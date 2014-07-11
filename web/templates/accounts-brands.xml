@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dropdown>
+	{% for item in brands %}
+	<item>
+			<name>{{ item.name }}</name>
+			<id>{{ item.id }}</id>
+		</item>
+	{% endfor %}
+ </dropdown>

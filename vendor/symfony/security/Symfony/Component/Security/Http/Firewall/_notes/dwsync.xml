@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="AbstractAuthenticationListener.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="AbstractPreAuthenticatedListener.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="AccessListener.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="AnonymousAuthenticationListener.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="BasicAuthenticationListener.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="ChannelListener.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="ContextListener.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="DigestAuthenticationListener.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="ExceptionListener.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="ListenerInterface.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="LogoutListener.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="RememberMeListener.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="SwitchUserListener.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="UsernamePasswordFormAuthenticationListener.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="X509AuthenticationListener.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+</dwsync>

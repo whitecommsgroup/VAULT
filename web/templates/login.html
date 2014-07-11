@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block navigation %}
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+         <a class="navbar-brand" href="/"><img src="/templates/assets/img/logo.png" width="49" height="49"  alt=""/></a>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="col-md-4 col-md-offset-4">
+	
+    <div class="well">
+        <form role="form" action="/login" method="post" name="login">
+        
+        	{% if error %}
+        	<div class="alert alert-danger" role="alert">{{ error }}</div>
+            {% endif %}
+            
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" name="username" id="username" placeholder="Enter username" data-validation="required">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" name="password" id="password" placeholder="Enter password" data-validation="required">
+            </div>
+
+                <input type="hidden" class="form-control" name="route" id="route" data-validation="required" value="{{ route }}">
+            
+            <button class="btn btn-primary" type="submit">Login</button>
+            
+    
+        </form>
+    </div>
+    
+</div>
+
+<script>
+    $.validate({  });
+</script>
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+
+		
+	});
+
+</script>
+
+{% endblock %}

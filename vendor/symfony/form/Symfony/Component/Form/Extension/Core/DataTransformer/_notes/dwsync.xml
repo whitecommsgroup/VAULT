@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="ArrayToPartsTransformer.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="BaseDateTimeTransformer.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="BooleanToStringTransformer.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="ChoicesToBooleanArrayTransformer.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="ChoicesToValuesTransformer.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="ChoiceToBooleanArrayTransformer.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="ChoiceToValueTransformer.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="DataTransformerChain.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="DateTimeToArrayTransformer.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="DateTimeToLocalizedStringTransformer.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="DateTimeToRfc3339Transformer.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="DateTimeToStringTransformer.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="DateTimeToTimestampTransformer.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="IntegerToLocalizedStringTransformer.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="MoneyToLocalizedStringTransformer.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="NumberToLocalizedStringTransformer.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="PercentToLocalizedStringTransformer.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="ValueToDuplicatesTransformer.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+</dwsync>

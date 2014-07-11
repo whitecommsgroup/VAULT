@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="AntiFloodPlugin.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="BandwidthMonitorPlugin.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="DecoratorPlugin.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="ImpersonatePlugin.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="Logger.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="LoggerPlugin.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="MessageLogger.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="PopBeforeSmtpPlugin.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="RedirectingPlugin.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="Reporter.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="ReporterPlugin.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="Sleeper.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="ThrottlerPlugin.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="Timer.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+</dwsync>

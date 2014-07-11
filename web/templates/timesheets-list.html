@@ -1,0 +1,279 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+      <li class="active">Timesheets</li>
+    </ol>
+
+  <div class="tabbable">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#all" data-toggle="tab"><i class="icon-tasks"></i> Your Timesheets</a></li>
+        {% if user.group b-and 128 %}<li><a href="#approval" data-toggle="tab"><i class="glyphicon glyphicon-check"></i> Need Approval</a></li>
+        <li><a href="#archive" data-toggle="tab"><i class="icon-archive"></i> Timesheets Archive</a></li>{% endif %}
+        <li class="navbar-right"><a href="#add_timesheet" data-toggle="tab"><i class="glyphicon glyphicon-plus"></i> Add New</a></li>
+    </ul>
+   </div>
+	
+    <br />
+   
+     <div class="tab-content">
+
+             <div class="tab-pane active" id="all">
+             	<a class="list-group-item"><h4 class="list-group-item-heading">{{ date()|date('M Y') }}</h4></a>
+                <div class="nav nav-tabs nav-stacked">
+             	   {% set temp_date = date() %}
+                    {% for timesheet in timesheets %}
+                        {% if temp_date|date('M Y') != timesheet.date|date('M Y') %}
+                            <a class="list-group-item"><h4 class="list-group-item-heading">{{ timesheet.date|date('M Y') }}</h4></a>
+                        {% endif %}
+                        <a href="/timesheets/view/{{ timesheet.id}}" class="list-group-item">{{ timesheet.date|date('d/m/Y') }} <span class="floatright lighttext">{{ timesheet.totalhours }} hrs</span></a>
+                        {% set temp_date = timesheet.date %}
+                    {% endfor %}
+                </div>
+            </div>
+
+             <div class="tab-pane" id="approval">
+                <div class="nav nav-tabs nav-stacked">
+                    {% for timesheet in timesheetsforapproval %}
+                        <a href="/timesheets/approve/{{ timesheet.id}}" class="list-group-item">{{ timesheet.date|date('d/m/Y') }} <span class="floatright lighttext">{{ getAccMgrName(timesheet.employeeid) }}</span></a>
+                    {% endfor %}
+                </div>
+            </div>
+
+             <div class="tab-pane" id="archive">
+                 
+                <ul class="nav nav-tabs timesheet-archive-nav">
+                <li class="active"><a data-name="All" href="#" data-toggle="tab"><i class="icon-user"></i> All</a></li>
+                 {% for item in global_creativestaff %}
+                    <li><a data-name="{{ item.firstname }} {{ item.lastname }}" href="#{{ item.firstname }}" data-toggle="tab"><i class="icon-user"></i>{{ item.firstname }}</a></li>
+                 {% endfor %}
+                 {% for item in global_digitalstaff %}
+                    <li><a data-name="{{ item.firstname }} {{ item.lastname }}" href="#{{ item.firstname }}" data-toggle="tab"><i class="icon-user"></i>{{ item.firstname }}</a></li>
+                 {% endfor %}
+                </ul>
+             
+             	<a class="list-group-item"><h4 class="list-group-item-heading">{{ date()|date('M Y') }}</h4></a>
+                <div class="nav nav-tabs nav-stacked timesheet-archive">
+             	   {% set temp_date = date() %}
+                    {% for timesheet in archive %}
+                        {% if temp_date|date('M Y') != timesheet.date|date('M Y') %}
+                            <a class="list-group-item"><h4 class="list-group-item-heading">{{ timesheet.date|date('M Y') }}</h4></a>
+                        {% endif %}
+                        <a data-name="{{ getAccMgrName(timesheet.employeeid) }}" href="/timesheets/approve/{{ timesheet.id}}" class="list-group-item hideable">{{ timesheet.date|date('d/m/Y') }} <span class="floatright lighttext">{{ getAccMgrName(timesheet.employeeid) }}</span></a>
+                        {% set temp_date = timesheet.date %}
+                    {% endfor %}
+                </div>
+            </div>
+
+                <div class="tab-pane " id="add_timesheet">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">New Timesheet</h3>
+                        </div>
+                    <form class="" role="form" name="addTimesheet" id="addTimesheet" method="post" action="/timesheets/add">
+                    <div class="form-group"><input type="hidden" name="timesheetEmployeeId" id="timesheetEmployeeId" value="{{ user.id }}" /></div>
+                    <div class="panel-body">
+                        <div class="form-group col-lg-12">
+                            <label for="jobDate">Date</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                <input type="text" class="form-control datepicker-timesheet" name="timesheetDate" id="timesheetDate" placeholder="Enter date or leave blank for today" data-validation="required" value="{{ date()|date('d/m/Y') }}" readonly>
+                            </div>
+                        </div>
+                        <table id="tbl">
+                           <tr>
+                           		<th class="col-md-5">Job</th>
+                           		<th class="col-md-2">Work type</th>
+                           		<th class="col-md-2">Comments</th>
+                           		<th class="col-md-1">Hours</th>
+                           		<th class="col-md-1">Images</th>
+                           		<th class="col-md-4"></th>
+                           </tr>
+                           <tr class="tr_clone">
+                                <td class="col-md-5">
+                                	<div class="form-group">
+                                            <input style="float:left; width:25%; margin-right:10px;" type="text" class="form-control typeah" name="timeSheetJobNumber[]" id="timeSheetJobNumber" placeholder="Job number" data-validation="number" autocomplete="off">
+                                            <input style="float:left; width:35%; margin-right:10px; font-size:0.8em;" type="text" class="form-control" name="timeSheetClient[]" id="timeSheetClient" placeholder="Client" autocomplete="off" readonly >
+                                            <input style="width:35%; font-size:0.8em;" type="text" class="form-control" name="timeSheetTitle[]" id="timeSheetTitle" placeholder="Title"  autocomplete="off" readonly >
+                                    </div>
+                                </td>
+                                <td class="col-md-2">
+                                    <div class="form-group">
+                                    <select class="form-control" name="timeSheetType[]" id="timeSheetType" data-validation="number">
+                                      <option value="">-- select --</option>
+                                      {% for worktype in global_worktypes %}
+                                          <option value="{{ worktype.id }}">{{ worktype.name }}</option>
+                                      {% endfor %}
+                                    </select>
+                                    </div>
+                                </td>
+                                <td class="col-md-2">
+                                	<div class="form-group">
+                                        <input type="text" class="form-control" name="timeSheetDescription[]" id="timeSheetDescription" placeholder="Enter comments">
+                                    </div>
+                                </td>
+                                <td class="col-md-1"><div class="form-group"><input type="text" class="form-control timeSheetHours" name="timeSheetHours[]" id="timeSheetHours" placeholder="Hours" autocomplete="off" data-validation="number" data-validation-allowing="float"></div></td>
+                                <td class="col-md-1"><div class="form-group"><input type="text" class="form-control timeSheetImages" name="timeSheetImages[]" id="timeSheetImages" placeholder="Images" autocomplete="off" data-validation="number" data-validation-optional="true" data-validation-allowing="float"></div></td>
+                                <td class="col-md-4"><a class="btn btn-danger tr_minus btn-sm"><i class="glyphicon glyphicon-minus"></i> Remove</a></td>
+                            </tr>
+                            <tfoot>
+                               <tr>
+                                    <th class="col-md-5"><a class="btn btn-success tr_clone_add btn-sm"><i class="glyphicon glyphicon-plus"></i> Add row</a></th>
+                                    <th class="col-md-2"></th>
+                                    <th class="col-md-2"><strong class="floatright">Total:</strong></th>
+                                    <th class="col-md-1"><input class="form-control total" id="disabledInput" type="text" placeholder="0" disabled></th>
+                                    <th class="col-md-1"></th>
+                                    <th class="col-md-4"></th>
+                               </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                           <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+                </form>
+            </div>
+
+        </div>
+
+{% raw %}
+<script>
+    $.validate({  });
+</script>
+
+    <script type="text/javascript">
+		
+		$(document).ready(function() {
+
+			init();
+			
+			$(".tr_clone_add").on("click",function(){
+       
+				var $tableBody = $('#tbl').find("tbody"),
+					$trLast = $tableBody.find("tr:last"),
+					$trNew = $trLast.clone();
+					$trLast.after($trNew);
+					$("#tbl tr.tr_clone:last input").val('');
+					$("#tbl tr.tr_clone:last select").val('');
+					$("#tbl tr.tr_clone:last .tr_approve").remove();
+
+					$("#tbl tr.tr_clone:last .tr_minus").attr("id","");
+					
+					$(".has-success").removeClass("has-success");
+					$(".has-error").removeClass("has-error");
+					
+					init();
+
+			});
+		
+		// filtering of archive timesheets	
+		$(".timesheet-archive-nav a").click(function(){
+			if($(this).attr("data-name") == "All"){
+				$(".timesheet-archive .list-group-item.hideable").show();
+			}else{
+				$(".timesheet-archive .list-group-item.hideable").hide();
+				$(".timesheet-archive .list-group-item.hideable[data-name='" + $(this).attr("data-name") + "']").show();
+			}
+		});
+			
+				
+		});
+
+function init(){
+	
+
+
+
+	/*	$('#addTimesheet').validate({
+				eachValidField : function() {
+
+					$(this).parent().removeClass('has-error').addClass('has-success');
+				},
+				eachInvalidField : function() {
+
+					$(this).parent().removeClass('has-success').addClass('has-error');
+				}
+			});*/
+
+			//$('form').removeData('validate');
+	
+			$("input[name='timeSheetJobNumber[]']").on("click", function () {
+			   $(this).select();
+			});
+
+			$("input[name='timeSheetJobNumber[]']").on("keyup",function(){
+				if ($(this).val() == ''){
+					$(this).siblings("#timeSheetClient").val('');
+				}
+			});
+
+			$(".timeSheetHours").on("keyup",function(){
+				var sum = 0;
+				$('.timeSheetHours').each(function() {
+					sum += Number($(this).val());
+				});
+				$(".total").val(sum);
+			});
+			
+		
+			$(".tr_minus").on("click",function(){
+				if ($(".tr_clone").length > 1){
+					
+					
+					$(this).parent().parent().remove();
+					
+					var form = $('#addTimesheet').get(0);
+					$(form).removeData('validate');
+					
+				}else{
+					alert('Cannot delete row - you need at least 1 row')	
+				}
+			});
+
+		/*	$('#tbl tr.tr_clone:last .typeah').typeahead([
+			  {
+				name: 'jobs',
+				ttl: 1,
+				prefetch: '/json/jobs',
+				template: '<p><strong>{{value}} - {{companyname}}</strong><br />{{description}}</p>',
+				engine: Hogan,
+				limit: 5
+			  }
+			]);*/
+			
+			  
+			  $.ajax({
+				  url: "/xml/jobs",
+				  dataType: "xml",
+				  success: function( xmlResponse ) {
+					var data = $( "job", xmlResponse ).map(function() {
+					  return {
+						value: $( "jobnumber", this ).text() + " - " +
+						  ( $.trim( $( "company", this ).text() ) +  ', ' + $.trim( $( "title", this ).text() ) ),
+						company: $( "company", this ).text(),
+						title: $( "title", this ).text(),
+						id: $( "jobnumber", this ).text()
+					  };
+					}).get();
+					$( ".typeah" ).autocomplete({
+					  source: data,
+					  minLength: 0,
+					  select: function( event, ui ) {
+						$(this).val( ui.item.id );
+						$(this).siblings("#timeSheetClient").val( ui.item.company );
+						$(this).siblings("#timeSheetTitle").val( ui.item.title );
+						return false;
+					  }
+					});
+				  }
+				});
+
+}
+
+	</script>
+{% endraw %}
+        
+</div>
+{% endblock %}

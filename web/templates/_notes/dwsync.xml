@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="accounts-brands.xml" server="//WCGSERVER/Interactive Server/VAULT/" local="130408398519015874" remote="130408398510000000" Dst="2" />
+<file name="accounts-details.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130487847351332706" remote="130487847350000000" Dst="2" />
+<file name="accounts-edit-client.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130426270690524037" remote="130426270690000000" Dst="2" />
+<file name="accounts-edit-supplier.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130408398518045818" remote="130408398510000000" Dst="2" />
+<file name="accounts-list.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130408398523956156" remote="130408398520000000" Dst="2" />
+<file name="base - Copy.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130408398514275603" remote="130408398510000000" Dst="2" />
+<file name="base.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130487841378131058" remote="130487841370000000" Dst="2" />
+<file name="contact-details.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130487847331811590" remote="130487847330000000" Dst="2" />
+<file name="contact-edit.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130408398526876323" remote="130408398520000000" Dst="2" />
+<file name="contact-list.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130427393985823459" remote="130427393980000000" Dst="2" />
+<file name="contacts-account.xml" server="//WCGSERVER/Interactive Server/VAULT/" local="130408398508185254" remote="130408398500000000" Dst="2" />
+<file name="crm-sidebar.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130408398522536075" remote="130408398520000000" Dst="2" />
+<file name="crm.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130489625262611408" remote="130489625260000000" Dst="2" />
+<file name="hosting-details.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130468634163301619" remote="130468634160000000" Dst="2" />
+<file name="hosting-edit.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130463421217327481" remote="130463421210000000" Dst="2" />
+<file name="hosting-list.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130463422374603673" remote="130463422370000000" Dst="2" />
+<file name="invoicing-report.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130493710406939577" remote="130493710400000000" Dst="2" />
+<file name="invoicing.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130482668378770711" remote="130482668370000000" Dst="2" />
+<file name="job-details.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130488725843473130" remote="130488725840000000" Dst="2" />
+<file name="job-edit-costs.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130464276045224708" remote="130464276040000000" Dst="2" />
+<file name="job-edit-outsourced.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130408398510685397" remote="130408398510000000" Dst="2" />
+<file name="job-edit.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130481847878330906" remote="130481847870000000" Dst="2" />
+<file name="job-list.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130432578011892755" remote="130432578010000000" Dst="2" />
+<file name="jobs-list.xml" server="//WCGSERVER/Interactive Server/VAULT/" local="130408398504495043" remote="130408398500000000" Dst="2" />
+<file name="jobs.json" server="//WCGSERVER/Interactive Server/VAULT/" local="130408398530796548" remote="130408398530000000" Dst="2" />
+<file name="jobs.xml" server="//WCGSERVER/Interactive Server/VAULT/" local="130408398512875523" remote="130408398510000000" Dst="2" />
+<file name="login.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130487715122659659" remote="130487715120000000" Dst="2" />
+<file name="prospects.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130491994742496722" remote="130491994740000000" Dst="2" />
+<file name="report-summary-start.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130482668547890384" remote="130482668540000000" Dst="2" />
+<file name="report-summary.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130482707258504505" remote="130482707250000000" Dst="2" />
+<file name="report-utilisation-start.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130463426468637838" remote="130463426460000000" Dst="2" />
+<file name="report-utilisation.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130486136167337361" remote="130486136160000000" Dst="2" />
+<file name="seasons.tmpl" server="//WCGSERVER/Interactive Server/VAULT/" local="130408398522416068" remote="130408398520000000" Dst="2" />
+<file name="ticket-details.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130426274839261331" remote="130426274830000000" Dst="2" />
+<file name="ticket-edit.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130408398530666540" remote="130408398530000000" Dst="2" />
+<file name="ticket-list.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130408398521526017" remote="130408398520000000" Dst="2" />
+<file name="timesheets-approve.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130446204366459930" remote="130446204360000000" Dst="2" />
+<file name="timesheets-list.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130486152301530184" remote="130486152300000000" Dst="2" />
+<file name="timesheets-view.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130439433434010958" remote="130439433430000000" Dst="2" />
+<file name="report-client-list-start.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130463426397123748" remote="130463426390000000" Dst="2" />
+<file name="report-client-list.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130408398515405667" remote="130408398510000000" Dst="2" />
+<file name="holidays-list.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130409084249914538" remote="130409084240000000" Dst="2" />
+<file name="report-jobs-start.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130463426422725212" remote="130463426420000000" Dst="2" />
+<file name="report-jobs.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130463426101606845" remote="130463426100000000" Dst="2" />
+<file name="staff-accounts-list.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130413333665390590" remote="130413333660000000" Dst="2" />
+<file name="staff-accounts-view.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130413332937278944" remote="130413332930000000" Dst="2" />
+<file name="job-list - Copy.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130427246783313957" remote="130427246780000000" Dst="2" />
+<file name="job-studio-breakdown.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130488599129785522" remote="130488599120000000" Dst="2" />
+<file name="report-summary.csv" server="//WCGSERVER/Interactive Server/VAULT/" local="130482702800829540" remote="130482702800000000" Dst="2" />
+<file name="test.csv" server="//WCGSERVER/Interactive Server/VAULT/" local="130482683483634660" remote="130482683480000000" Dst="2" />
+<file name="report-logs-start.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130486806641835998" remote="130486806640000000" Dst="2" />
+<file name="report-logs.html" server="//WCGSERVER/Interactive Server/VAULT/" local="130487624936421301" remote="130487624930000000" Dst="2" />
+</dwsync>

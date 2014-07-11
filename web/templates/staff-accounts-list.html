@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="col-md-12">
+
+	<ol class="breadcrumb">
+      <li class="active">Staff</li>
+      <li class="active">Accounts</li>
+    </ol>
+
+
+<div class="tabbable">
+
+     <ul class="nav nav-tabs">
+      <li class="active"><a href="#current" data-toggle="tab"><i class="glyphicon glyphicon-align-justify"></i> Current</a></li>
+      <li class="navbar-right"><a href="#add_employee" data-toggle="tab"><i class="glyphicon glyphicon-plus"></i> Add New</a></li>
+    </ul>
+
+</div>
+
+    <br />
+    
+     <div class="tab-content">
+     
+         <div class="tab-pane active" id="current">
+            <div class="nav nav-tabs nav-stacked">
+                {% for item in staff %}
+                    <a href="/staff/accounts/view/{{ item.id}}" class="list-group-item">{{ item.firstname}} {{ item.lastname}} <span class="floatright lighttext">{{ item.dob|date('d/m/Y') }}</span></a>
+                {% endfor %}
+            </div>
+        </div>
+        
+         <div class="tab-pane" id="leavers">
+         </div>
+
+        <div class="tab-pane" id="add_employee">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">New Contact Details</h3>
+                </div>
+            <div class="panel-body">
+                <form role="form" name="addContact" id="addContact" method="post" action="/staff/accounts/add">
+                    <div class="form-group">
+                        <label for="employeeFirstName">First Name</label>
+                        <input type="text" class="form-control" name="employeeFirstName" id="employeeFirstName" placeholder="Enter first name" data-validation="required">
+                    </div>
+                    <div class="form-group">
+                        <label for="employeeLastName">Last Name</label>
+                        <input type="text" class="form-control" name="employeeLastName" id="employeeLastName" placeholder="Enter last name" data-validation="required">
+                    </div>
+                    <div class="form-group">
+                        <label for="employeeDOB">DOB</label>
+                        <input type="text" class="form-control datepicker" name="employeeDOB" id="employeeDOB" placeholder="Enter DOB" data-validation="required">
+                    </div>
+                    <div class="form-group">
+                        <label for="employeeDepartment">Department</label>
+                        <select class="form-control" id="employeeDepartment" name="employeeDepartment" data-validation="required">
+                            <option value="">-- select --</option>
+                            {% for item in departments %}
+                                <option value="{{ item.id }}">{{ item.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">User groups</label><br />
+                        {% for group in usergroups %}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" id="companyServices1" value="{{ group.id }}" name="companyServices" > {{ group.name }}
+                            </label><br />
+                        {% endfor %}
+                    </div>
+                    <div class="form-group">
+                        <label for="employeeEmail">Email address</label>
+                        <input type="email" class="form-control" name="employeeEmail" id="employeeEmail" placeholder="Enter email address">
+                    </div>
+                    <div class="form-group">
+                        <label for="employeeUsername">Username</label>
+                        <input type="text" class="form-control" name="employeeUsername" id="employeeUsername" placeholder="Enter username">
+                    </div>
+                    <div class="form-group">
+                        <label for="employeePassword">Password</label>
+                        <input type="text" class="form-control" name="employeePassword" id="employeePassword" placeholder="Enter password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    
+</div>
+
+</div>
+{% raw %}
+	<script>
+        $.validate({  });
+    </script>
+
+    <script type="text/javascript">
+		
+		$(document).ready(function() {
+
+
+
+		});
+		
+	</script>
+
+ {% endraw %}
+       
+{% endblock %}

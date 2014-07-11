@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="col-md-12">
+
+         <ol class="breadcrumb">
+          <li class="active">Staff</li>
+          <li class="active">Holidays</li>
+        </ol>
+    
+            <ul class="nav nav-tabs">
+            {% for item in holidays_staff %}
+                <li {% if loop.index == 1 %}class="active"{% endif %}><a href="#{{ item.firstname }}" data-toggle="tab"><i class="icon-user"></i>{{ item.firstname }}</a></li>
+            {% endfor %}
+              </li>
+            </ul>
+
+            <br />
+
+             <div class="tab-content">
+             
+             {% for item in holidays_staff %}
+                 <div class="tab-pane {% if loop.index == 1 %}active{% endif %}" id="{{ item.firstname }}">
+                    <div class="nav nav-tabs nav-stacked">
+                    	<form class="" role="form" name="addHolidayLine" id="addHolidayLine" method="post" action="/staff/holidays/add-holiday-line/{{ item.id }}">
+                            <table class="table table-bordered table-responsive">
+                                <tr class="active">
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Days</th>
+                                    <th>Action</th>
+                                </tr>
+                                {% set total_days = 0 %}
+                                {% for sub_item in holidays %}
+                                    {% if item.id == sub_item.employeeid %}
+                                        {% set total_days = total_days + sub_item.days %}
+                                        <tr>
+                                            <td>{{ sub_item.startdate|date('D dS M') }}</td>
+                                            <td>{{ sub_item.enddate|date('D dS M') }}</td>
+                                            <td>{{ sub_item.days }}</td>
+                                            <td><a class="btn btn-danger tr_minus btn-xs delete_line" holiday_id="{{ sub_item.id }}" id="delete_{{ sub_item.id }}"><i class="glyphicon glyphicon-minus"></i> Delete</a>
+        </td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td><strong>Total: {{ total_days }}</strong></th>
+                                    <td></td>
+                                </tr>
+                                 <tr>
+                                    <td><input type="text" data-validation="required" placeholder="Start Date" id="startDate" name="startDate" class="form-control input-sm datepicker"></td>
+                                    <td><input type="text" data-validation="required" placeholder="End Date" id="endDate" name="endDate" class="form-control input-sm datepicker"></td>
+                                    <td><input type="text" data-validation="required" placeholder="Days" id="days" name="days" class="form-control input-sm"></td>
+                                    <td><button type="submit" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-plus"></i> Add</button></td>
+                                </tr>
+                           </table>
+						</form>
+                  </div>
+                </div>
+            {% endfor %}
+
+
+
+</div>
+
+<script>
+    $.validate({  });
+</script>
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+
+		
+		$(".delete_line").on("click",function(){
+			if ($(this).attr("holiday_id")){
+				$(this).addClass("disabled");
+				$(this).text("Please wait");
+				$.get("/ajax/delete-holiday-line/" + $(this).attr("holiday_id"), function( data ) {
+					if(data >= 1){
+						window.location.href = location.href;
+						window.location.reload(true);
+					}else{
+						alert('Error deleting');	
+					}
+				});		
+			}
+		});
+		
+
+	});
+</script>
+
+{% endblock %}

@@ -1,0 +1,4 @@
+id, field1, field2, field3 
+{% for row in data %}
+    {{ row.organisationid }},{{ row.name }},{{ row.period }},{{ row.value }}
+{% endfor %}

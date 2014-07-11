@@ -1,0 +1,386 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+<div class="col-md-12">
+
+	<ol class="breadcrumb">
+      <li><a href="#">CRM</a></li>
+      <li class="active">Accounts</li>
+    </ol>
+
+         <div class="tabbable">
+    
+             <ul class="nav nav-tabs">
+                <li class="dropdown active">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                      <i class="icon-list-ul"></i> View All <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li class="active"><a href="#currentclients" data-toggle="tab">Current Clients</a></li>
+                      <li><a href="#lapsedclients" data-toggle="tab">Lapsed Clients</a></li>
+                      <li><a href="#prospects" data-toggle="tab">Prospects</a></li>
+                      <li><a href="#allsuppliers" data-toggle="tab">Suppliers</a></li>
+                    </ul>
+                  </li>
+                  <!--<li class="active"><a href="#all" data-toggle="tab"><i class="glyphicon glyphicon-align-justify"></i> All</a></li>-->
+                  <li><a href="#myclients" data-toggle="tab"><i class="icon-briefcase"></i> My Clients</a></li>
+                 <!--<li><a href="#pinned" data-toggle="tab"><i class="glyphicon glyphicon-pushpin"></i> Pinned</a></li>-->
+                    {% if user.group b-and 2 %}<li class="dropdown navbar-right">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-plus"></i> <span>Add New</span></a>
+                        <ul class="dropdown-menu pull-right" role="menu">
+                            <li><a href="#add_client" data-toggle="tab">Client</a></li>
+                            <li><a href="#add_supplier" data-toggle="tab">Supplier</a></li>
+                        </ul>
+                    </li>{% endif %}
+                </ul>
+            </div>
+            
+            <br />
+
+             <div class="tab-content">
+             
+            <!--    <div class="btn-group" id="list-filter">
+                    <button type="button" class="btn btn-default btn-xs list-filter-all">all</button>
+                    <button type="button" class="btn btn-default btn-xs list-filter-number">#</button>
+                    {% for letter in 'a'..'z' %}
+                        <button type="button" class="btn btn-default btn-xs list-filter-letter" value="{{ letter }}">{{ letter }}</button>
+                    {% endfor %}
+                </div>
+                <br />
+                <br />-->
+             
+                <div class="tab-pane active" id="currentclients">
+ 
+                   <div class="nav nav-tabs nav-stacked">
+                       <div class="btn-group" id="list-filter">
+                            <button type="button" class="btn btn-default btn-xs list-filter-all">all</button>
+                            <button type="button" class="btn btn-default btn-xs list-filter-number">#</button>
+                            {% for letter in 'a'..'z' %}
+                                <button type="button" class="btn btn-default btn-xs list-filter-letter" value="{{ letter }}">{{ letter }}</button>
+                            {% endfor %}
+                        </div>
+                        <br /><br />
+                        {% for client in current_clients %}
+                            <a href="/accounts/view/{{ client.organisationid }}" class="list-group-item {{ client.name|lower|slice(0, 1) }}">{{ client.name }} <span class="floatright lighttext">{{ client.firstname }} {{ client.lastname }}</span>{% if user.id == 0 %}<a href="/accounts/make-lapsed/{{ client.organisationid }}">MAKE LAPSED</a>{% endif %}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="tab-pane" id="lapsedclients">
+                    <div class="nav nav-tabs nav-stacked">
+                       <div class="btn-group" id="list-filter">
+                            <button type="button" class="btn btn-default btn-xs list-filter-all">all</button>
+                            <button type="button" class="btn btn-default btn-xs list-filter-number">#</button>
+                            {% for letter in 'a'..'z' %}
+                                <button type="button" class="btn btn-default btn-xs list-filter-letter" value="{{ letter }}">{{ letter }}</button>
+                            {% endfor %}
+                        </div>
+                        <br /><br />
+                        {% for client in lapsed_clients %}
+                            <a href="/accounts/view/{{ client.organisationid}}" class="list-group-item {{ client.name|lower|slice(0, 1) }}">{{ client.name }} <span class="floatright lighttext">{{ client.firstname }} {{ client.lastname }}</span></a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="allsuppliers">
+                    <div class="nav nav-tabs nav-stacked">
+                       <div class="btn-group" id="list-filter">
+                            <button type="button" class="btn btn-default btn-xs list-filter-all">all</button>
+                            <button type="button" class="btn btn-default btn-xs list-filter-number">#</button>
+                            {% for letter in 'a'..'z' %}
+                                <button type="button" class="btn btn-default btn-xs list-filter-letter" value="{{ letter }}">{{ letter }}</button>
+                            {% endfor %}
+                        </div>
+                        <br /><br />
+                        {% for client in suppliers %}
+                            	<a href="/accounts/view/{{ client.organisationid}}" class="list-group-item {{ client.name|lower|slice(0, 1) }}">{{ client.name}} <span class="floatright lighttext">{{ getStateName(client.accountstatusid) }}</span></a>
+                        {% endfor %}
+                    </div>
+                </div>
+                               
+                <div class="tab-pane" id="prospects">
+                    <div class="nav nav-tabs nav-stacked">
+                       <div class="btn-group" id="list-filter">
+                            <button type="button" class="btn btn-default btn-xs list-filter-all">all</button>
+                            <button type="button" class="btn btn-default btn-xs list-filter-number">#</button>
+                            {% for letter in 'a'..'z' %}
+                                <button type="button" class="btn btn-default btn-xs list-filter-letter" value="{{ letter }}">{{ letter }}</button>
+                            {% endfor %}
+                        </div>
+                        <br /><br />
+                        {% for client in prospects %}
+                            	<a href="/accounts/view/{{ client.organisationid}}" class="list-group-item {{ client.name|lower|slice(0, 1) }}">{{ client.name }} <span class="floatright lighttext">{{ client.firstname }} {{ client.lastname }}</span></a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+
+                 <div class="tab-pane" id="myclients">
+                    <div class="nav nav-tabs nav-stacked">
+                       <div class="btn-group" id="list-filter">
+                            <button type="button" class="btn btn-default btn-xs list-filter-all">all</button>
+                            <button type="button" class="btn btn-default btn-xs list-filter-number">#</button>
+                            {% for letter in 'a'..'z' %}
+                                <button type="button" class="btn btn-default btn-xs list-filter-letter" value="{{ letter }}">{{ letter }}</button>
+                            {% endfor %}
+                        </div>
+                        <br /><br />
+                        {% for client in current_clients %}
+                        	{% if client.accountmanagerid == user.id %}
+                            	<a href="/accounts/view/{{ client.organisationid}}" class="list-group-item {{ client.name|lower|slice(0, 1) }}">{{ client.name}} <span class="floatright lighttext">{{ getActionMonthName(client.actionmonthid) }}</span></a>
+                            {% endif %}	
+                        {% endfor %}
+                    </div>
+                 </div>
+
+                 <div class="tab-pane" id="pinned">
+                 </div>
+
+                 <div class="tab-pane" id="add_client">
+                 <form role="form" name="addClient" method="post" id="addClient" action="/accounts/add" >
+                	<div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Client Details</h3>
+                    </div>
+                    <div class="panel-body">
+                    	<div><input type="hidden" class="form-control" name="companyType" id="companyType" value="1"></div>
+                      <div class="form-group">
+                        <label for="companyName">Company Name *</label>
+                        <input type="text" class="form-control" name="companyName" id="companyName" placeholder="Enter company name" data-validation="required">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyPhone">Phone</label>
+                        <input type="text" class="form-control" name="companyPhone" id="companyPhone" placeholder="Enter phone number">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyEmail">Email</label>
+                        <input type="text" class="form-control" name="companyEmail" id="companyEmail" placeholder="Enter email address">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyWebsite">Website</label>
+                        <input type="text" class="form-control" name="companyWebsite" id="companyWebsite" placeholder="Enter website URL">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyAdd1">Address 1</label>
+                        <input type="text" class="form-control" name="companyAdd1" id="companyAdd1" placeholder="Enter address line 1">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyAdd2">Address 2</label>
+                        <input type="text" class="form-control" name="companyAdd2" id="companyAdd2" placeholder="Enter address line 2">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyAdd3">Address 3</label>
+                        <input type="text" class="form-control" name="companyAdd3" id="companyAdd3" placeholder="Enter address line 3">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyTown">Town</label>
+                        <input type="text" class="form-control" name="companyTown" id="companyTown" placeholder="Enter town">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyCounty">County</label>
+                        <input type="text" class="form-control" name="companyCounty" id="companyCounty" placeholder="Enter county">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyPostcode">Postcode</label>
+                        <input type="text" class="form-control" name="companyPostcode" id="companyPostcode" placeholder="Enter postcode">
+                      </div>
+ 
+                     </div>
+                     
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Account Info</h3>
+                    </div>
+
+                    <div class="panel-body">
+                      
+                      <div class="form-group">
+                        <label for="companyAccountStatus">Account Status *</label>
+                        <select class="form-control" id="companyAccountStatus" name="companyAccountStatus" data-validation="required">
+                          <option value="">- select -</option>
+                            {% for state in global_states_clients %}
+                            	<option value="{{ state.id }}">{{ state.name }}</option>
+                            {% endfor %}
+                        </select>
+                      </div>
+                        <div class="form-group">
+                        <label for="companyFirstcontact">First Contact</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                <input type="text" class="form-control datepicker" name="companyFirstcontact" id="companyFirstcontact" placeholder="Select date" value="{{ date()|date("d/m/Y") }}" data-validation="required">
+                            </div>
+                        </div>
+                      <div class="form-group">
+                        <label for="companyAccManager">Account Manager *</label>
+                        <select class="form-control" id="companyAccManager" name="companyAccManager" data-validation="required">
+                          <option value="">- select -</option>
+                            {% for manager in global_accountmanagers %}
+                            	<option value="{{ manager.id }}">{{ manager.firstname }} {{ manager.lastname }}</option>
+                            {% endfor %}
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="companyNextDate">Next contact date</label>
+                        <input type="text" class="form-control datepicker" name="companyNextDate" id="companyNextDate" placeholder="Select date">
+                      </div>
+                      <div class="form-group">
+                        <label for="companySource">Source *</label>
+                        <select class="form-control" id="companySource" name="companySource" data-validation="required">
+                            <option value="">- select -</option>
+                            {% for source in global_sources %}
+                            	<option value="{{ source.id }}">{{ source.name }}</option>
+                            {% endfor %}
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="compactSector">Sector *</label>
+                        <select class="form-control" id="companySector" name="companySector" data-validation="required">
+                            <option value="">- select -</option>
+                            {% for sector in global_sectors %}
+                            	<option value="{{ sector.id }}">{{ sector.name }}</option>
+                            {% endfor %}
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="">Services</label><br />
+                        <label class="checkbox-inline">
+                            <input type="checkbox" id="companyServices1" value="1" name="companyServices" > Creative
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" id="companyServices2" value="2" name="companyServices" > Interactive
+                        </label>
+                      </div>
+                      
+                      <button type="submit" class="btn btn-primary">Submit</button>
+
+                    </div>
+                </div>
+                </form>
+                </div>
+                    
+                <div class="tab-pane" id="add_supplier">
+                <form role="form" name="addSupplier" method="post" id="addSupplier" action="/accounts/add" >
+                 	<div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Supplier Details</h3>
+                    </div>
+                    <div class="panel-body">
+                    	<div><input type="hidden" class="form-control" name="companyType" id="companyType" value="2"></div>
+                      <div class="form-group">
+                        <label for="companyName">Company Name *</label>
+                        <input type="text" class="form-control" name="companyName" id="companyName" placeholder="Enter company name" data-validation="required">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyPhone">Phone</label>
+                        <input type="text" class="form-control" name="companyPhone" id="companyPhone" placeholder="Enter phone number">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyEmail">Email</label>
+                        <input type="text" class="form-control" name="companyEmail" id="companyEmail" placeholder="Enter email address">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyWebsite">Website</label>
+                        <input type="text" class="form-control" name="companyWebsite" id="companyWebsite" placeholder="Enter website URL">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyAdd1">Address 1</label>
+                        <input type="text" class="form-control" name="companyAdd1" id="companyAdd1" placeholder="Enter address line 1">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyAdd2">Address 2</label>
+                        <input type="text" class="form-control" name="companyAdd2" id="companyAdd2" placeholder="Enter address line 2">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyAdd3">Address 3</label>
+                        <input type="text" class="form-control" name="companyAdd3" id="companyAdd3" placeholder="Enter address line 3">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyTown">Town</label>
+                        <input type="text" class="form-control" name="companyTown" id="companyTown" placeholder="Enter town">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyCounty">County</label>
+                        <input type="text" class="form-control" name="companyCounty" id="companyCounty" placeholder="Enter county">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyPostcode">Postcode</label>
+                        <input type="text" class="form-control" name="companyPostcode" id="companyPostcode" placeholder="Enter postcode">
+                      </div>
+ 
+                     </div>
+                     
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Account Info</h3>
+                    </div>
+
+                    <div class="panel-body">
+                      
+                      <div class="form-group">
+                        <label for="companyAccountStatus">Supplier Type *</label>
+                        <select class="form-control" id="companyAccountStatus" name="companyAccountStatus" data-validation="required">
+                          <option value="">- select -</option>
+                            {% for state in global_states_suppliers %}
+                            	<option value="{{ state.id }}">{{ state.name }}</option>
+                            {% endfor %}
+                        </select>
+                      </div>
+
+                      <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+         </div>
+             
+         </div>
+
+       </div>
+
+</div>
+
+<script>
+    $.validate({  });
+</script>
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+
+
+		$(".list-filter-all, .list-filter-number, .list-filter-letter").click(function(){
+			$(".list-filter-all, .list-filter-number, .list-filter-letter").removeClass("active");
+			$(this).addClass("active");
+		});
+
+		$(".list-filter-all").click(function(){
+			$(this).parent().parent().children(".tab-content .nav-stacked a").show();
+		});
+
+		$(".list-filter-number").click(function(){
+			$(this).parent().parent().children(".tab-content .nav-stacked a").hide();
+			$(this).parent().parent().children(".tab-content .nav-stacked a.0").show();
+			$(this).parent().parent().children(".tab-content .nav-stacked a.1").show();
+			$(this).parent().parent().children(".tab-content .nav-stacked a.2").show();
+			$(this).parent().parent().children(".tab-content .nav-stacked a.3").show();
+			$(this).parent().parent().children(".tab-content .nav-stacked a.4").show();
+			$(this).parent().parent().children(".tab-content .nav-stacked a.5").show();
+			$(this).parent().parent().children(".tab-content .nav-stacked a.6").show();
+			$(this).parent().parent().children(".tab-content .nav-stacked a.7").show();
+			$(this).parent().parent().children(".tab-content .nav-stacked a.8").show();
+			$(this).parent().parent().children(".tab-content .nav-stacked a.9").show();
+		});
+		
+		$(".list-filter-letter").click(function(){
+			val = $(this).val();
+			$(this).parent().parent().children(".tab-content .nav-stacked a").hide();
+			$(this).parent().parent().children(".tab-content .nav-stacked a." + val + "").show();
+		});
+
+	});
+		
+</script>
+
+</div>
+
+{% endblock %}

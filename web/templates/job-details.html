@@ -1,0 +1,766 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<div class="col-md-12">
+
+         <ol class="breadcrumb">
+          <li><a href="/jobs/list">Jobs Book</a></li>
+          <li class="active">{% if content.jobnumber %}{{ content.jobnumber }} - {% endif %}{{ content.title }}</li>
+        </ol>
+
+        <h1>{% if content.jobnumber %}{{ content.jobnumber }} - {% endif %}{{ content.title }}
+            <div class="btn-group floatright">
+              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                Action <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu pull-right" role="menu">
+              {% if user.group b-and 32 %}
+                  {% if user.group b-and 256 %}{% if content.statusid == 3 %}<li><a href="#re-open_job" data-toggle="modal"><i class="glyphicon glyphicon-folder-open"></i> Re-open Job</a> </li>{% endif %}{% endif %}
+                    {% if content.statusid < 3 %}
+                        <li><a href="/jobs/edit/{{ content.id }}"><i class="glyphicon glyphicon-pencil"></i> Edit Details</a> </li>
+                        <li><a href="/jobs/edit-costs/{{ content.id }}"><i class="icon-tasks"></i> {% if estimated|length > 0 %}Edit{% else %}Create{% endif %} Costs</a> </li>
+                        <li><a href="/jobs/edit-outsourced/{{ content.id }}"><i class="icon-tasks"></i> {% if estimated|length > 0 %}Edit{% else %}Create{% endif %} Oursourced</a> </li>
+                    {% endif %}
+                    {% if content.statusid == 2 %}<li><a href="#convert_job" data-toggle="modal"><i class="glyphicon glyphicon-book"></i> Create Job</a> </li>{% endif %}
+                    {% if user.group b-and 256 %}{% if content.statusid == 1 %}<li><a href="#close_job" data-toggle="modal"><i class="glyphicon glyphicon-lock"></i> Close Job</a> </li>{% endif %}{% endif %}
+                    {% if user.group b-and 32 %}{% if content.statusid == 2 %}<li><a href="#archive_estimate" data-toggle="modal"><i class="glyphicon glyphicon-lock"></i> Archive Estimate</a> </li>{% endif %}{% endif %}
+                    <!--<li><a href="#delete_job" data-toggle="modal"><i class="glyphicon glyphicon-trash"></i> Delete</a> </li>-->
+                    {% if content.statusid < 4 %}<li role="presentation" class="divider"></li>{% endif %}
+                {% endif %}
+                <li><a href="/accounts/view/{{ content.organisationid}}"><i class="glyphicon glyphicon-home"></i> View Company</a></li>
+                <li><a href="/contacts/view/{{ content.contactid}}"><i class="glyphicon glyphicon-user"></i> View Contact</a></li>
+              </ul>
+            </div>
+        </h1>
+        
+
+            <table class="table table-bordered">
+            	<tr>
+                	<td colspan="2"><strong>Description:</strong> {{ content.description }}</td>
+                </tr>
+            	<tr>
+                    <td><strong>Date:</strong> {{ content.date|date('d/m/Y') }}</td>
+                	<td><strong>Job Number:</strong> {% if content.jobnumber %}{{ content.jobnumber }}{% else %}N/A{% endif %}</td>
+                </tr>
+            	<tr>
+                	<td><strong>Status:</strong> {{ getJobStatusName(content.statusid) }}</td>
+                    <td><strong>Status Changed:</strong> {{ content.statusdate|date('d/m/Y') }}</td>
+                </tr>
+            	<tr>
+                	<td><strong>Company:</strong> <a href="/accounts/view/{{ content.organisationid }}">{{ content.companyname }}</a></td>
+                	<td><strong>Contact:</strong> <a href="/contacts/view/{{ content.contactid }}">{{ getContactName(content.contactid) }}</a></td>
+                </tr>
+            	<tr>
+                    <td><strong>Acc Mgr:</strong> {{ getAccMgrName(content.accountmanagerid) }}</td>
+                	<td><strong>PO:</strong> {{ content.po }}</td>
+                </tr>
+            	<tr>
+                	<td><strong>Type:</strong> {{ getJobTypeName(content.type) }}</td>
+                    <td><strong>Value:</strong> £{{ content.value }}</td>
+                </tr>
+            	<tr>
+                </tr>
+            	{% if content.statusid == 4 %}<tr>
+                	<td><strong>Invoice Number:</strong> {{ content.invoicenumber }}</td>
+                    <td><strong>Invoice Date:</strong> {{ content.invoicedate|date('d/m/Y') }}</td>
+                </tr>{% endif %}
+            </table>
+            
+
+             <div class="tabbable">
+             <ul class="nav nav-tabs">
+                <li class="active">
+                  <a href="#job_summary" data-toggle="tab"><i class="glyphicon glyphicon-list-alt"></i> Job Sheet Summary </a>
+                </li>
+                {% if user.group b-and 32 and content.statusid != 2  and content.statusid != 5 %}
+                    <li>
+                      <a href="#invoices" data-toggle="tab"><i class="icon-inbox"></i> Invoice <span class="badge">{{invoice_lines|length}}</span></a>
+                    </li>
+                {% endif %}
+                {% if content.jobnumber %}
+                <li>
+                  <a href="#time_actual" data-toggle="tab"><i class="glyphicon glyphicon-tasks"></i> Studio Time </a>
+                </li>
+                
+               <!-- <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                      <i class="glyphicon glyphicon-tasks"></i> Time <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a href="#time_estimated_vs_actual" data-toggle="tab">Estimated vs Actual Hours</a></li>
+                      <li><a href="#time_estimated_vs_actual_cost" data-toggle="tab">Estimated vs Actual Cost</a></li>
+                      <li><a href="#time_estimated" data-toggle="tab">Estimated Costs</a></li>
+                      <li><a href="#time_actual" data-toggle="tab">Actual Costs</a></li>
+                    </ul>
+                  </li>-->
+                  {% endif %}
+                <li>
+                  <a href="#notes" data-toggle="tab"><i class="glyphicon glyphicon-comment"></i> Notes <span class="badge">{{ notes|length }}</span></a>
+                </li>
+                </ul>
+            </div>
+            
+            <br />
+
+         <div class="tab-content">
+
+             <div class="tab-pane" id="invoices">
+                <form class="" role="form" name="addInvoiceLine" id="addInvoiceLine" method="post" action="/jobs/add-invoice-line/{{ content.id }}">
+                    <table class="table table-bordered table-responsive">
+                    <tr class="active">
+                        <th width="10%">Studio Value</th>
+                        <th width="10%">Charge Out</th>
+                        <th width="10%">Cost In</th>
+                        <th width="10%">Month</th>
+                        <th width="15%">Note</th>
+                        <th width="15%">Status</th>
+                        <th width="15%">Actions</th>
+                    </tr>
+                    {% set has_final_invoice = 0 %}
+                    {% for line in invoice_lines %}
+                    {% if line.finalinvoice == 1 %}
+	                    {% set has_final_invoice = 1 %}
+                    {% endif %}
+                    <tr>
+                           <td>£{{ line.studiovalue|number_format }}</td>
+                           <td>£{{ line.chargeout|number_format }}</td>
+                           <td>£{{ line.chargein|number_format }}</td>
+                           <td>{{ line.invoicemonth }}/{{ line.invoiceyear }}</td>
+                            <td>{{ line.note }}</td>
+                          <td>{{ line.name }} {% if line.invoicedate %}({{ line.invoicedate|date('d/m/Y') }}){% endif %}</td>
+                           <td>
+                                {% if content.statusid != 3 %}
+                                    {% if line.statusid == 1 %}
+	                                    <a class="btn btn-danger tr_minus btn-xs delete_line" invoice_id="{{ line.id }}" id="delete_{{ line.id }}"><i class="glyphicon glyphicon-minus"></i> Delete</a>
+                                      <!--  <a class="btn btn-primary tr_minus btn-xs close_line" invoice_id="{{ line.id }}" id="close_{{ line.id }}"><i class="glyphicon glyphicon-inbox"></i> Final Invoice</a>-->
+                                      <div class="btn-group">
+                                          <button type="button" class="btn btn-primary tr_minus btn-xs " data-toggle="dropdown"> <i class="glyphicon glyphicon-inbox"></i>
+                                            Invoice <span class="caret"></span>
+                                          </button>
+                                          <ul class="dropdown-menu pull-right" role="menu">
+                                            <li><a class="close_line" invoice_id="{{ line.id }}" id="close_{{ line.id }}" href="#">Part Invoice</a></li>
+                                            <li><a class="close_line_final" invoice_id="{{ line.id }}" id="close_{{ line.id }}" href="#">Final Invoice</a></li>
+                                          </ul>
+										</div>
+                                    {% endif %}
+                                    {% if line.statusid == 2 %}
+                                        <a class="btn btn-warning tr_minus btn-xs open_line" invoice_id="{{ line.id }}" id="open_{{ line.id }}"><i class="glyphicon glyphicon-inbox"></i> Re-open</a>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    {% if content.statusid != 3 and has_final_invoice == 0 %}
+                    <tr>
+                        <td>
+                            <div class="input-group">
+                                <span class="input-group-addon">£</span>
+                                <input type="text" data-validation="required" placeholder="Enter value" id="studioValue" name="studioValue" class="form-control input-sm">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <span class="input-group-addon">£</span>
+                                <input type="text" data-validation="required" placeholder="Enter value" id="chargeOut" name="chargeOut" class="form-control input-sm">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <span class="input-group-addon">£</span>
+                                <input type="text" data-validation="required" placeholder="Enter value" id="chargeIn" name="chargeIn" class="form-control input-sm">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                <input type="text" data-validation="required" placeholder="Enter month" id="month" name="month" class="form-control input-sm monthpicker-invoices">
+                            </div>
+                        </td>
+                        <td>
+                            <input type="text" placeholder="Enter note" id="note" name="note" class="form-control input-sm">
+                        </td>
+                        <td></td>
+                        <td><button type="submit" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-plus"></i> Add Line</button></td>
+                    </tr>
+                     {% endif %}
+                   </table>
+                </form>
+			 </div>
+                                
+             <div class="tab-pane" id="notes">
+                <form role="form" name="addReply" method="post" action="/notes/add" enctype="multipart/form-data">
+                <div><input type="hidden" class="form-control" name="noteCompany" id="noteCompany" value="{{ content.organisationid }}"></div>
+                <div><input type="hidden" class="form-control" name="noteJob" id="noteJob" value="{{ content.id }}"></div>
+                <div class="panel panel-default">        
+                    <div class="panel-body">
+                          <div class="form-group">
+                            <label for="noteBody">New Note</label>
+                            <textarea class="form-control" rows="3" id="noteBody" name="noteBody" data-validation="required"></textarea>
+                          </div>
+                          <div class="form-group">
+                            <label for="noteAttachment">Attachment</label>
+                            <input type="file" id="noteAttachment" name="noteAttachment[]" class="noteAttachment">
+                            <br />
+                            <button class="addFileUpload btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i> Add more attachments</button>
+                          </div>
+                    </div>
+                    <div class="panel-footer"><button type="submit" class="btn btn-primary">Submit</button></div>
+                </div>
+                </form>  
+                  
+                {% for note in notes %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        {{ note.date|date }}
+                        <span class="floatright">{{ getAccMgrName(note.accountmanagerid) }}</span>
+                    </div>
+                   <div class="panel-body">
+                        {{ note.body }}<span class="floatright"><a href="/notes/delete/{{ note.id }}/{{ content.organisationid }}" class="text-danger"><i class="glyphicon glyphicon-remove "></i></a></span>
+                    </div>
+                    {% if note.filenames != '' %}
+                        <div class="panel-footer">
+                        {% for i in note.filenames|split(',') %}
+                            <a href="/attachments/{{ i }}"  class="btn btn-default btn-xs">{{ i }} <i class="glyphicon glyphicon-paperclip"></i></a>
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+             <div class="tab-pane" id="time_estimated_vs_actual">
+                <table class="table table-bordered table-responsive">
+                <tr class="active">
+                    <th>Type</th>
+                    <th>Est Hours</th>
+                    <th>Act Hours</th>
+                    <th>Diff</th>
+                </tr>
+                {% set total_est = 0 %}
+                {% set total_act = 0 %}
+                {% for line in estimated_vs_actual %}
+                 	{% set total_est = total_est + line.estHours %}
+                	{% set total_act = total_act + line.actHours %}
+               	<tr>
+                    	<td>{{ getWorkTypeName(line.worktypeid) }}</td>
+                    	<td>{{ line.estHours }}</td>
+                    	<td>{{ line.actHours }}</td>
+                    	<td>{{ line.estHours - line.actHours }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <th></th>
+                    <th>{{ total_est }}</th>
+                    <th>{{ total_act }}</th>
+                    <th>{{ total_est - total_act }}</th>
+                </tr>
+				</table>
+            </div>
+
+             <div class="tab-pane" id="time_estimated_vs_actual_cost">
+                <table class="table table-bordered table-responsive">
+                <tr class="active">
+                    <th>Type</th>
+                    <th>Est Cost</th>
+                    <th>Act Cost</th>
+                    <th>Diff</th>
+                </tr>
+                {% set total_est = 0 %}
+                {% set total_act = 0 %}
+                {% for line in estimated_vs_actual_cost %}
+                 	{% set total_est = total_est + (line.estHours * line.estRate) %}
+                	{% set total_act = total_act + (line.actHours * line.estRate) %}
+               	<tr>
+                    	<td>{{ getWorkTypeName(line.worktypeid) }}</td>
+                    	<td>£{{ line.estHours * line.estRate }}</td>
+                    	<td>£{{ (line.actHours * line.estRate)|number_format }}</td>
+                    	<td>£{{ (line.estHours * line.estRate) - (line.actHours * line.estRate)|number_format }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <th></th>
+                    <th>£{{ total_est }}</th>
+                    <th>£{{ total_act|number_format }}</th>
+                    <th>£{{ total_est - total_act|number_format }}</th>
+                </tr>
+				</table>
+            </div>
+
+             <div class="tab-pane" id="time_estimated">
+                <table class="table table-bordered table-responsive">
+                <tr class="active">
+                    <th>Type</th>
+                    <th>Hours</th>
+                    <th>Rate</th>
+                    <th>Value</th>
+                </tr>
+                {% set total_hours = 0 %}
+                {% set total_value = 0 %}
+                {% for line in estimated %}
+                 	{% set total_hours = total_hours + line.hours %}
+                	{% set total_value = total_value + line.value %}
+               	<tr>
+                    	<td>{{ getWorkTypeName(line.worktypeid) }}</td>
+                    	<td>{{ line.hours }}</td>
+                    	<td>{{ line.rate }}</td>
+                    	<td>£{{ line.value }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <th></th>
+                    <th>{{ total_hours }}</th>
+                    <th></th>
+                    <th>£{{ total_value }}</th>
+                </tr>
+				</table>
+            </div>
+
+             <div class="tab-pane" id="time_actual">
+                <table class="table table-bordered table-responsive">
+                    <tr class="active">
+                        <th>Employee</th>
+                       <!-- <th>Type</th>-->
+                        <th>Hours</th>
+                 <!--      <th>Value</th>-->
+                    </tr>
+                    {% set total_hours = 0 %}
+                    {% set total_value = 0 %}
+                    {% for line in actual %}
+                        {% set total_hours = total_hours + line.hours %}
+                        {% set total_value = total_value + line.value %}
+                    <tr>
+                            <td>{{ getAccMgrName(line.employeeid) }}</td>
+                       <!--     <td>{{ getWorkTypeName(line.worktypeid) }} {% if line.worksubtypeid %}({{ getWorkSubTypeName(line.worksubtypeid) }}){% endif %}</td> -->
+                            <td>{{ line.hours }}<a href="/jobs/studio-breakdown/{{ content.jobnumber }}/{{ line.employeeid }}" data-toggle="modal" data-target="#modal" class="modal-link btn btn-primary btn-xs pull-right"><i class="glyphicon glyphicon-zoom-in"></i> Details</a></td>
+                   <!--     	<td>£{{ line.value }}</td>-->
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <th></th>
+                      <!--  <th></th>-->
+                        <th>{{ total_hours }}</th>
+                      <!--  <th>£{{ total_value }}</th>-->
+                    </tr>
+				</table>
+            </div>
+
+
+         <div class="tab-pane active" id="job_summary">
+            {% if estimated_vs_actual_cost|length > 0 %}
+            <h4>Studio Costs</h4>
+            <table class="table table-bordered table-responsive">
+                <tr class="table-blue">
+                    <th width="25%">Type</th>
+                    <th width="25%" colspan="4">Hours</th>
+                    <th width="50%" colspan="5">Costs</th>
+                </tr>
+                <tr class="active">
+                    <th></th>
+                    <th>Est</th>
+                    <th>Act</th>
+                    <th>Diff</th>
+                    <th></th>
+                    <th>Est Rate</th>
+                    <th>Est Cost</th>
+                    <th>Act Rate</th>
+                    <th>Act Cost</th>
+                    <th>Diff</th>
+                </tr>
+                
+                {% set total_est_hours = 0 %}
+                {% set total_est_value = 0 %}
+                {% set total_act_hours = 0 %}
+                {% set total_act_value = 0 %}
+                
+                {% for line in estimated_vs_actual_cost %}
+                {% if line.estHours or line.actHours %}
+
+                    {% set total_est_hours = total_est_hours + line.estHours %}
+                    {% set total_est_value = total_est_value + (line.estHours * line.estRate) %}
+                    {% set total_act_hours = total_act_hours + line.actHours %}
+                    {% set total_act_value = total_act_value + (line.actHours * line.estRate) %}
+                    
+                    <tr>
+                    	<td>{{ getWorkTypeName(line.worktypeid) }}</td>
+                    	<td>{{ line.estHours }}</td>
+                    	<td>{{ line.actHours }}</td>
+						<td>{{ (line.actHours - line.estHours) }}</td>
+						<td></td>
+<!-- est rate -->		<td>£{{ line.estRate }}</td>
+<!-- est cost -->		<td>£{{ (line.estHours * line.estRate)|number_format(2, '.', ',') }}</td>
+<!-- act rate -->		<td>£{%if line.estHours and line.actHours %}{{ ((line.estHours * line.estRate)/ line.actHours)|number_format(2, '.', ',') }}{% else %}70{% endif %}</td>
+<!-- act cost -->		<td>£{{ (line.actHours * line.estRate)|number_format(2, '.', ',') }}</td>
+<!-- diff -->          	<td>£{{ ((line.estHours * line.estRate) - (line.actHours * line.estRate))|number_format(2, '.', ',') }}</td>
+                    </tr>
+                {% endif %}
+                {% endfor %}
+                <tr style="font-weight:bold;">
+                    <td></td>
+                    <td>{{ total_est_hours }}</td>
+                    <td>{{ total_act_hours }}</td>
+                    <td>{{ (total_act_hours - total_est_hours) }}</td>
+                    <td></th>
+                    <td></td>
+                    <td>£{{ total_est_value }}</td>
+                    <td></td>
+                    <td>£{{ total_act_value|number_format(2, '.', ',') }}</td>
+                    <td>£{{ (total_est_value - total_act_value)|number_format(2, '.', ',') }}</td>
+                </tr>
+            </table>
+            {% else %}
+            <!--    No estimated costs yet. <a href="/jobs/edit-costs/{{ content.id }}" class="btn btn-default previous">Add studios costs</a>-->
+            {% endif %}
+
+  <!--      {% if estimated|length > 0 %}
+        	<h4>Estimated Studio</h4>
+            <table class="table table-bordered table-responsive">
+                <tr class="active">
+                    <th>Type</th>
+                    <th>Hours</th>
+                    <th>Rate</th>
+                    <th>Value</th>
+                </tr>
+                {% set total_hours = 0 %}
+                {% set total_value = 0 %}
+                {% for line in estimated %}
+                 	{% set total_hours = total_hours + line.hours %}
+                	{% set total_value = total_value + line.value %}
+               	<tr>
+                    	<td>{{ getWorkTypeName(line.worktypeid) }}</td>
+                    	<td>{{ line.hours }}</td>
+                    	<td>£{{ line.rate }}</td>
+                    	<td>£{{ line.value }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <th></th>
+                    <th>{{ total_hours|number_format(2, '.', ',') }}</th>
+                    <th></th>
+                    <th>£{{ total_value }}</th>
+                </tr>
+            </table>
+        {% endif %}-->
+
+        {% if outsourced|length > 0 %}
+        	<h4>Outsourced</h4>
+            <table class="table table-bordered table-responsive">
+                <tr class="table-green">
+                    <th width="20%">Type</th>
+                    <th width="20%">PO Number</th>
+                    <th width="20%">Cost In</th>
+                    <th width="20%">Charge Out</th>
+                    <th width="20%">Markup</th>
+                </tr>
+                {% set total_value = 0 %}
+                {% set total_valueout = 0 %}
+                {% for line in outsourced %}
+                	{% set total_value = total_value + line.valuein %}
+                	{% set total_valueout = total_valueout + line.valueout %}
+               	<tr>
+                    	<td>{{ line.name }}</td>
+                    	<td>{{ line.po }}</td>
+                    	<td>£{{ line.valuein }}</td>
+                    	<td>£{{ line.valueout }}</td>
+                    	<td>£{{ (line.valueout-line.valuein) }} / {{ ((line.valueout - line.valuein) / line.valuein * 100)|number_format }}%</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>£{{ total_value }}</th>
+                    <th>£{{ total_valueout }}</th>
+                    <th>£{%if total_value > 0 %}{{ (total_valueout-total_value) }} / {{ ((total_valueout - total_value) / total_value * 100)|number_format }}{%else%}100{%endif%}%</th>
+                </tr>
+            </table>
+        {% else %}
+    <!--        No outsourced costs yet. <a href="/jobs/edit-outsourced/{{ content.id }}" class="btn btn-default previous">Add outsourced costs</a>-->
+        {% endif %}
+
+        {% if content.statusid != 2 %}
+        
+        	<h4>Analysis</h4>
+            <table class="table table-bordered table-responsive">
+                <tr class="table-orange">
+                    <th width="50%">Type</th>
+                    <th width="50%">Value</th>
+                </tr>
+               	<tr>
+                    <td>Estimated Studio</td>
+                    <td>£{{ costanalysis.estStudio|number_format(2, '.', ',') }}</td>
+                </tr>
+               	<tr>
+                    <td>Actual Studio</td>
+                    <td>£{{ (costanalysis.estRate * costanalysis.actStudio)|number_format(2, '.', ',') }}</td>
+                </tr>
+               	<tr>
+                    <td>Service Charge Out</td>
+                    <td>£{{ costanalysis.chargedOut|number_format(2, '.', ',') }} (£{{ costanalysis.totalchargeoutvalue|number_format(2, '.', ',') }} invoiced)</td>
+                </tr>
+               	<tr>
+                    <td>Actual Studio + Charge Out</td>
+                    <td>£{{ ((costanalysis.estRate * costanalysis.actStudio) + costanalysis.chargedOut)|number_format(2, '.', ',') }}</td>
+                </tr>
+               	<tr>
+                    <td>Adjustment</td>
+                    <td>£{{ (costanalysis.totalinvoicedvalue-((costanalysis.estRate * costanalysis.actStudio) + costanalysis.chargedOut))|number_format(2, '.', ',') }}</td>
+                </tr>
+               	<tr  class="active">
+                    <th>Client Invoiced</th>
+                    <th>£{{ costanalysis.totalinvoicedvalue|number_format(2, '.', ',') }} (£{{ costanalysis.totalstudiovalue|number_format(2, '.', ',') }} / £{{ costanalysis.totalchargeoutvalue|number_format(2, '.', ',') }})</th>
+                </tr>
+            </table>
+        {% endif %}
+    </div>
+
+
+
+
+</div>
+
+
+    <!------------ MODAL FORMS -------------->
+
+    <div class="modal fade" id="convert_job">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form role="form" name="convertJob" method="post" action="/jobs/convert-estimate/{{ content.id }}">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Create Job</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to convert this estimate to a Job?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Create Job</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="delete_job">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form role="form" name="deleteJob" method="post" action="/jobs/delete/{{ content.id }}">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Delete</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete {{ content.title }}?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="close_job">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form role="form" name="closeJob" method="post" action="/jobs/close/{{ content.id }}">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Close Job</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to close this Job?</p>
+                    
+                    <h4><strong>Has the job been full invoiced?</strong></h4>
+                    
+                    {% if content.po is empty %}
+                        <p>Please supply the following information to close the job:</p>
+                    {% endif %}
+                    {% if content.po is empty %}
+                        <div class="form-group">
+                            <label for="jobPo">PO</label>
+                            <input type="text" class="form-control" name="jobPo" id="jobPo" placeholder="Enter job PO"  data-validation="required">
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Close Job</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="archive_estimate">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form role="form" name="closeJob" method="post" action="/jobs/archive/{{ content.id }}">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Archive Estimate</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to Archive this Estimate?</p>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Archive Estimate</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="re-open_job">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form role="form" name="closeJob" method="post" action="/jobs/re-open/{{ content.id }}">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Re-Open Job</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to re-open this Job?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Re-Open Job</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+
+<script>
+    $.validate({  });
+</script>
+    
+<script type="text/javascript">
+
+/*	$(document.body).on('hidden.bs.modal', function () {
+		$('#modal').removeData('bs.modal')
+	});*/
+	
+	$(document).on("hidden.bs.modal", function (e) {
+		$(e.target).removeData("bs.modal").find(".modal-content").empty();
+	});
+
+	$(document).ready(function() {
+		
+
+
+
+		/*$(".modal-link").click(function(event) {
+			event.preventDefault();
+			$('#modal').removeData('bs.modal');
+			$('#modal').modal({remote: $(this).attr("href")});
+		})*/
+		
+		$('.monthpicker-invoices').datepicker({
+			format: "mm/yyyy",
+			minViewMode: 1,
+			autoclose: true,
+			todayHighlight: false,
+			startDate: {{ invoice_closedmonthlength+1 }} + 'm'
+		});
+		
+/*		$(".hours_breakdown_link").on("click",function(){
+			
+			alert($(this).attr("data-employee"));
+		
+			return false;
+		});*/
+		
+		$(".delete_line").on("click",function(){
+			if ($(this).attr("invoice_id")){
+				$(this).addClass("disabled");
+				$(this).text("Please wait");
+				$.get("/ajax/delete-invoice-line/" + $(this).attr("invoice_id"), function( data ) {
+					if(data >= 1){
+						if(location.href.indexOf("#_invoices") < 0)
+						{
+							window.location.href = location.href + "#_invoices";
+						}
+						window.location.reload(true);
+					}else{
+						alert('Error deleting');	
+					}
+				});		
+			}
+			return false;
+		});
+
+		$(".close_line").on("click",function(){
+			if ($(this).attr("invoice_id")){
+				$(this).addClass("disabled");
+				$(this).text("Please wait");
+				$.get("/ajax/update-invoice-status/" + $(this).attr("invoice_id") + "/2/0", function( data ) {
+					if(data >= 1){
+						if(location.href.indexOf("#_invoices") < 0)
+						{
+							window.location.href = location.href + "#_invoices";
+						}
+						window.location.reload(true);
+					}else{
+						alert('Error closing');	
+					}
+				});		
+			}
+			return false;
+		});
+
+		$(".close_line_final").on("click",function(){
+			if ($(this).attr("invoice_id")){
+				$(this).addClass("disabled");
+				$(this).text("Please wait");
+				$.get("/ajax/update-invoice-status/" + $(this).attr("invoice_id") + "/2/1", function( data ) {
+					if(data >= 1){
+						if(location.href.indexOf("#_invoices") < 0)
+						{
+							window.location.href = location.href + "#_invoices";
+						}
+						window.location.reload(true);
+					}else{
+						alert('Error closing');	
+					}
+				});		
+			}
+			return false;
+		});
+
+		$(".open_line").on("click",function(){
+			if ($(this).attr("invoice_id")){
+				$(this).addClass("disabled");
+				$(this).text("Please wait");
+				$.get("/ajax/update-invoice-status/" + $(this).attr("invoice_id") + "/1/0", function( data ) {
+					if(data >= 1){
+						if(location.href.indexOf("#_invoices") < 0)
+						{
+							window.location.href = location.href + "#_invoices";
+						}
+						window.location.reload(true);
+					}else{
+						alert('Error opening');	
+					}
+				});		
+			}
+			return false;
+		});
+
+		
+	});
+	
+</script>
+
+{% endblock %}

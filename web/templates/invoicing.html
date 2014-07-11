@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="col-md-12">
+
+         <ol class="breadcrumb">
+          <li><a href="/jobs/list">Jobs</a></li>
+          <li class="active">Invoicing</li>
+        </ol>
+        
+        <form role="form" name="invoiceReport" id="invoiceReport" method="post" action="/invoicing/report">
+        <div class="well">
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                    <input type="text" class="form-control monthpicker" name="invoicingMonth" id="invoicingMonth" placeholder="Choose month" data-validation="required" readonly>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+        </form>
+    
+
+</div>
+
+<script>
+    $.validate({  });
+</script>
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+
+		
+		$('#jobCompany').change(function(){
+			var accountid = $(this).val();
+			$.ajax({
+					type: "GET",
+					url: "/xml/contacts/" + accountid,
+					dataType: "xml",
+					success: function(xml) {
+						var select = $('#jobContact');
+						select.attr("disabled","disabled");
+						select.children().remove();
+						select.append("<option value=''>-- select --</option>");
+						$(xml).find('item').each(function(){
+							var name = $(this).find('name').text();
+							var id = $(this).find('id').text();
+							select.append("<option value="+id+">"+name+"</option>");
+						});
+						select.removeAttr("disabled");
+					}
+				});
+		});
+
+		$('#estimateCompany').change(function(){
+			var accountid = $(this).val();
+			$.ajax({
+					type: "GET",
+					url: "/xml/contacts/" + accountid,
+					dataType: "xml",
+					success: function(xml) {
+						var select = $('#estimateContact');
+						select.attr("disabled","disabled");
+						select.children().remove();
+						select.append("<option value=''>-- select --</option>");
+						$(xml).find('item').each(function(){
+							var name = $(this).find('name').text();
+							var id = $(this).find('id').text();
+							select.append("<option value="+id+">"+name+"</option>");
+						});
+						select.removeAttr("disabled");
+					}
+				});
+		});
+		
+
+	});
+</script>
+
+{% endblock %}

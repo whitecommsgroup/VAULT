@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="AbstractToken.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="AnonymousToken.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="PreAuthenticatedToken.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="RememberMeToken.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="TokenInterface.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="UsernamePasswordToken.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+</dwsync>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="AbstractLoader.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="AnnotationLoader.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="FileLoader.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="FilesLoader.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="LoaderChain.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="LoaderInterface.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="StaticMethodLoader.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="XmlFileLoader.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="XmlFilesLoader.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="YamlFileLoader.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="YamlFilesLoader.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+</dwsync>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="Acl.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="AclCollectionCache.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="AuditLogger.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="DoctrineAclCache.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="Entry.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="FieldEntry.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="ObjectIdentity.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="ObjectIdentityRetrievalStrategy.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="PermissionGrantingStrategy.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="RoleSecurityIdentity.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="SecurityIdentityRetrievalStrategy.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+<file name="UserSecurityIdentity.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924320000000" remote="130244924320000000" Dst="2" />
+</dwsync>

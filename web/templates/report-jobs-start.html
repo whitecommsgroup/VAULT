@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="col-md-12">
+
+         <ol class="breadcrumb">
+          <li class="active">Reports</li>
+          <li class="active">Summary</li>
+        </ol>
+        
+        <h1>Job Summary Report</h1>
+        
+        <form role="form" name="summaryReport" id="summaryReport" method="post" action="/reports/jobs">
+        <div class="well">
+            <div class="form-group">
+                <label for="dateFrom">Date From</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                    <input type="text" class="form-control datepicker" name="dateFrom" id="dateFrom" placeholder="Choose date" data-validation="required">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="dateTo">Date To</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                    <input type="text" class="form-control datepicker" name="dateTo" id="dateTo" placeholder="Choose date" data-validation="required">
+                </div>
+            </div>
+            <div class="input-group">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    
+
+</div>
+
+<script>
+    $.validate({  });
+</script>
+
+
+{% endblock %}

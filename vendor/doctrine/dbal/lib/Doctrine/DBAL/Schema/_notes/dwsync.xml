@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="AbstractAsset.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="AbstractSchemaManager.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="Column.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="ColumnDiff.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="Comparator.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="Constraint.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="DB2SchemaManager.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="DrizzleSchemaManager.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="ForeignKeyConstraint.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="Index.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="MySqlSchemaManager.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="OracleSchemaManager.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="PostgreSqlSchemaManager.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="Schema.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="SchemaConfig.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="SchemaDiff.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="SchemaException.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="Sequence.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="SqliteSchemaManager.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="SQLServerSchemaManager.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="Table.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="TableDiff.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="View.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+</dwsync>

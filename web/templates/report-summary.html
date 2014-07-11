@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+
+<div class="col-md-12">
+
+         <ol class="breadcrumb">
+          <li class="active">Reports</li>
+          <li><a href="/reports/summary">Summary</a></li>
+          <li class="active">Report for {{ dateFrom }} to {{ dateTo }}</li>
+        </ol>
+        
+        <h4>Summary for {{ dateFrom }} to {{ dateTo }}
+        
+        <div class="btn-group floatright">
+            <form role="form" name="summaryReport2" id="summaryReport2" method="post" action="/reports/summary/export/current" style="float:right; margin-left:10px;">
+                <input type="hidden" class="form-control datepicker" name="dateFrom" id="dateFrom" placeholder="Choose month" data-validation="required" value="{{ dateFrom }}">
+                <input type="hidden" class="form-control datepicker" name="dateTo" id="dateTo" placeholder="Choose month" data-validation="required" value="{{ dateTo }}">
+                <button type="submit" class="btn btn-primary pull-right"><i class="glyphicon glyphicon-floppy-save"></i> Export Current</button>
+            </form>
+              <form role="form" name="summaryReport" id="summaryReport" method="post" action="/reports/summary/export/invoiced" style="float:right; margin-left:10px;">
+                <input type="hidden" class="form-control datepicker" name="dateFrom" id="dateFrom" placeholder="Choose month" data-validation="required" value="{{ dateFrom }}">
+                <input type="hidden" class="form-control datepicker" name="dateTo" id="dateTo" placeholder="Choose month" data-validation="required" value="{{ dateTo }}">
+                <button type="submit" class="btn btn-primary pull-right"><i class="glyphicon glyphicon-floppy-save"></i> Export Invoiced</button>
+            </form>
+       </div>
+     
+        
+        </h4>
+
+      <div class="tabbable">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#invoiced" data-toggle="tab">Invoiced</a></li>
+            <li><a href="#current" data-toggle="tab">Current</a></li>
+        </ul>
+       </div>
+
+    <br />
+   
+    <div class="tab-content">
+
+        <div class="tab-pane active" id="invoiced">
+             <table class="table table-bordered table-responsive table-condensed table-striped table-smallfont">
+                <tr class="active">
+                    <th nowrap="nowrap">Job No.</th>
+                    <th nowrap="nowrap">Client</th>
+                    <th nowrap="nowrap">Job Title</th>
+                    <th nowrap="nowrap">Invoice Date</th>
+                    <th nowrap="nowrap">Account Handler</th>
+                    <th nowrap="nowrap">Studio [E]</th>
+                    <th nowrap="nowrap">Studio [A]</th>
+                    <th nowrap="nowrap">Services [I]</th>
+                    <th nowrap="nowrap">Services [C]</th>
+                    <th nowrap="nowrap">Mark up %</th>
+                    <th nowrap="nowrap">Invoice [C]</th>
+                    <th nowrap="nowrap">Invoiced [I]</th>
+                    <th nowrap="nowrap">Adjustment</th>
+                </tr>
+                {% for item in invoiced %}
+                    <tr>
+                        <td>{{ item.jobnumber }}</td>
+                        <td>{{ getCompanyName(item.organisationid) }}</td>
+                        <td>{{ item.title }}</td>
+                        <td>{{ item.statusdate|date('d/m/Y') }}</td>
+                        <td>{{ getAccMgrName(item.accountmanagerid) }}</td>
+                        <td>£{{ (item.estHours * item.estRate) }}</td>
+                        <td>£{{ (item.actHours * item.estRate) }}</td>
+                        <td>£{{ item.boughtIn }}</td>
+                        <td>£{{ item.boughtOut }}</td>
+                        <td>{% if item.boughtOut or item.boughtIn %}{{ ((item.boughtOut - item.boughtIn) / item.boughtIn * 100)|number_format }}%{% endif %}</td>
+                        <td>£{{ (item.boughtOut + (item.actHours * item.estRate)) }}</td>
+                        <td>£{{ item.invoicevalue }}</td>
+                        <td>£{{ item.invoicevalue - (item.boughtOut + (item.actHours * item.estRate)) }}</td>
+                    </tr>
+                {% endfor %}
+            </table>    
+		</div>              
+
+        <div class="tab-pane" id="current">
+             <table class="table table-bordered table-responsive table-condensed table-striped table-smallfont">
+                <tr class="active">
+                    <th nowrap="nowrap">Job No.</th>
+                    <th nowrap="nowrap">Client</th>
+                    <th nowrap="nowrap">Job Title</th>
+                    <th nowrap="nowrap">Invoice Date</th>
+                    <th nowrap="nowrap">Account Handler</th>
+                    <th nowrap="nowrap">Studio [E]</th>
+                    <th nowrap="nowrap">Studio [A]</th>
+                    <th nowrap="nowrap">Services [I]</th>
+                    <th nowrap="nowrap">Services [C]</th>
+                    <th nowrap="nowrap">Mark up %</th>
+                    <th nowrap="nowrap">Invoice [C]</th>
+                    <th nowrap="nowrap">Invoiced [I]</th>
+                    <th nowrap="nowrap">Adjustment</th>
+                </tr>
+                {% for item in current %}
+                    <tr>
+                        <td>{{ item.jobnumber }}</td>
+                        <td>{{ getCompanyName(item.organisationid) }}</td>
+                        <td>{{ item.title }}</td>
+                        <td>{{ item.statusdate|date('d/m/Y') }}</td>
+                        <td>{{ getAccMgrName(item.accountmanagerid) }}</td>
+                        <td>£{{ (item.estHours * item.estRate) }}</td>
+                        <td>£{{ (item.actHours * item.estRate) }}</td>
+                        <td>£{{ item.boughtIn }}</td>
+                        <td>£{{ item.boughtOut }}</td>
+                        <td>{% if item.boughtOut or item.boughtIn %}{{ ((item.boughtOut - item.boughtIn) / item.boughtIn * 100)|number_format }}%{% endif %}</td>
+                        <td>£{{ item.boughtOut + (item.estHours * item.estRate) }}</td>
+                        <td>£{{ item.invoicevalue }}</td>
+                        <td>£{{ item.invoicevalue - (item.boughtOut + (item.estHours * item.estRate)) }}</td>
+                    </tr>
+                {% endfor %}
+            </table>    
+		</div>              
+ 
+	</div> 
+</div>
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+		
+		$('.jobState').change(function(){
+
+			var jobid = $(this).attr("id");
+			var statusid = $(this).val();
+
+			$.ajax({
+				type: "GET",
+				url: "/ajax/update-job-status/" + jobid + "/" + statusid,
+				success: function() {
+					$("#jobrow-" + jobid).removeClass();
+					$("#jobrow-" + jobid).addClass("jobstatus-" + statusid);
+				}
+			});
+			
+		});
+
+		$('.po, .date, .number').editable();
+
+	});
+</script>
+
+{% endblock %}

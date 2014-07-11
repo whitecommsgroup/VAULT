@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+      <li><a href="/jobs">Jobs</a></li>
+      <li><a href="/jobs/list">Jobs Book</a></li>
+      <li><a href="/jobs/view/{{ jobDetails.id }}">{% if jobDetails.jobnumber %}{{ jobDetails.jobnumber }} - {% endif %}{{ jobDetails.title }}</a></li>
+      <li class="active">Edit Costs</li>
+    </ol>
+
+   
+                    <div class="panel panel-default">
+                    <form class="" role="form" name="editEstimate" id="editEstimate" method="post" action="/jobs/estimate/update">
+                    <div><input type="hidden" name="jobId" id="jobId" value="{{ jobDetails.id }}" /></div>
+                    <div class="panel-body">
+                        <table id="tbl">
+                           <tr>
+                           		<th class="col-md-1">ID</th>
+                           		<th class="col-md-3">Work type</th>
+                           		<th class="col-md-1">Hours</th>
+                           		<th class="col-md-2">Rate</th>
+                           		<th class="col-md-2">Value</th>
+                           		<th class="col-md-4"></th>
+                           </tr>
+                           {% if lines|length > 0 %}
+                           {% for line in lines %}
+                           <tr class="tr_clone">
+                           		<td class="col-md-1" class="tr_id"><input class="form-control" name="timeSheetLineId[]" id="timeSheetLineId" type="hidden" value="{{ line.id }}" ><input class="form-control" type="text" value="{{ line.id }}" disabled="disabled"></td>
+                                <td class="col-md-2">
+                                    <select class="form-control" name="timeSheetType[]" id="timeSheetType" data-validation="required">
+                                      <option value="">-- select --</option>
+                                      {% for worktype in global_worktypes %}
+                                          <option value="{{ worktype.id }}" {% if worktype.id == line.worktypeid %}selected="selected"{% endif %}>{{ worktype.name }}</option>
+                                      {% endfor %}
+                                    </select>
+                                </td>
+                                <td class="col-md-1">
+                                    <input type="text" class="form-control timeSheetHours" name="timeSheetHours[]" id="timeSheetHours" placeholder="Hours" value="{{ line.hours }}" data-validation="required">
+                                </td>
+                                <td class="col-md-2">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">£</span>
+                                        <input type="text" class="form-control timeSheetRate" name="timeSheetRate[]" id="timeSheetRate" placeholder="Hours" value="{{ line.rate }}" data-validation="required">
+                                	</div>
+                                </td>
+                                <td class="col-md-2">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">£</span>
+                                        <input type="text" class="form-control timeSheetValue" name="timeSheetValue[]" id="timeSheetValue" placeholder="Hours" value="{{ line.value }}" data-validation="required">
+                                 	</div>
+                               </td>
+                                <td class="col-md-2"><a class="btn btn-danger tr_minus btn-sm" id="{{ line.id }}"><i class="glyphicon glyphicon-minus"></i> Remove</a></td>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                           <tr class="tr_clone">
+                           		<td class="col-md-1" class="tr_id"></td>
+                                <td class="col-md-2">
+                                    <select class="form-control" name="timeSheetType[]" id="timeSheetType" data-validation="required">
+                                      <option value="">-- select --</option>
+                                      {% for worktype in global_worktypes %}
+                                          <option value="{{ worktype.id }}" >{{ worktype.name }}</option>
+                                      {% endfor %}
+                                    </select>
+                                </td>
+                                <td class="col-md-1">
+                                    <input type="text" class="form-control timeSheetHours" name="timeSheetHours[]" id="timeSheetHours" placeholder="Hours" data-validation="required">
+                                </td>
+                                <td class="col-md-2">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">£</span>
+                                        <input type="text" class="form-control timeSheetRate" name="timeSheetRate[]" id="timeSheetRate" placeholder="Rate" value="{% if getAccountRate(jobDetails.organisationid) %}{{ getAccountRate(jobDetails.organisationid) }}{% else %}70{% endif %}" data-validation="required">
+                                	</div>
+                                </td>
+                                <td class="col-md-2">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">£</span>
+                                        <input type="text" class="form-control timeSheetValue" name="timeSheetValue[]" id="timeSheetValue" placeholder="Value" data-validation="required">
+                                 	</div>
+                               </td>
+                                <td class="col-md-2"><a class="btn btn-danger tr_minus btn-sm"><i class="glyphicon glyphicon-minus"></i> Remove</a></td>
+                            </tr>
+                            {% endif %}
+                            <tfoot>
+                               <tr>
+                                    <th class="col-md-1"></th>
+                                    <th class="col-md-3"><a class="btn btn-success tr_clone_add btn-sm"><i class="glyphicon glyphicon-plus"></i> Add row</a></th>
+                                    <th class="col-md-1"></th>
+                                    <th class="col-md-2"><strong class="floatright">Total:</strong></th>
+                                    <th class="col-md-2">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">£</span>
+                                        <input class="form-control total" id="disabledInput" type="text" placeholder="0" disabled>
+                                    </div>
+                                    </th>
+                                    <th class="col-md-2"></th>
+                               </tr>
+                             </tfoot>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                           <a class="btn btn-default previous" href="/jobs/view/{{ jobDetails.id }}">&larr; Back</a> <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </div>
+                </form>
+
+<script>
+    $.validate({  });
+</script>
+
+    <script type="text/javascript">
+		
+		$(document).ready(function() {
+			
+			init();
+			
+			$(".tr_clone_add").on("click",function(){
+
+       
+				var $tableBody = $('#tbl').find("tbody"),
+					$trLast = $tableBody.find("tr:last"),
+					$trNew = $trLast.clone();
+					$trLast.after($trNew);
+			 		$("#tbl tr.tr_clone:last input").val('');
+			 		$("#tbl tr.tr_clone:last select").prop('selectedIndex',0);
+					$("#tbl tr.tr_clone:last .tr_approve").remove();
+					$("#tbl tr.tr_clone:last #timeSheetRate").val('{% if getAccountRate(jobDetails.organisationid) %}{{ getAccountRate(jobDetails.organisationid) }}{% else %}70{% endif %}');
+					
+				init();
+
+			});
+
+
+				
+				
+				
+		});
+
+
+function init(){
+
+			$(".timeSheetHours, .timeSheetRate").on("blur",function(){
+				$("#tbl tr.tr_clone").each(function() {
+					value = Number($(this).find(".timeSheetHours").val()) * Number($(this).find(".timeSheetRate").val());
+					$(this).find(".timeSheetValue").val(value);
+				});
+				
+				var sum = 0;
+				$('.timeSheetValue').each(function() {
+					sum += Number($(this).val());
+				});
+				$(".total").val(sum);
+			});
+
+
+		
+			$("#tbl tr.tr_clone:last .tr_minus").on("click",function(){
+				if ($(".tr_clone").length > 1){
+					if ($(this).attr("id") != ''){
+						$.get("/ajax/deleteEstimateLine/" + $(this).attr("id"), function( data ) { });		
+						$(this).parent().parent().remove();
+					}
+					$(this).parent().parent().remove();
+				}else{
+					alert('Cannot delete row - you need at least 1 row')	
+				}
+				
+			});
+
+
+	
+}
+	
+	</script>
+        
+</div>
+{% endblock %}

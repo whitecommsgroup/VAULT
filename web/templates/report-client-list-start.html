@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="col-md-12">
+
+         <ol class="breadcrumb">
+          <li class="active">Reports</li>
+          <li class="active">Client List</li>
+        </ol>
+        
+        <h1>Client List Report</h1>
+        
+        <form role="form" name="summaryReport" id="summaryReport" method="post" action="/reports/client-list">
+        <div class="well">
+            <div class="form-group">
+                <label for="reportAccManager">Account Manager *</label>
+                <select class="form-control" id="reportAccManager" name="reportAccManager">
+                  <option value="0">- select -</option>
+                    {% for manager in global_accountmanagers %}
+                        <option value="{{ manager.id }}">{{ manager.firstname }} {{ manager.lastname }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+              <div class="form-group">
+                <label for="reportStatus">Status</label>
+                <select class="form-control" id="reportStatus" name="reportStatus">
+                    <option value="0">- select -</option>
+                    {% for state in global_states_clients %}
+                        <option value="{{ state.id }}">{{ state.name }}</option>
+                    {% endfor %}
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="reportSource">Source</label>
+                <select class="form-control" id="reportSource" name="reportSource">
+                    <option value="0">- select -</option>
+                    {% for source in global_sources %}
+                        <option value="{{ source.id }}">{{ source.name }}</option>
+                    {% endfor %}
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="reportSector">Sector</label>
+                <select class="form-control" id="reportSector" name="reportSector">
+                    <option value="0">- select -</option>
+                    {% for sector in global_sectors %}
+                        <option value="{{ sector.id }}">{{ sector.name }}</option>
+                    {% endfor %}
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="">Services</label><br />
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="reportServices1" value="1" name="reportServices[]"> Creative
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="reportServices2" value="2" name="reportServices[]"> Interactive
+                </label>
+              </div>
+
+            <div class="form-group">
+                <label for="dateFrom">Date From</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                    <input type="text" class="form-control datepicker" name="dateFrom" id="dateFrom" placeholder="Choose month">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="dateTo">Date To</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                    <input type="text" class="form-control datepicker" name="dateTo" id="dateTo" placeholder="Choose month">
+                </div>
+            </div>
+            <div class="input-group">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    
+
+</div>
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+
+        $('form').validate({
+            onKeyup : true,
+            eachValidField : function() {
+
+                $(this).parent().removeClass('has-error').addClass('has-success');
+            },
+            eachInvalidField : function() {
+
+                $(this).parent().removeClass('has-success').addClass('has-error');
+            }
+        });
+
+	});
+</script>
+
+{% endblock %}

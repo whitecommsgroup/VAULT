@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="col-md-12">
+
+
+	<ol class="breadcrumb">
+      <li><a href="/tickets/list">Tickets</a></li>
+      <li class="active"><a href="/tickets/view/{{ ticketDetails.id }}">{{ ticketDetails.subject }}</a></li>
+      <li class="active">Edit</li>
+    </ol>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Edit Ticket Details</h3>
+                        </div>
+                    <div class="panel-body">
+                        <form role="form" name="addTicket" id="addTicket" method="post" action="/tickets/update/{{ ticketDetails.id}}">
+                            <div class="form-group">
+                                <label for="ticketSubject">Subject</label>
+                                <input type="text" class="form-control" name="ticketSubject" id="ticketSubject" placeholder="Enter ticket subject" value="{{ ticketDetails.subject }}">
+                            </div>
+                       </div>
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Company Info</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label for="ticketCompany">Company</label>
+                                <select class="form-control" id="ticketCompany" name="ticketCompany">
+                                    <option value="">-- select --</option>
+                                    {% for item in global_clients %}
+                                        <option value="{{ item.organisationid }}" {% if ticketDetails.organisationid == item.organisationid %}selected="selected"{% endif %}>{{ item.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ticketContact">Company Contact</label>
+                                <select class="form-control" id="ticketContact" name="ticketContact">
+                                    <option value="">-- select --</option>
+                                    {% for item in getContactsByClient(ticketDetails.organisationid) %}
+                                        <option value="{{ item.id }}" {% if ticketDetails.contactid == item.id %}selected="selected"{% endif %}>{{ item.firstname }} {{ item.lastname }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ticketJob">Job</label>
+                                <select class="form-control" id="ticketJob" name="ticketJob">
+                                    <option value="">-- select --</option>
+                                     {% for item in getJobsByClient(ticketDetails.organisationid) %}
+                                     	{% if item.statusid == 1 %}
+	                                        <option value="{{ item.id }}" {% if ticketDetails.jobid == item.id %}selected="selected"{% endif %}>{{ item.jobnumber }} - {{ item.title }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                               </select>
+                            </div>
+                        </div>
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Ticket Assignment</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label for="ticketDepartment">Department</label>
+                                <select class="form-control" id="ticketDepartment" name="ticketDepartment">
+                                    <option value="">-- select --</option>
+                                    {% for item in global_ticket_departments %}
+                                        <option value="{{ item.id }}" {% if ticketDetails.departmentid == item.id %}selected="selected"{% endif %}>{{ item.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ticketAssigned">Assigned To</label>
+                                <select class="form-control" id="ticketAssigned" name="ticketAssigned">
+                                    <option value="">-- select --</option>
+                                    {% for item in global_ticket_support_agents %}
+                                        <option value="{{ item.id }}" {% if ticketDetails.assignedtoid == item.id %}selected="selected"{% endif %}>{{ item.firstname }} {{ item.lastname }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Ticket Status</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label for="ticketStatus">Status</label>
+                                <select class="form-control" id="ticketStatus" name="ticketStatus">
+                                    <option value="">-- select --</option>
+                                    {% for item in global_ticket_states %}
+                                        <option value="{{ item.id }}" {% if ticketDetails.statusid == item.id %}selected="selected"{% endif %}>{{ item.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ticketPriority">Priority</label>
+                                <select class="form-control" id="ticketPriority" name="ticketPriority">
+                                    <option value="">-- select --</option>
+                                    {% for item in global_ticket_priorities %}
+                                        <option value="{{ item.id }}" {% if ticketDetails.priorityid == item.id %}selected="selected"{% endif %}>{{ item.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="jobDate">Date Created</label>
+                                <input type="text" class="form-control datepicker" name="jobDate" id="jobDate" placeholder="Enter date or leave blank for today" value="{{ ticketDetails.date|date('d/m/Y') }}">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+
+        
+</div>
+</div>
+
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+
+        $('form').validate({
+            onKeyup : true,
+            eachValidField : function() {
+
+                $(this).parent().removeClass('has-error').addClass('has-success');
+            },
+            eachInvalidField : function() {
+
+                $(this).parent().removeClass('has-success').addClass('has-error');
+            }
+        });
+		
+		$('#ticketCompany').change(function(){
+			var accountid = $(this).val();
+			$.ajax({
+					type: "GET",
+					url: "/xml/contacts/" + accountid,
+					dataType: "xml",
+					success: function(xml) {
+						var select = $('#ticketContact');
+						select.attr("disabled","disabled");
+						select.children().remove();
+						select.append("<option value=''>-- select --</option>");
+						$(xml).find('item').each(function(){
+							var name = $(this).find('name').text();
+							var id = $(this).find('id').text();
+							select.append("<option value="+id+">"+name+"</option>");
+						});
+						select.removeAttr("disabled");
+					}
+				});
+			$.ajax({
+					type: "GET",
+					url: "/xml/jobs/" + accountid,
+					dataType: "xml",
+					success: function(xml) {
+						var select = $('#ticketJob');
+						select.attr("disabled","disabled");
+						select.children().remove();
+						select.append("<option value=''>-- select --</option>");
+						$(xml).find('item').each(function(){
+							var title = $(this).find('title').text();
+							var id = $(this).find('id').text();
+							select.append("<option value="+id+">"+title+"</option>");
+						});
+						select.removeAttr("disabled");
+					}
+				});
+		});
+
+		
+
+	});
+</script>
+
+{% endblock %}

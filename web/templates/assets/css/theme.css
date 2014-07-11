@@ -1,0 +1,310 @@
+body {
+  padding-top: 70px;
+  padding-bottom: 30px;
+  font-size:12px;
+}
+
+
+.theme-dropdown .dropdown-menu {
+  display: block;
+  position: static;
+  margin-bottom: 20px;
+}
+
+.theme-showcase > p > .btn {
+  margin: 5px 0;
+}
+
+.form-control, .dropdown-menu{
+  font-size:12px;
+}
+
+.panel-title{
+  font-size:14px;
+}
+
+h1, .h1{
+	font-size:30px;	
+}
+
+h1, .h1{
+	font-size:28px;	
+}
+
+.btn{
+  font-size:12px;
+}
+
+.jobvalue-chart{
+	height:200px!important;	
+	overflow:hidden;
+	display:block;
+}
+
+/*.popover
+{
+    min-width: 400px ! important;
+}
+
+.tab-content{
+	margin-top:20px;	
+}*/
+
+.sidebar-nav > .nav > li > a{
+	padding:10px;	
+}
+
+.panel-heading{
+	overflow:hidden;
+}
+
+.panel-heading h3{
+	float:left;	
+	line-height:23px;
+}
+
+.panel-heading > a{
+	float:right;
+	margin-left:10px;	
+}
+
+.panel-heading .badge{
+	background-color:#fff;	
+	color:#555;
+}
+
+a span.floatright{
+	float:right;
+}
+
+.floatright{
+	float:right;	
+}
+
+.floatleft{
+	float:left;	
+}
+
+.panel-danger .nav-pills > li > a{
+   color: #b94a48;
+}
+
+.panel-danger .nav-pills > li.active > a, .panel-danger .nav-pills > li.active > a:hover, .panel-danger .nav-pills > li.active > a:focus{
+	color: #f2dede;
+    background-color: #b94a48;
+	border-radius:0;
+}
+
+.panel .tab-content .list-group{
+	margin-bottom:0;	
+}
+
+.panel .tab-content .list-group .list-group-item{
+	border-radius:0;	
+	border-width: 1px 0;
+}
+
+
+/*.navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav>li>a:hover{
+	background-color:#222;	
+}*/
+
+[class^="icon-"]:before, [class*=" icon-"]:before{
+	width:14px;
+}
+
+.tab-content .nav-tabs{
+	border-bottom:none;
+}
+
+
+.navbar-brand {
+	padding: 1px 10px;
+}
+
+.ticket-reply-name{
+	float:left;	
+	margin:0;
+}
+
+.ticket-reply-date{
+	float:right;	
+	margin:0;
+}
+
+h1 > a{
+	float:right;	
+	margin-left:10px;
+}
+
+.error{
+	color:#B94A48;
+	font-weight:normal;
+}
+
+.lighttext{
+	color:#AAA;	
+}
+
+.tr_clone input, .tr_clone select, .tr_clone .btn, .tr_clone div.input-group{
+	margin-bottom:10px;
+}
+
+/*@media (min-width: 768px) and (max-width: 991px) {
+
+	.nav.navbar-nav span { display:none; }
+	.nav.navbar-nav a { font-size:20px;  }
+
+}
+
+@media (max-width: 767px) {
+
+	.nav.nav-tabs a span{ display:none; }
+	
+}*/
+
+
+
+.editable-click, a.editable-click, a.editable-click:hover{
+	border:none!important;	
+}
+
+/* table colors */
+
+.table-blue{
+	background-color:#428BCA;
+	color:#fff;
+}
+
+.table-green{
+	background-color:#5CB85C;
+	color:#fff;
+}
+
+.table-orange{
+	background-color:#F0AD4E;
+	color:#fff;
+}
+
+.table-red{
+	background-color:#D9534F;
+	color:#fff;
+}
+
+tr.faded td{
+	color:#ccc;
+}
+
+/* table colors */
+
+.table-smallfont{
+	font-size:0.8em;
+}
+
+.invoicestatus-2{
+	background-color:#f7d6a6;
+}
+
+.invoicestatus-3{
+	background-color:#addbad;
+}
+
+.invoicestatus-2 a, .invoicestatus-3 a{
+}
+
+
+.jobstatus-4{
+	background-color:#addbad;
+}
+
+.jobstatus-3{
+	background-color:#f7d6a6;
+}
+
+.jobstatus-3 a, .jobstatus-4 a{
+}
+
+/* jquery ui auto-complete */
+
+
+.ui-helper-hidden-accessible{
+	display:none;	
+}
+
+.ui-autocomplete{
+	background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+    width: 500px!important;
+	max-height: 100px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+	
+}
+
+
+.ui-autocomplete li{
+    width: auto;
+}
+
+.ui-autocomplete li a{
+    width: auto;
+	display:block;
+	color:#333333;
+	border:none;
+}
+
+.ui-autocomplete li a:hover{
+	color:#fff;
+    background-color:#357EBD;
+	text-decoration:none;
+	border:none;
+}
+
+.form-error{ display:none; }
+
+/*.dropdown:hover .dropdown-menu {
+    display: block;
+}
+.dropdown-menu {
+    margin-top: 0px;
+}*/
+
+.birthdays{
+	background-image:url(../img/birthdays-header.png);	
+	background-repeat:no-repeat;
+}
+
+.holidays{
+	background-image:url(../img/holidays.png);	
+	background-repeat:no-repeat;
+}
+
+.noticeboard{
+	background-image:url(../img/noticeboard.png);	
+	background-repeat:no-repeat;
+}
+
+.input-xs {
+  height: 25px;
+  padding: 5px 10px;
+  font-size: 10px;
+  line-height: 1.5;
+  border-radius: 3px;
+}
+
+select.input-xs {
+  height: 25px;
+  line-height: 25px;
+}
+
+textarea.input-xs {
+  height: auto;
+}
+
+table tr td {
+    vertical-align: middle!important;
+}

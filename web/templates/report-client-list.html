@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+
+<link href="/templates/assets/css/crm.css" rel="stylesheet">
+<link href="/templates/assets/css/reports.css" rel="stylesheet">
+
+<script src="/templates/assets/js/jquery.js"></script>
+<script src="/templates/assets/js/jquery.tablesorter.min.js"></script>
+
+<script language="javascript" type="text/javascript">
+$(document).ready(function(){
+
+	$("#clientReport").tablesorter({dateFormat: 'uk'});
+
+});
+
+</script>
+</head>
+<body>
+
+<table align="center" width="100%" border="0" cellpadding="0" cellspacing="0">
+     <tr>
+    	<td align="center">
+        
+        	<table id="clientReport" border="0" width="100%" cellpadding="0" cellspacing="0" class="tablesorter" style="font-size:8pt;padding:0px; text-align:left;border:1px solid #AAA;">
+        
+     		   <thead class="reportHeader"> <tr>
+						<th class="reportCell title">Client</th>
+						<th class="reportCell title">Acc. Status</th>
+						<th class="reportCell title">Cont. Date</th>
+						<th class="reportCell title">Man. Name</th>
+						<th class="reportCell title">Cont. Status</th>
+						<th class="reportCell title">Services</th>
+						<th class="reportCell title">Source</th>
+						<th class="reportCell title">Sector</th>
+					</tr></thead>
+                    <tbody id="reportContent">
+                    	{% for item in table %}
+						<tr>
+                            <td nowrap="nowrap" class="reportCell" style="font-size:8pt;">{{ item.name }}</td>
+                            <td nowrap="nowrap" class="reportCell" style="font-size:8pt;">{{ item.accountstatus }}</td>
+                            <td nowrap="nowrap" class="reportCell" style="font-size:8pt;">{{ item.firstcontact }}</td>
+                            <td nowrap="nowrap" class="reportCell" style="font-size:8pt;">{{ item.accountmanager }}</td>
+                            <td nowrap="nowrap" class="reportCell" style="font-size:8pt;">{{ item.contactstate }}</td>
+                            <td nowrap="nowrap" class="reportCell" style="font-size:8pt;">{{ item.services }}</td>
+                            <td nowrap="nowrap" class="reportCell" style="font-size:8pt;">{{ item.source }}</td>
+                            <td nowrap="nowrap" class="reportCell" style="font-size:8pt;">{{ item.sector }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+        
+        	</table>
+         </td>
+    </tr>
+</table>
+
+</body>
+</html>

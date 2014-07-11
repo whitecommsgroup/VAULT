@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dropdown>
+	{% for item in jobs %}
+		{% if item.statusid == 1 %}
+		<item>
+				<title>{{ item.jobnumber }} - {{ item.title }}</title>
+				<id>{{ item.id }}</id>
+			</item>
+		{% endif %}
+	{% endfor %}
+ </dropdown>

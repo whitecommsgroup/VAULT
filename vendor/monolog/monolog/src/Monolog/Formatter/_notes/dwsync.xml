@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="ChromePHPFormatter.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="FormatterInterface.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="GelfMessageFormatter.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="JsonFormatter.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="LineFormatter.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="LogstashFormatter.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="NormalizerFormatter.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="WildfireFormatter.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+</dwsync>

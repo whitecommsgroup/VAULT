@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="col-md-12">
+
+         <ol class="breadcrumb">
+          <li><a href="/jobs">Jobs</a></li>
+          <li><a href="/jobs/list">Jobs Book</a></li>
+          <li><a href="/jobs/view/{{ jobDetails.id }}">{% if jobDetails.jobnumber %}{{ jobDetails.jobnumber }} - {% endif %}{{ jobDetails.title }}</a></li>
+          <li class="active">Edit</li>
+        </ol>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Edit Details</h3>
+            </div>
+        <div class="panel-body">
+            <form role="form" name="addContact" id="addContact" method="post" action="/jobs/update/{{ jobDetails.id }}">
+                <div class="form-group">
+                    <label for="jobCompany">Company</label>
+                    <select class="form-control" id="jobCompany" name="jobCompany" data-validation="required">
+                    <option value="">-- select --</option>
+                        {% for item in global_accounts %}
+                            <option value="{{ item.organisationid }}" {% if jobDetails.organisationid == item.organisationid %}selected="selected"{% endif %}>{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="jobBrand">Company Brand</label>
+                        <select class="form-control" id="jobBrand" name="jobBrand">
+                        <option value="">N/A</option>
+                        {% for brand in getListOfBrandsByCompany(jobDetails.organisationid) %}
+                            <option value="{{ brand.id }}" {% if jobDetails.brandid == brand.id %}selected="selected"{% endif %}>{{ brand.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="jobContact">Company Contact</label>
+                    <select class="form-control" id="jobContact" name="jobContact">
+                    	<option value="">-- select --</option>
+                        {% for item in getContactsByClient(jobDetails.organisationid) %}
+                            <option value="{{ item.id }}" {% if jobDetails.contactid == item.id %}selected="selected"{% endif %}>{{ item.firstname }} {{ item.lastname }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+              <div class="form-group">
+                <label for="jobAccManager">Account Manager *</label>
+                <select class="form-control" id="jobAccManager" name="jobAccManager" data-validation="required">
+                  <option value="">- select -</option>
+                    {% for manager in global_accountmanagers %}
+                        <option value="{{ manager.id }}" {% if jobDetails.accountmanagerid == manager.id %}selected="selected"{% endif %}>{{ manager.firstname }} {{ manager.lastname }}</option>
+                    {% endfor %}
+                </select>
+              </div>
+                <div class="form-group form-inline">
+                    <label for="jobValue">Value</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">£</span>
+                        <input type="text" class="form-control" name="jobValue" id="jobValue" placeholder="Enter value" value="{{ jobDetails.value }}" data-validation="required">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="jobType">Type</label>
+                    <select class="form-control" id="jobType" name="jobType" data-validation="required">
+                        <option value="">-- select --</option>
+                        {% for type in global_jobtypes %}
+                            <option value="{{ type.id }}" {% if jobDetails.type == type.id %}selected="selected"{% endif %}>{{ type.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="jobCategory">Category</label>
+                    <select class="form-control" id="jobCategory" name="jobCategory" data-validation="required">
+                        <option value="">-- select --</option>
+                        {% for type in global_jobcategories %}
+                            <option value="{{ type.id }}" {% if jobDetails.categoryid == type.id %}selected="selected"{% endif %}>{{ type.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="jobDate">Date</label>
+                    <div class="input-group">
+	                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
+    	                <input type="text" class="form-control datepicker" name="jobDate" id="jobDate" placeholder="Select date" value="{{ jobDetails.date|date("d/m/Y") }}" data-validation="required">
+           			</div>
+                </div>
+                <div class="form-group">
+                    <label for="jobTitle">Title</label>
+                    <input type="text" class="form-control" name="jobTitle" id="jobTitle" placeholder="Enter job title" value="{{ jobDetails.title }}" data-validation="required">
+                </div>
+                  <div class="form-group">
+                    <label for="jobDescription">Description</label>
+                    <textarea class="form-control" rows="3" id="jobDescription" name="jobDescription" placeholder="Enter description" data-validation="required">{{ jobDetails.description }}</textarea>
+                  </div>
+				</div>
+
+                <div class="panel-heading">
+                    <h3 class="panel-title">Invoice Info</h3>
+                </div>
+                <div class="panel-body">
+                <div class="form-group">
+                    <label for="jobPo">PO</label>
+                    <input type="text" class="form-control" name="jobPo" id="jobPo" placeholder="Enter job PO" value="{{ jobDetails.po }}" data-validation="required">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+    $.validate({  });
+</script>
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+
+		
+		$('#jobCompany').change(function(){
+			
+			var accountid = $(this).val();
+			$.ajax({
+					type: "GET",
+					url: "/xml/contacts/" + accountid,
+					dataType: "xml",
+					success: function(xml) {
+						var select = $('#jobContact');
+						select.attr("disabled","disabled");
+						select.children().remove();
+						select.append("<option value=''>-- select --</option>");
+						$(xml).find('item').each(function(){
+							var name = $(this).find('name').text();
+							var id = $(this).find('id').text();
+							select.append("<option value="+id+">"+name+"</option>");
+						});
+						select.removeAttr("disabled");
+					}
+				});
+		});
+		
+
+	});
+</script>
+
+{% endblock %}

@@ -1,0 +1,528 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}<i class="glyphicon glyphicon-user"></i> {{ contactDetails.firstname}} {{ contactDetails.lastname}} <a href="#delete_contact" class="btn btn-primary" data-toggle="modal"><i class="glyphicon glyphicon-trash"></i> Delete</a> <a href="/accounts/view/{{ contactDetails.organisationid}}" class="btn btn-primary" data-toggle="modal"><i class="glyphicon glyphicon-home"></i> View Company</a>{% endblock %}
+
+{% block content %}
+
+<div class="col-md-12">
+
+         <ol class="breadcrumb">
+          <li><a href="#">CRM</a></li>
+          <li><a href="/contacts/list">Contacts</a></li>
+          <li class="active">{{ contactDetails.firstname}} {{ contactDetails.lastname}} </li>
+        </ol>
+   
+            <h1>{{ contactDetails.firstname}} {{ contactDetails.lastname}}
+             
+                <div class="btn-group floatright">
+                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    Action <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu pull-right" role="menu">
+                    {% if user.group b-and 2 %}<li><a href="/contacts/edit/{{ contactDetails.id }} " data-toggle="modal"><i class="glyphicon glyphicon-pencil"></i> Edit</a></li>
+                    <li><a href="#delete_contact" data-toggle="modal"><i class="glyphicon glyphicon-trash"></i> Delete</a></li>
+                    <li role="presentation" class="divider"></li>{% endif %}
+                    <li><a href="/accounts/view/{{ contactDetails.organisationid }}" data-toggle="modal"><i class="glyphicon glyphicon-home"></i> View Company</a></li>
+                  </ul>
+                </div>
+
+            </h1>
+    
+            
+            <!--        <ul class="list-group">
+                      <li class="list-group-item"><strong>Phone:</strong> {{ contactDetails.phone}}</li>
+                      <li class="list-group-item">mobile:</strong> {{ contactDetails.mobile}}</li>
+                      <li class="list-group-item">email:</strong> {{ contactDetails.email}}</li>
+                      <li class="list-group-item">position:</strong> {{ contactDetails.position}}</li>
+                    </ul>-->
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="glyphicon glyphicon-phone-alt"></i> Info </h3>
+                </div>
+                <div class="panel-body">
+                  <strong>Company:</strong> <a href="/accounts/view/{{ contactDetails.organisationid }}" data-toggle="modal">{{ getCompanyName(contactDetails.organisationid) }}</a><br />
+                  <strong>Position:</strong> {{ contactDetails.position }}<br />
+                  <strong>Phone:</strong> {{ contactDetails.phone }}<br />
+                  <strong>Mobile:</strong> {{ contactDetails.mobile }}<br />
+                  <strong>Email:</strong> {{ contactDetails.email }}
+                </div>
+             </div>
+    
+             <div class="tabbable">
+             <ul class="nav nav-tabs">
+                   <li class="active">
+                      <a href="#jobs" id="myTabDrop1" data-toggle="tab"><i class="glyphicon glyphicon-book"></i> Jobs </a>
+                    </li>
+                   <li>
+                      <a href="#estimates" id="myTabDrop1" data-toggle="tab"><i class="icon-file-text"></i> Estimates </a>
+                    </li>
+                    <li>
+                      <a href="#notes" id="myTabDrop2" data-toggle="tab"><i class="glyphicon glyphicon-comment"></i> Notes <span class="badge">{{ notes|length }}</span></a>
+                    </li>
+                    <li>
+                      <a href="#tickets" id="myTabDrop3" data-toggle="tab"><i class="glyphicon glyphicon-bookmark"></i> Tickets <!--<span class="badge ">{{ tickets|length }}</span>--> </a>
+                    </li>
+                    {% if user.group b-and 2 %}<li class="dropdown navbar-right">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-plus"></i> Add New</a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#add_job" data-toggle="tab">Job</a></li>
+                            <li><a href="#add_estimate" data-toggle="tab">Estimate</a></li>
+                            <li><a href="#add_note" data-toggle="tab">Note</a></li>
+                            <li><a href="#add_ticket" data-toggle="tab">Ticket</a></li>
+                        </ul>
+                    </li>{% endif %}
+                </ul>
+            </div>
+            
+            <br />
+
+                 <div class="tab-content">
+                 
+                     <div class="tab-pane active" id="jobs">
+                        {% for job in jobs %}
+                            {% if job.statusid == 1 %}
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">{{ job.jobnumber }} - {{ job.title }}</h3>
+                                        <a href="/jobs/view/{{ job.id}}" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-zoom-in"></i> View</a>
+                                        <!--<a href="#" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
+                                        <a href="#" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</a>-->
+                                    </div>
+                                    <div class="panel-body">
+                                        <strong>Description:</strong> {{ job.description}}<br />
+                                        <strong>Value:</strong> £{{ job.value }}<br />
+                                        <strong>Date:</strong> {{ job.date }}<br />
+                                         <strong>Acc Mgr:</strong> {{ getAccMgrName(job.accountmanagerid) }}
+                                   </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                     </div>
+
+                     <div class="tab-pane" id="estimates">
+                        {% for job in jobs %}
+                            {% if job.statusid == 2 %}
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">{{ job.title }}</h3>
+                                        <a href="/jobs/view/{{ job.id}}" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-zoom-in"></i> View</a>
+                                        <!--<a href="#" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
+                                        <a href="#" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</a>-->
+                                    </div>
+                                    <div class="panel-body">
+                                        <strong>Description:</strong> {{ job.description}}<br />
+                                        <strong>Value:</strong> £{{ job.value }}<br />
+                                        <strong>Date:</strong> {{ job.date }}<br />
+                                         <strong>Acc Mgr:</strong> {{ getAccMgrName(job.accountmanagerid) }}
+                                   </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                     </div>
+ 
+                     <div class="tab-pane" id="notes">
+                        {% for note in notes %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                {{ note.date|date }}
+                                <span class="floatright lighttext">{{ note.employee_firstname }}{% if note.jobid %} | <a href="/jobs/view/{{ note.jobid }}">{{ note.jobid }}</a>{% endif %}</span>
+                            </div>
+                           <div class="panel-body">
+                                {{ note.body }}
+                            </div>
+                            {% if note.filenames != '' %}
+                                <div class="panel-footer">
+                                {% for i in note.filenames|split(',') %}
+                                    <a href="/attachments/{{ i }}"  class="btn btn-default btn-xs">{{ i }} <i class="glyphicon glyphicon-paperclip"></i></a>
+                                {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                     </div>
+                    
+                     <div class="tab-pane" id="tickets">
+                        {% for ticket in tickets %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">{{ ticket.subject }}</h3>
+                                <a href="/tickets/view/{{ ticket.id}}" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-zoom-in"></i> View</a>
+                            </div>
+                            <div class="panel-body">
+                                <strong>Subject:</strong> {{ ticket.body }}<br />
+                                <strong>Status:</strong> {{ getTicketStateName(ticket.statusid) }}<br />
+                                <strong>Tracking ID:</strong> {{ ticket.trackingid }}<br />
+                                <strong>Last Updated:</strong> {{ ticket.lastchanged }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                     </div>
+    
+                    <div class="tab-pane" id="add_note">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">New Note</h3>
+                            </div>
+                            <div class="panel-body">
+                                <form role="form" name="addReply" method="post" action="/notes/add" enctype="multipart/form-data">
+                                    <div><input type="hidden" class="form-control" name="noteCompany" id="noteCompany" value="{{ contactDetails.organisationid }}"></div>
+                                    <div><input type="hidden" class="form-control" name="noteContact" id="noteContact" value="{{ contactDetails.id }}"></div>
+                                    <div class="form-group">
+                                        <textarea class="form-control" rows="3" id="noteBody" name="noteBody"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="noteJob">Job</label>
+                                        <select class="form-control" id="noteJob" name="noteJob">
+                                        <option value="">-- select --</option>
+                                            {% for job in jobs %}
+                                                <option value="{{ job.id}}">{{ job.id }} - {{ job.title }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="noteAttachment">Attachment</label>
+                                        <input type="file" id="noteAttachment" name="noteAttachment[]" class="noteAttachment">
+                                        <br />
+                                        <button class="addFileUpload btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i> Add more attachments</button>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>  
+                            </div>
+                        </div>
+                    </div>
+            
+                        <div class="tab-pane" id="add_job">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">New Job Details</h3>
+                                </div>
+                            <div class="panel-body">
+                                <form role="form" name="addJob" id="addJob" method="post" action="/jobs/add">
+                                    <div><input type="hidden" class="form-control" name="noteCompany" id="noteCompany" value="{{ contactDetails.organisationid }}"></div>
+                                    <div><input type="hidden" class="form-control" name="jobContact" id="jobContact" value="{{ contactDetails.id }}"></div>
+                                <div class="form-group">
+                                    <label for="jobBrand">Company Brand</label> <a href="#add_brand_modal" data-toggle="modal">Add</a>
+                                        <select class="form-control" id="jobBrand" name="jobBrand">
+                                        <option value="">N/A</option>
+                                        {% for brand in getListOfBrandsByCompany(contactDetails.organisationid) %}
+                                            <option value="{{ brand.id }}">{{ brand.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                  <div class="form-group">
+                                    <label for="jobAccManager">Account Manager *</label>
+                                    <select class="form-control" id="jobAccManager" name="jobAccManager" data-validation="required">
+                                      <option value="">- select -</option>
+                                        {% for manager in global_accountmanagers %}
+                                            <option value="{{ manager.id }}">{{ manager.firstname }} {{ manager.lastname }}</option>
+                                        {% endfor %}
+                                    </select>
+                                  </div>
+                                    <div class="form-group form-inline">
+                                        <label for="jobValue">Value</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">£</span>
+                                            <input type="text" class="form-control" name="jobValue" id="jobValue" placeholder="Enter value">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="jobType">Type</label>
+                                        <select class="form-control" id="jobType" name="jobType" data-validation="required">
+                                            <option value="">-- select --</option>
+                                            {% for type in global_jobtypes %}
+                                                <option value="{{ type.id }}">{{ type.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="jobCategory">Category</label>
+                                        <select class="form-control" id="jobCategory" name="jobCategory" data-validation="required">
+                                            <option value="">-- select --</option>
+                                            {% for type in global_jobcategories %}
+                                                <option value="{{ type.id }}">{{ type.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="jobDate">Date</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                            <input type="text" class="form-control datepicker" name="jobDate" id="jobDate" placeholder="Select date" value="{{ date()|date("d/m/Y") }}" data-validation="required">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="jobTitle">Title</label>
+                                        <input type="text" class="form-control" name="jobTitle" id="jobTitle" placeholder="Enter job title" data-validation="required">
+                                    </div>
+                                      <div class="form-group">
+                                        <label for="jobDescription">Description</label>
+                                        <textarea class="form-control" rows="3" id="jobDescription" name="jobDescription" placeholder="Enter description" data-validation="required"></textarea>
+                                      </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+        
+                        <div class="tab-pane" id="add_estimate">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">New Estimate Details</h3>
+                                </div>
+                            <div class="panel-body">
+                                <form role="form" name="addEstimate" id="addEstimate" method="post" action="/jobs/add-estimate">
+                                    <div><input type="hidden" class="form-control" name="estimateCompany" id="estimateCompany" value="{{ contactDetails.organisationid }}"></div>
+                                    <div><input type="hidden" class="form-control" name="estimateContact" id="estimateContact" value="{{ contactDetails.id }}"></div>
+                                  <div class="form-group">
+                                    <label for="estimateAccManager">Account Manager *</label>
+                                    <select class="form-control" id="estimateAccManager" name="estimateAccManager" data-validation="required">
+                                      <option value="">- select -</option>
+                                        {% for manager in global_accountmanagers %}
+                                            <option value="{{ manager.id }}">{{ manager.firstname }} {{ manager.lastname }}</option>
+                                        {% endfor %}
+                                    </select>
+                                  </div>
+                                    <div class="form-group form-inline">
+                                        <label for="estimateValue">Value</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">£</span>
+                                            <input type="text" class="form-control" name="estimateValue" id="estimateValue" placeholder="Enter value">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="estimateType">Type *</label>
+                                        <select class="form-control" id="estimateType" name="estimateType" data-validation="required">
+                                            <option value="">-- select --</option>
+                                            {% for type in global_jobtypes %}
+                                                <option value="{{ type.id }}">{{ type.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="jobCategory">Category</label>
+                                        <select class="form-control" id="jobCategory" name="jobCategory" data-validation="required">
+                                            <option value="">-- select --</option>
+                                            {% for type in global_jobcategories %}
+                                                <option value="{{ type.id }}">{{ type.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="estimateDate">Date *</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                            <input type="text" class="form-control datepicker" name="estimateDate" id="estimateDate" placeholder="Select date" value="{{ date()|date("m/d/Y") }}" data-validation="required">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="estimateTitle">Title *</label>
+                                        <input type="text" class="form-control" name="estimateTitle" id="estimateTitle" placeholder="Enter job title" data-validation="required">
+                                    </div>
+                                      <div class="form-group">
+                                        <label for="estimateDescription">Description *</label>
+                                        <textarea class="form-control" rows="3" id="estimateDescription" name="estimateDescription" placeholder="Enter description" data-validation="required"></textarea>
+                                      </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+                        <div class="tab-pane" id="add_ticket">
+                            <form role="form" name="addTicket" id="addTicket" method="post" action="/tickets/add">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">New Ticket Details</h3>
+                                    </div>
+                                <div class="panel-body">
+                                        <div class="form-group">
+                                            <label for="ticketSubject">Subject</label>
+                                            <input type="text" class="form-control" name="ticketSubject" id="ticketSubject" placeholder="Enter ticket subject" data-validation="required">
+                                        </div>
+                                   </div>
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Company Info</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div><input type="hidden" class="form-control" name="ticketCompany" id="ticketCompany" value="{{ contactDetails.organisationid }}"></div>
+                                        <div><input type="hidden" class="form-control" name="ticketContact" id="ticketContact" value="{{ contactDetails.id }}"></div>
+                                        <div class="form-group">
+                                            <label for="ticketJob">Job</label>
+                                            <select class="form-control" id="ticketJob" name="ticketJob">
+                                                <option value="">-- select --</option>
+                                                {% for job in jobs %}
+                                                    <option value="{{ job.id}}">{{ job.id }} - {{ job.title }}</option>
+                                                {% endfor %}
+                                           </select>
+                                        </div>
+                                    </div>
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Ticket Assignment</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label for="ticketDepartment">Department</label>
+                                            <select class="form-control" id="ticketDepartment" name="ticketDepartment" data-validation="required">
+                                                <option value="">-- select --</option>
+                                                {% for item in global_ticket_departments %}
+                                                    <option value="{{ item.id }}" >{{ item.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="ticketAssigned">Assigned To</label>
+                                            <select class="form-control" id="ticketAssigned" name="ticketAssigned" data-validation="required">
+                                                <option value="">-- select --</option>
+                                                {% for item in global_ticket_support_agents %}
+                                                    <option value="{{ item.id }}" >{{ item.firstname }} {{ item.lastname }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Ticket Status</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label for="ticketStatus">Status</label>
+                                            <select class="form-control" id="ticketStatus" name="ticketStatus" data-validation="required">
+                                                <option value="">-- select --</option>
+                                                {% for item in global_ticket_states %}
+                                                    <option value="{{ item.id }}" >{{ item.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="ticketPriority">Priority</label>
+                                            <select class="form-control" id="ticketPriority" name="ticketPriority" data-validation="required">
+                                                <option value="">-- select --</option>
+                                                {% for item in global_ticket_priorities %}
+                                                    <option value="{{ item.id }}" >{{ item.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="jobDate">Date Created</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                                <input type="text" class="form-control datepicker" name="jobDate" id="jobDate" placeholder="Select date" value="{{ date()|date("m/d/Y") }}" data-validation="required">
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+            
+                             
+                </div>
+
+
+
+    </div>
+	</div>
+
+    <!------------ MODAL FORMS -------------->
+
+    <div class="modal fade" id="delete_contact">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form role="form" name="deletePerson" method="post" action="/contacts/delete/{{ contactDetails.organisationid}}/{{ contactDetails.id}}">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Delete Contact</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete {{ contactDetails.firstname}} {{ contactDetails.lastname}}?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="add_brand_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Create Brand</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="brandName_modal">Brand Name *</label>
+                        <input type="text" class="form-control" name="brandName_modal" id="brandName_modal" placeholder="Enter brand name" data-validation="required">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success" id="submit_add_brand">Create Brand</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<script>
+        $.validate({  });
+    </script>
+    
+    <script type="text/javascript">
+	
+		//turn to inline mode
+		$.fn.editable.defaults.mode = 'inline';
+		
+		$(document).ready(function() {
+			$('#phone').editable();
+			$('#email').editable();
+			$('#website').editable();
+
+			$('#submit_add_brand').click(function(){
+	
+				$.ajax({
+					type: "GET",
+					url: "/ajax/accounts/add-brand/{{ contactDetails.organisationid }}/" + $('#brandName_modal').val(),
+					dataType: "html",
+					success: function(data) {
+						
+						$('#add_brand_modal').modal('hide');
+						
+						var _newId = data;
+
+						$.ajax({
+							type: "GET",
+							url: "/xml/brands/{{ contactDetails.organisationid }}",
+							dataType: "xml",
+							success: function(xml) {
+								var select = $('#jobBrand');
+								select.attr("disabled","disabled");
+								select.children().remove();
+								select.append("<option value=''>N/A</option>");
+								$(xml).find('item').each(function(){
+									var name = $(this).find('name').text();
+									var id = $(this).find('id').text();
+									select.append("<option value="+id+">"+name+"</option>");
+								});
+								select.removeAttr("disabled");
+								select.val( _newId );
+							}
+						});
+
+					}
+				});
+			
+			});
+
+		});
+	
+	</script>
+
+</div>
+          
+{% endblock %}

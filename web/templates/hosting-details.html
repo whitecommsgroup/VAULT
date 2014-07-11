@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="col-md-12">
+
+         <ol class="breadcrumb">
+          <li><a href="/hosting">Hosting</a></li>
+          <li class="active">{{ hosting.description}}</li>
+        </ol>
+   
+            <h1>{{ hosting.description}}
+             
+                <div class="btn-group floatright">
+                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    Action <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu pull-right" role="menu">
+                    {% if user.group b-and 2 %}<li><a href="/hosting/edit/{{ hosting.id }} " data-toggle="modal"><i class="glyphicon glyphicon-pencil"></i> Edit</a></li>
+                    {% if hosting.outstanding %}
+                        <li><a href="#renew_hosting" data-toggle="modal" ><i class="glyphicon glyphicon-retweet"></i> Renew</a></li>
+                    {% else %}
+                        <li class="disabled"><a href="#" data-toggle="modal" ><i class="glyphicon glyphicon-retweet"></i> Renew</a></li>
+                    {% endif %}
+                    <li><a href="#delete_hosting" data-toggle="modal"><i class="glyphicon glyphicon-trash"></i> Archive</a></li>
+                    <li role="presentation" class="divider"></li>{% endif %}
+                    <li><a href="/accounts/view/{{ hosting.organisationid }}" data-toggle="modal"><i class="glyphicon glyphicon-home"></i> View Company</a></li>
+                  </ul>
+                </div>
+
+            </h1>
+    
+            
+
+            <table class="table table-bordered">
+            	<tr>
+                	<td width="50%"><strong>Company:</strong> <a href="/accounts/view/{{ hosting.organisationid }}">{{ getCompanyName(hosting.organisationid) }}</a></td>
+                    <td width="50%"><strong>Type:</strong> {{ getHostingTypeName(hosting.type) }}</td>
+                </tr>
+            	<tr>
+                	<td><strong>Value:</strong> £{{ hosting.value|number_format }}</td>
+                    <td><strong>Job:</strong> <a href="/jobs/view/{{ hosting.jobid }}">{{ getJobNumber(hosting.jobid) }}</a></td>
+                </tr>
+            	<tr>
+                    <td><strong>Expiry Date:</strong> {{ hosting.expirydate|date('d/m/Y') }}</td>
+                	<td><strong>Expiry Period:</strong> {{ hosting.period }} months</td>
+                </tr>
+            </table>
+    
+</div>
+
+    <!------------ MODAL FORMS -------------->
+
+    <div class="modal fade" id="renew_hosting">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form role="form" name="deleteHosting" method="post" action="/hosting/renew/{{ hosting.id}}">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Renew Hosting Record</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to renew {{ hosting.description}} for {{ hosting.period }} months?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Renew</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="delete_hosting">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form role="form" name="renewHosting" method="post" action="/hosting/delete/{{ hosting.id}}">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Archive Hosting Record</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to archive {{ hosting.description}}?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+	
+		//turn to inline mode
+		$.fn.editable.defaults.mode = 'inline';
+		
+		$(document).ready(function() {
+			$('#phone').editable();
+			$('#email').editable();
+			$('#website').editable();
+		});
+	
+	</script>
+
+</div>
+          
+{% endblock %}

@@ -1,0 +1,321 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="col-md-12">
+
+         <ol class="breadcrumb">
+          <li class="active">Hosting</li>
+        </ol>
+    
+            <ul class="nav nav-tabs">
+              <li class="active"><a href="#web" data-toggle="tab"><i class="glyphicon glyphicon-hdd"></i> Web Hosting</a></li>
+              <li><a href="#email" data-toggle="tab"><i class="glyphicon glyphicon-envelope"></i> Email Hosting</a></li>
+              <li><a href="#domains" data-toggle="tab"><i class="glyphicon glyphicon-globe"></i> Domains</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span>Archive <b class="caret"></b></span></a>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    <li><a href="#web_archive" data-toggle="tab"><i class="glyphicon glyphicon-hdd"></i> Web Hosting</a></li>
+                    <li><a href="#email_archive" data-toggle="tab"><i class="glyphicon glyphicon-envelope"></i> Email Hosting</a></li>
+                    <li><a href="#domains_archive" data-toggle="tab"><i class="glyphicon glyphicon-globe"></i> Domain</a></li>
+                </ul>
+              </li>
+                {% if user.group b-and 2 %}
+                <li class="dropdown navbar-right">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-plus"></i> <span>Add New</span></a>
+                    <ul class="dropdown-menu pull-right" role="menu">
+                        <li><a href="#add_web" data-toggle="tab">Web Hosting</a></li>
+                        <li><a href="#add_email" data-toggle="tab">Email Hosting</a></li>
+                        <li><a href="#add_domain" data-toggle="tab">Domain</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+            </ul>
+
+            <br />
+
+             <div class="tab-content">
+             
+                 <div class="tab-pane active" id="web">
+                    <div class="nav nav-tabs nav-stacked">
+                        {% for item in web %}
+                            <a href="/hosting/view/{{ item.id }}" class="list-group-item">{{ item.description }} | {{ item.expirydate|date('d/m/Y') }} <span class="floatright lighttext">{{ item.name }}</span></a>
+                        {% endfor %}
+                  </div>
+                </div>
+
+                 <div class="tab-pane" id="email">
+                    <div class="nav nav-tabs nav-stacked">
+                        {% for item in email %}
+                            <a href="/hosting/view/{{ item.id }}" class="list-group-item">{{ item.description }} | {{ item.expirydate|date('d/m/Y') }} <span class="floatright lighttext">{{ item.name }}</span></a>
+                        {% endfor %}
+                  </div>
+                </div>
+
+                 <div class="tab-pane" id="domains">
+                    <div class="nav nav-tabs nav-stacked">
+                        {% for item in domains %}
+                            <a href="/hosting/view/{{ item.id }}" class="list-group-item">{{ item.description }} | {{ item.expirydate|date('d/m/Y') }} <span class="floatright lighttext">{{ item.name }}</span></a>
+                        {% endfor %}
+                  </div>
+                </div>
+
+                 <div class="tab-pane" id="web_archive">
+                    <div class="nav nav-tabs nav-stacked">
+                        {% for item in web_archive %}
+                            <a href="/hosting/view/{{ item.id }}" class="list-group-item">{{ item.description }} | {{ item.expirydate|date('d/m/Y') }} <span class="floatright lighttext">{{ item.name }}</span></a>
+                        {% endfor %}
+                  </div>
+                </div>
+
+                 <div class="tab-pane" id="email_archive">
+                    <div class="nav nav-tabs nav-stacked">
+                        {% for item in email_archive %}
+                            <a href="/hosting/view/{{ item.id }}" class="list-group-item">{{ item.description }} <span class="floatright lighttext">{{ item.name }}</span></a>
+                        {% endfor %}
+                  </div>
+                </div>
+
+                 <div class="tab-pane" id="domains_archive">
+                    <div class="nav nav-tabs nav-stacked">
+                        {% for item in domains_archive %}
+                            <a href="/hosting/view/{{ item.id }}" class="list-group-item">{{ item.description }} <span class="floatright lighttext">{{ item.name }}</span></a>
+                        {% endfor %}
+                  </div>
+                </div>
+
+                <div class="tab-pane" id="add_web">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">New Web Hosting Details</h3>
+                        </div>
+                    <div class="panel-body">
+                        <form role="form" name="addHosting" id="addHosting" method="post" action="/hosting/add">
+                        	<div><input type="hidden" name="hostingType" id="hostingType" value="2" /></div>
+                            <div class="form-group">
+                                <label for="hostingCompany">Company</label>
+                                <select class="form-control webCompany" id="hostingCompany" name="hostingCompany" data-validation="required">
+                                <option value="">-- select --</option>
+                                    {% for item in global_clients %}
+                                        <option value="{{ item.organisationid }}" >{{ item.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="hostingJob">Job</label>
+                                <select class="form-control webJob" id="hostingJob" name="hostingJob" >
+                                    <option value="">-- select --</option>
+                               </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="hostingDescription">Description</label>
+                                <input type="text" class="form-control" name="hostingDescription" id="hostingDescription" placeholder="Enter description" data-validation="required">
+                            </div>
+                            <div class="form-group form-inline">
+                                <label for="hostingValue">Value</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">£</span>
+                                    <input type="text" class="form-control" name="hostingValue" id="hostingValue" placeholder="Enter value" data-validation="required" data-pattern="[0-9]+">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="hostingExpiryDate">Expiry Date</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                    <input type="text" class="form-control datepicker" name="hostingExpiryDate" id="hostingExpiryDate" placeholder="Select date" value="{{ date()|date("d/m/Y") }}" data-validation="required">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="hostingPeriod">Renewal Period</label>
+                                <input type="text" class="form-control" name="hostingPeriod" id="hostingPeriod" placeholder="Enter number of months" data-validation="required" data-pattern="[0-9]+">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+               </div>
+
+                <div class="tab-pane" id="add_email">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">New Email Hosting Details</h3>
+                        </div>
+                    <div class="panel-body">
+                        <form role="form" name="addHosting" id="addHosting" method="post" action="/hosting/add">
+                        	<div><input type="hidden" name="hostingType" id="hostingType" value="3" /></div>
+                            <div class="form-group">
+                                <label for="hostingCompany">Company</label>
+                                <select class="form-control emailCompany" id="hostingCompany" name="hostingCompany" data-validation="required">
+                                <option value="">-- select --</option>
+                                    {% for item in global_clients %}
+                                        <option value="{{ item.organisationid }}" >{{ item.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="hostingJob">Job</label>
+                                <select class="form-control emailJob" id="hostingJob" name="hostingJob">
+                                    <option value="">-- select --</option>
+                               </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="hostingDescription">Description</label>
+                                <input type="text" class="form-control" name="hostingDescription" id="hostingDescription" placeholder="Enter description" data-validation="required">
+                            </div>
+                            <div class="form-group form-inline">
+                                <label for="hostingValue">Value</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">£</span>
+                                    <input type="text" class="form-control" name="hostingValue" id="hostingValue" placeholder="Enter value" data-validation="required" data-pattern="[0-9]+">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="hostingExpiryDate">Expiry Date</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                    <input type="text" class="form-control datepicker" name="hostingExpiryDate" id="hostingExpiryDate" placeholder="Select date" value="{{ date()|date("d/m/Y") }}" data-validation="required">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="hostingPeriod">Renewal Period</label>
+                                <input type="text" class="form-control" name="hostingPeriod" id="hostingPeriod" placeholder="Enter number of months" data-validation="required" data-pattern="[0-9]+">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+               </div>
+
+                <div class="tab-pane" id="add_domain">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">New Domain Name Details</h3>
+                        </div>
+                    <div class="panel-body">
+                        <form role="form" name="addHosting" id="addHosting" method="post" action="/hosting/add">
+                        	<div><input type="hidden" name="hostingType" id="hostingType" value="1" /></div>
+                            <div class="form-group">
+                                <label for="hostingCompany">Company</label>
+                                <select class="form-control domainCompany" id="hostingCompany" name="hostingCompany" data-validation="required">
+                                <option value="">-- select --</option>
+                                    {% for item in global_clients %}
+                                        <option value="{{ item.organisationid }}" >{{ item.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="hostingJob">Job</label>
+                                <select class="form-control domainJob" id="hostingJob" name="hostingJob">
+                                    <option value="">-- select --</option>
+                               </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="hostingDescription">Description</label>
+                                <input type="text" class="form-control" name="hostingDescription" id="hostingDescription" placeholder="Enter description" data-validation="required">
+                            </div>
+                            <div class="form-group form-inline">
+                                <label for="hostingValue">Value</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">£</span>
+                                    <input type="text" class="form-control" name="hostingValue" id="hostingValue" placeholder="Enter value" data-validation="required" data-pattern="[0-9]+">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="hostingExpiryDate">Expiry Date</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                    <input type="text" class="form-control datepicker" name="hostingExpiryDate" id="hostingExpiryDate" placeholder="Select date" value="{{ date()|date("d/m/Y") }}" data-validation="required">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="hostingPeriod">Renewal Period</label>
+                                <input type="text" class="form-control" name="hostingPeriod" id="hostingPeriod" placeholder="Enter number of months" data-validation="required" data-pattern="[0-9]+">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+
+
+            </div>
+
+</div>
+
+<script>
+    $.validate({  });
+</script>
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+
+		
+		$('.webCompany').change(function(){
+			var accountid = $(this).val();
+			$.ajax({
+					type: "GET",
+					url: "/xml/jobs/" + accountid,
+					dataType: "xml",
+					success: function(xml) {
+						var select = $('.webJob');
+						select.attr("disabled","disabled");
+						select.children().remove();
+						select.append("<option value=''>-- select --</option>");
+						$(xml).find('item').each(function(){
+							var title = $(this).find('title').text();
+							var id = $(this).find('id').text();
+							select.append("<option value="+id+">"+title+"</option>");
+						});
+						select.removeAttr("disabled");
+					}
+				});
+		});
+
+		$('.emailCompany').change(function(){
+			var accountid = $(this).val();
+			$.ajax({
+					type: "GET",
+					url: "/xml/jobs/" + accountid,
+					dataType: "xml",
+					success: function(xml) {
+						var select = $('.emailJob');
+						select.attr("disabled","disabled");
+						select.children().remove();
+						select.append("<option value=''>-- select --</option>");
+						$(xml).find('item').each(function(){
+							var title = $(this).find('title').text();
+							var id = $(this).find('id').text();
+							select.append("<option value="+id+">"+title+"</option>");
+						});
+						select.removeAttr("disabled");
+					}
+				});
+		});
+
+		$('.domainCompany').change(function(){
+			var accountid = $(this).val();
+			$.ajax({
+					type: "GET",
+					url: "/xml/jobs/" + accountid,
+					dataType: "xml",
+					success: function(xml) {
+						var select = $('.domainJob');
+						select.attr("disabled","disabled");
+						select.children().remove();
+						select.append("<option value=''>-- select --</option>");
+						$(xml).find('item').each(function(){
+							var title = $(this).find('title').text();
+							var id = $(this).find('id').text();
+							select.append("<option value="+id+">"+title+"</option>");
+						});
+						select.removeAttr("disabled");
+					}
+				});
+		});
+		
+
+	});
+</script>
+
+{% endblock %}

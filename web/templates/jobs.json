@@ -1,0 +1,9 @@
+{
+	
+	{% for job in jobs %}
+		
+		"{{ job.id }}":{"value":"{{ job.jobnumber }}","companyname":"{{ job.companyname }}","description":"{{ job.description }}","tokens":["{{ job.jobnumber }}", "{{ job.companyname }}"],"datum":{"companyname":"{{ job.companyname }}","value":"{{ job.jobnumber }}","tokens":["{{ job.jobnumber }}","{{ job.companyname }}"]}} {% if not loop.last %},{% endif %}
+
+	{% endfor %}
+	
+}

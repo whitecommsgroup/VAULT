@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<div class="col-md-12">
+
+         <ol class="breadcrumb">
+          <li><a href="/tickets/list">Tickets</a></li>
+          <li class="active">{{ ticketDetails.subject }}</li>
+        </ol>
+
+        <h1>{{ ticketDetails.subject}}
+            <div class="btn-group floatright">
+              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                Action <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu pull-right" role="menu">
+                {% if ticketDetails.statusid == 6 %}
+                	<li><a href="#re-open_ticket" data-toggle="modal"><i class="glyphicon glyphicon-folder-open"></i> Re-open Ticket</a> </li>
+                {% else %}
+                    <li><a href="/tickets/edit/{{ ticketDetails.id }}" data-toggle="modal"><i class="glyphicon glyphicon-pencil"></i> Edit Ticket</a> </li>
+                    <li><a href="#close_ticket" data-toggle="modal"><i class="glyphicon glyphicon-lock"></i> Close Ticket</a> </li>
+                    <li><a href="#delete_ticket" data-toggle="modal"><i class="glyphicon glyphicon-trash"></i> Delete</a> </li>
+                {% endif %}
+                <li role="presentation" class="divider"></li>
+                <li><a href="/accounts/view/{{ ticketDetails.organisationid}}" data-toggle="modal"><i class="glyphicon glyphicon-home"></i> View Company</a></li>
+                <li><a href="/contacts/view/{{ ticketDetails.contactid}}" data-toggle="modal"><i class="glyphicon glyphicon-user"></i> View Contact</a></li>
+              </ul>
+            </div>
+        </h1>
+        
+
+            <table class="table table-bordered">
+            	<tr>
+                	<td><strong>Rasied By:</strong> <a href="/contacts/view/{{ ticketDetails.contactid }}">{{ getContactName(ticketDetails.contactid) }}</a></td>
+                    <td><strong>Assigned To:</strong> {{ getAccMgrName(ticketDetails.assignedtoid) }}
+                    
+                    	
+					</td>
+                </tr>
+            	<tr>
+                	<td><strong>Company:</strong> <a href="/accounts/view/{{ ticketDetails.organisationid }}">{{ getCompanyName(ticketDetails.organisationid) }}</a></td>
+                    <td><strong>Status:</strong> {{ getTicketStateName(ticketDetails.statusid) }}</td>
+                </tr>
+            	<tr>
+                	<td><strong>Tracking ID:</strong> {{ ticketDetails.trackingid }}</td>
+                    <td><strong>Department:</strong> {{ getTicketDepartmentName(ticketDetails.departmentid) }}</td>
+                </tr>
+            	<tr>
+                	<td><strong>Date Raised:</strong> {{ ticketDetails.date|date }}</td>
+                    <td><strong>Priority:</strong> {{ getTicketPriorityName(ticketDetails.priorityid) }}</td>
+                </tr>
+            	<tr>
+                	<td><strong>Number of replies:</strong> {{ ticketReplies|length }}</td>
+                    <td><strong>Job Number:</strong> <a href="/jobs/view/{{ ticketDetails.jobid }}">{{ getJobNumber(ticketDetails.jobid) }}</a></td>
+                </tr>
+            </table>
+            
+                
+            <form role="form" name="addReply" method="post" action="/tickets/reply/{{ ticketDetails.id}}" enctype="multipart/form-data">
+            <div class="panel panel-default">        
+                <div class="panel-body">
+                      <div class="form-group">
+                        <label for="ticketReply">New Reply</label>
+                        <textarea class="form-control" rows="3" id="ticketReply" name="ticketReply"></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label for="ticketAttachment">Attachment</label>
+                        <input type="file" id="ticketAttachment" name="ticketAttachment">
+                      </div>
+                </div>
+                <div class="panel-footer"><button type="submit" class="btn btn-primary">Submit</button></div>
+            </div>
+            </form>  
+              
+            {% for reply in ticketReplies %}
+            <div class="panel {% if reply.usertype == 1 %}panel-info{% else %}panel-success{% endif %}">
+                <div class="panel-heading"><p class="ticket-reply-name">{% if reply.usertype == 1 %}{{ reply.userid }}{% else %}{{ getAccMgrName(reply.userid) }}{% endif %}</p><p class="ticket-reply-date">{{ reply.date|date }}</p></div>
+                <div class="panel-body">
+                    <p>{{ reply.body}}</p>
+                </div>
+                {% if reply.filenames != '' %}
+                	<div class="panel-footer">
+                    {% for i in reply.filenames|split(',') %}
+                        <a href="/attachments/{{ i }}"  class="btn btn-default btn-xs">{{ i }} <i class="glyphicon glyphicon-paperclip"></i></a>
+                    {% endfor %}
+                    </div>
+                <!--<div class="panel-footer"><a href="/attachments/{{ reply.filenames}}">{{ reply.filenames}}</a></div>-->
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+
+    <!------------ MODAL FORMS -------------->
+
+    <div class="modal fade" id="delete_ticket">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form role="form" name="deleteTicket" method="post" action="/tickets/delete/{{ ticketDetails.id}}">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Delete Ticket</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this ticket?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="close_ticket">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form role="form" name="closeTicket" method="post" action="/tickets/close/{{ ticketDetails.id}}">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Close Ticket</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to close this ticket?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Close</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="re-open_ticket">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form role="form" name="reopenTicket" method="post" action="/tickets/re-open/{{ ticketDetails.id}}">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Re-Open Ticket</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to re-open this ticket?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Re-Open</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

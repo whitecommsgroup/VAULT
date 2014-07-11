@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="BodySigner.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="DKIMSigner.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="DomainKeySigner.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="HeaderSigner.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="SMimeSigner.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+</dwsync>

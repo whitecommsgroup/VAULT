@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dwsync>
+<file name="Annotation.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="AnnotationException.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="AnnotationReader.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="AnnotationRegistry.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="CachedReader.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="DocLexer.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="DocParser.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="FileCacheReader.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="IndexedReader.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="PhpParser.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="Reader.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="SimpleAnnotationReader.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+<file name="TokenParser.php" server="//WCGSERVER/Interactive Server/VAULT/" local="130244924300000000" remote="130244924300000000" Dst="2" />
+</dwsync>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dropdown>
+	{% for item in contacts %}
+	<item>
+			<name>{{ item.firstname }} {{ item.lastname }}</name>
+			<id>{{ item.id }}</id>
+		</item>
+	{% endfor %}
+ </dropdown>

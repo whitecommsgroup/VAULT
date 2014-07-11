@@ -1,0 +1,6 @@
+{% autoescape false %}
+Job No.,Client,Job Title,Invoice Date,Account Handler,Studio [E],Studio [A],Services [I],Services [C],Mark up %,Invoice [C],Invoiced [I],Adjustment
+{% for item in data %}
+	{{ item.jobnumber }},{{ getCompanyName(item.organisationid) }},{{ item.title }},{{ item.statusdate|date('d/m/Y') }},{{ getAccMgrName(item.accountmanagerid) }},{{ (item.estHours * item.estRate) }},{{ (item.actHours * item.estRate) }},{{ item.boughtIn }},{{ item.boughtOut }},{% if item.boughtOut or item.boughtIn %}{{ ((item.boughtOut - item.boughtIn) / item.boughtIn * 100)|number_format }}%{% endif %},{{ (item.boughtOut + (item.actHours * item.estRate)) }},{{ item.invoicevalue }},{{ item.invoicevalue - (item.boughtOut + (item.actHours * item.estRate)) }}
+{% endfor %}
+{% endautoescape %}

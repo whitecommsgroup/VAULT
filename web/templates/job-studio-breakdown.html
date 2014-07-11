@@ -1,0 +1,26 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Studio Time Breakdown - {{ getAccMgrName(employeeid) }}</h4>
+        </div>			
+        <div class="modal-body" style="max-height:400px; overflow-y:auto;">
+            <table class="table table-bordered table-responsive" >
+                <tr class="active">
+                    <th width="25">Type</th>
+                    <th width="25%">Hours</th>
+                    <th width="25%">Date</th>
+                    <th width="25%">Notes</th>
+                </tr>
+                {% for line in content %}
+                <tr {% if line.approved == 0 %}class="faded"{%endif%}>
+                    <td>{{ getWorkTypeName(line.worktypeid) }} {% if line.worksubtypeid %}({{ getWorkSubTypeName(line.worksubtypeid) }}){% endif %}</td>
+                    <td>{{ line.hours }}</td>
+                    <td>{{ line.date|date('d/m/Y') }}</td>
+                    <td>{{ line.description }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>			
+    </div>
+</div>

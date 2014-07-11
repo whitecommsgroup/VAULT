@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <ol class="breadcrumb">
+      <li><a href="/timesheets/list">Timesheets</a></li>
+      <li class="active">View</li>
+    </ol>
+
+   
+                    <form class="" role="form" name="addTicket" id="addTicket" method="post" action="/timesheets/update">
+                    <div class="panel panel-default">
+    				<div>
+                    	<input type="hidden" name="timesheetEmployeeId" id="timesheetEmployeeId" value="{{ user.id }}" />
+	                    <input type="hidden" name="timesheetId" id="timesheetId" value="{{ timesheet.id }}" />
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group col-lg-12">
+                            <label for="jobDate">Date</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                                <input type="text" class="form-control datepicker" name="timesheetDate" id="timesheetDate" placeholder="Enter date or leave blank for today" value="{{ timesheet.date|date('d/m/Y') }}" readonly>
+                            </div>
+                        </div>
+                        <table id="tbl">
+                           <tr>
+                           		<th class="col-md-1">ID</th>
+                           		<th class="col-md-5">Job</th>
+                           		<th class="col-md-2">Work type</th>
+                           		<th class="col-md-2">Comments</th>
+                           		<th class="col-md-1">Hours</th>
+                           		<th class="col-md-1">Images</th>
+                           		<th class="col-md-4"></th>
+                           </tr>
+                           {% set lines_open = 0 %}
+                           {% for line in lines %}
+                           
+                           <tr class="tr_clone">
+                           		<td class="col-md-1" class="tr_id"><input class="form-control" name="timeSheetLineId[]" id="timeSheetLineId" type="hidden" value="{{ line.id }}" ><input id="timeSheetLineIdReadOnly" class="form-control" style="font-size:0.8em;" type="text" value="{{ line.id }}" readonly><input  style="display:none;" type="text" class="form-control timesheetApproved" name="timesheetApproved[]" id="timesheetApproved" placeholder="Hours" value="{{ line.approved }}" {% if line.approved == 1 %}readonly{% endif %}></td>
+                                <td class="col-md-5">
+                                	<div class="form-group">
+                                		<input style="float:left; width:25%; margin-right:10px;" type="text" class="form-control typeah" name="timeSheetJobNumber[]" id="timeSheetJobNumber" placeholder="Job number" value="{{ line.jobid }}" {% if line.approved == 1 %}readonly{% endif %} autocomplete="off" data-validation="required">
+                                	    <input style="float:left; width:35%; margin-right:10px; font-size:0.8em;" type="text" class="form-control" name="timeSheetClient[]" id="timeSheetClient" placeholder="Client"  autocomplete="off" readonly data-validation="required" value="{{ getCompanyName(line.organisationid) }}">
+                                	    <input style="width:35%; font-size:0.8em;" type="text" class="form-control" name="timeSheetTitle[]" id="timeSheetTitle" placeholder="Title"  autocomplete="off" readonly data-validation="required" value="{{ getJobTitle(line.jobidentity) }}">
+                                	</div>
+                                </td>
+                                <td class="col-md-2">
+                                	{% if line.approved == 1 %}
+                                        <input style="display:none;" type="text" class="form-control" name="timeSheetType[]" id="timeSheetType" placeholder="" data-validation="required" {% if line.approved == 1 %}readonly{% endif %} value="{{ line.worktypeid }}">
+                                        <input type="text" class="form-control" placeholder="" data-validation="required" {% if line.approved == 1 %}readonly{% endif %} value="{{ getWorkTypeName(line.worktypeid) }}">
+                                    {% else %}
+                                    	{% set lines_open = lines_open + 1 %}
+                                        <select class="form-control" name="timeSheetType[]" id="timeSheetType" data-validation="number" data-validation-allowing="range[1;9999]">
+                                          <option value="0">-- select --</option>
+                                          {% for worktype in global_worktypes %}
+                                              <option value="{{ worktype.id }}" {% if worktype.id == line.worktypeid %}selected="selected"{% endif %}>{{ worktype.name }}</option>
+                                          {% endfor %}
+                                        </select>
+                                    {% endif %}
+                                </td>
+                                <td class="col-md-2">
+                                    <input style="font-size:0.8em;" type="text" class="form-control" name="timeSheetDescription[]" id="timeSheetDescription" placeholder="Enter description" {% if line.approved == 1 %}readonly{% endif %} value="{{ line.description }}">
+                                </td>
+                                <td class="col-md-1"><input type="text" class="form-control timeSheetHours" name="timeSheetHours[]" id="timeSheetHours" placeholder="Hours" value="{{ line.hours }}" {% if line.approved == 1 %}readonly{% endif %} data-validation="number" data-validation-allowing="float"></td>
+                                <td class="col-md-1"><input type="text" class="form-control timeSheetImages" name="timeSheetImages[]" id="timeSheetImages" placeholder="Images" value="{{ line.images }}" {% if line.approved == 1 %}readonly{% endif %} data-validation="number" data-validation-optional="true"></td>
+                                {% if line.approved == 0 %}
+	                                <td class="col-md-2"><a class="btn btn-danger tr_minus btn-sm" id="{{ line.id }}"><i class="glyphicon glyphicon-minus"></i> Delete</a></td>
+								{% endif %}
+                            </tr>
+                            {% endfor %}
+                            {% if lines_open == 0 %}
+                           <tr class="tr_clone">
+                             <th class="col-md-1"></th>
+                               <td class="col-md-5">
+                                	<div class="form-group">
+                                            <input style="float:left; width:25%; margin-right:10px;" type="text" class="form-control typeah" name="timeSheetJobNumber[]" id="timeSheetJobNumber" placeholder="Job number" data-validation="number" autocomplete="off">
+                                            <input style="float:left; width:35%; margin-right:10px; font-size:0.8em;" type="text" class="form-control" name="timeSheetClient[]" id="timeSheetClient" placeholder="Client" autocomplete="off" readonly >
+                                            <input style="width:35%; font-size:0.8em;" type="text" class="form-control" name="timeSheetTitle[]" id="timeSheetTitle" placeholder="Title"  autocomplete="off" readonly >
+                                    </div>
+                                </td>
+                                <td class="col-md-2">
+                                    <div class="form-group">
+                                    <select class="form-control" name="timeSheetType[]" id="timeSheetType" data-validation="number">
+                                      <option value="">-- select --</option>
+                                      {% for worktype in global_worktypes %}
+                                          <option value="{{ worktype.id }}">{{ worktype.name }}</option>
+                                      {% endfor %}
+                                    </select>
+                                    </div>
+                                </td>
+                                <td class="col-md-2">
+                                	<div class="form-group">
+                                        <input type="text" class="form-control" name="timeSheetDescription[]" id="timeSheetDescription" placeholder="Enter comments">
+                                    </div>
+                                </td>
+                                <td class="col-md-1"><div class="form-group"><input type="text" class="form-control timeSheetHours" name="timeSheetHours[]" id="timeSheetHours" placeholder="Hours" autocomplete="off" data-validation="number" data-validation-allowing="float"></div></td>
+                                <td class="col-md-1"><div class="form-group"><input type="text" class="form-control timeSheetImages" name="timeSheetImages[]" id="timeSheetImages" placeholder="Hours" autocomplete="off" data-validation="number" data-validation-allowing="float"></div></td>
+                                <td class="col-md-4"><a class="btn btn-danger tr_minus btn-sm"><i class="glyphicon glyphicon-minus"></i> Remove</a></td>
+                            </tr>
+                            {% endif %}
+                            <tfoot>
+                               <tr>
+                                    <th class="col-md-1"></th>
+                                    <th class="col-md-5"><a class="btn btn-success tr_clone_add btn-sm"><i class="glyphicon glyphicon-plus"></i> Add row</a></th>
+                                    <th class="col-md-2"></th>
+                                    <th class="col-md-2"><strong class="floatright">Total:</strong></th>
+                                    <th class="col-md-1"><input class="form-control total" id="disabledInput" type="text" placeholder="0" disabled></th>
+                                    <th class="col-md-1"></th>
+                                    <th class="col-md-4"></th>
+                               </tr>
+                             </tfoot>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                           <a class="btn btn-default previous" href="/timesheets/list">&larr; Back</a> <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </div>
+                </form>
+
+{% raw %}
+<script>
+    $.validate({  });
+</script>
+    <script type="text/javascript">
+		
+		$(document).ready(function() {
+			
+			init();
+			
+			$(".tr_clone_add").on("click",function(){
+       
+				var $tableBody = $('#tbl').find("tbody"),
+					$trLast = $tableBody.find("tr:last"),
+					$trNew = $trLast.clone();
+					$trLast.after($trNew);
+					$("#tbl tr.tr_clone:last input").val('');
+					$("#tbl tr.tr_clone:last input").removeAttr("value");
+					$("#tbl tr.tr_clone:last input").removeAttr("readonly");
+
+
+					$("#tbl tr.tr_clone:last #timeSheetLineIdReadOnly").attr("readonly", "readonly");
+					$("#tbl tr.tr_clone:last #timeSheetClient").attr("readonly", "readonly");
+					$("#tbl tr.tr_clone:last #timeSheetTitle").attr("readonly", "readonly");
+
+					$("#tbl tr.tr_clone:last select").val(0);
+					$("#tbl tr.tr_clone:last .tr_approve").remove();
+
+					$("#tbl tr.tr_clone:last input, #tbl tr.tr_clone:last select").removeAttr("disabled");
+
+					$("#tbl tr.tr_clone:last .tr_minus").attr("id","");
+
+					$(".has-success").removeClass("has-success");
+					$(".has-error").removeClass("has-error");
+					
+					$("#tbl tr.tr_clone .tr_minus").on("click",function(){
+						if ($(this).attr("id") != '' && $(".tr_clone").length > 1){
+							$.get("/ajax/deleteLine/" + $(this).attr("id"), function( data ) { });		
+							$(this).parent().parent().remove();
+							calculateTotal();
+						}else{
+							if ($(".tr_clone").length > 1){
+								$(this).parent().parent().remove();
+								calculateTotal();
+							}else{
+								alert('Cannot delete row - you need at least 1 row')	
+								return false;
+							}
+						}
+					});
+
+
+					init();
+
+			});
+
+			var sum = 0;
+			$('.timeSheetHours').each(function() {
+				sum += Number($(this).val());
+			});
+			$(".total").val(sum);
+				
+			$("#tbl tr.tr_clone .tr_minus").on("click",function(){
+				if ($(this).attr("id") != '' && $(".tr_clone").length > 1){
+					$.get("/ajax/deleteLine/" + $(this).attr("id"), function( data ) { });		
+					$(this).parent().parent().remove();
+					calculateTotal();
+				}else{
+					if ($(".tr_clone").length > 1){
+						$(this).parent().parent().remove();
+						calculateTotal();
+					}else{
+						alert('Cannot delete row - you need at least 1 row')	
+						return false;
+					}
+				}
+			});
+				
+				
+		});
+
+
+function init(){
+
+			$("input[name='timeSheetJobNumber[]']").on("click", function () {
+			   $(this).select();
+			});
+
+			$("input[name='timeSheetJobNumber[]']").on("keyup",function(){
+				if ($(this).val() == ''){
+					$(this).siblings("#timeSheetClient").val('');
+				}
+			});
+
+			$(".timeSheetHours").on("blur",function(){
+				var sum = 0;
+				$('.timeSheetHours').each(function() {
+					sum += Number($(this).val());
+				});
+				$(".total").val(sum);
+			});
+		
+
+			/*$('#tbl tr.tr_clone:last .typeah').typeahead([
+			  {
+				name: 'jobs',
+				ttl: 1,
+				prefetch: '/json/jobs',
+				template: '<p><strong>{{value}} - {{companyname}}</strong><br />{{description}}</p>',
+				engine: Hogan,
+				limit: 5
+			  }
+			]);*/
+
+			  
+			  $.ajax({
+				  url: "/xml/jobs",
+				  dataType: "xml",
+				  success: function( xmlResponse ) {
+					var data = $( "job", xmlResponse ).map(function() {
+					  return {
+						value: $( "jobnumber", this ).text() + " - " +
+						  ( $.trim( $( "company", this ).text() ) +  ', ' + $.trim( $( "title", this ).text() ) ),
+						company: $( "company", this ).text(),
+						title: $( "title", this ).text(),
+						id: $( "jobnumber", this ).text()
+					  };
+					}).get();
+					$( ".typeah" ).autocomplete({
+					  source: data,
+					  minLength: 0,
+					  select: function( event, ui ) {
+						$(this).val( ui.item.id );
+						$(this).siblings("#timeSheetClient").val( ui.item.company );
+						$(this).siblings("#timeSheetTitle").val( ui.item.title );
+						return false;
+					  }
+					});
+				  }
+				});
+			
+	
+}
+
+function calculateTotal(){
+
+		var sum = 0;
+		$('.timeSheetHours').each(function() {
+			sum += Number($(this).val());
+		});
+		$(".total").val(sum);
+
+}
+	
+	</script>
+{% endraw %}
+        
+</div>
+{% endblock %}

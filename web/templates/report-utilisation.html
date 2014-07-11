@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="col-md-12">
+
+         <ol class="breadcrumb">
+          <li class="active">Reports</li>
+          <li><a href="/reports/utilisation">Utilisation</a></li>
+          <li class="active">Report for {{ dateFrom }} to {{ dateTo }}</li>
+        </ol>
+        
+        <h4>Utilisation for {{ dateFrom }} to {{ dateTo }}</h4>
+
+         <table class="table table-bordered table-responsive table-condensed table-striped">
+            <tr class="active">
+                <th nowrap="nowrap" width="25%">Employee</th>
+                <th nowrap="nowrap" width="25%">Days Off</th>
+                <th nowrap="nowrap" width="25%">Hours Logged</th>
+                <th nowrap="nowrap" width="25%">Utilisation</th>
+            </tr>
+            {% for item in hours %}
+                <tr>
+                    <td>{{ item.firstname }} {{ item.lastname }}</td>
+                    <td>{{ item.days|number_format }}</td>
+                    <td>{{ item.hours }}</td>
+                    {% if item.id == 11 %}
+                        <td>{{ (item.hours / (total_hours - 15 - (item.days*7.5)) * 100)|number_format(2, '.', ',') }}%</td>
+                    {% else %}
+    	                <td>{{ (item.hours / (total_hours - (item.days*7.5)) * 100)|number_format(2, '.', ',') }}%</td>
+                    {% endif %} 
+                </tr>
+            {% endfor %}
+        </table>    
+
+
+         <table class="table table-bordered table-responsive table-condensed table-striped">
+            <tr class="active">
+                <th nowrap="nowrap" width="10%">Employee</th>
+                <th nowrap="nowrap" width="15%">Chargeable</th>
+                <th nowrap="nowrap" width="15%">Pitch</th>
+                <th nowrap="nowrap" width="15">Charity</th>
+                <th nowrap="nowrap" width="15%">WCG</th>
+                <th nowrap="nowrap" width="15%">WCG production meeting</th>
+                <th nowrap="nowrap" width="15%">WCG meetings & briefings</th>
+            </tr>
+            {% for item in hours %}
+                    <tr>
+                        <td>{{ item.firstname }}</td>
+                        {% set _empty = true %}
+                        {% for i in 3..8 %}
+                        	{% set _empty = true %}
+                            {% for row in getEmployeeHoursByCategoryBetweenDate(item.id, dateFrom, dateTo) %}
+                            	{% if row.categoryid == i %}
+                                    <td>{{ row.hours }} ({{ ((row.hours / item.hours) * 100)|number_format(2, '.', ',') }}%)</td>
+                                    {% set _empty = false %}
+                                {% endif %}
+                            {% endfor %}
+                            {% if _empty == true %}
+                          	  <td></td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+            {% endfor %}
+        </table>    
+ 
+</div>
+
+
+{% endblock %}

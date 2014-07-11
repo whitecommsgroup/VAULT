@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="col-md-12">
+
+        <ol class="breadcrumb">
+            <li class="active">Reports</li>
+          <li><a href="/reports/jobs">Jobs</a></li>
+            <li class="active">Report for {{ dateFrom }} to {{ dateTo }}</li>
+        </ol>
+        
+        <h4>Job Report for {{ dateFrom }} to {{ dateTo }}</h4>
+
+        <div class="tab-pane active" id="invoiced">
+             <table class="table table-bordered table-responsive table-condensed table-striped">
+                <tr class="active">
+                    <th nowrap="nowrap">Job No.</th>
+                    <th nowrap="nowrap">Client</th>
+                    <th nowrap="nowrap">Job Title</th>
+                    <th nowrap="nowrap">Date</th>
+                    <th nowrap="nowrap">Account Handler</th>
+                    <th nowrap="nowrap">Value</th>
+                </tr>
+                {% set total = 0 %}
+                {% for item in jobs %}
+                	{% set total = total + item.value %}
+                    <tr>
+                        <td>{{ item.jobnumber }}</td>
+                        <td>{{ getCompanyName(item.organisationid) }}</td>
+                        <td>{{ item.title }}</td>
+                        <td>{{ item.date|date('d/m/Y') }}</td>
+                        <td>{{ getAccMgrName(item.accountmanagerid) }}</td>
+                        <td>£{{ item.value|number_format(0, '.', ',') }}</td>
+                    </tr>
+                {% endfor %}
+                <tr class="active">
+                    <th nowrap="nowrap"></th>
+                    <th nowrap="nowrap"></th>
+                    <th nowrap="nowrap"></th>
+                    <th nowrap="nowrap"></th>
+                    <th nowrap="nowrap">Total:</th>
+                    <th nowrap="nowrap">£{{ total|number_format(0, '.', ',') }}</th>
+                </tr>
+            </table>    
+
+</div>
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+		
+
+	});
+</script>
+
+{% endblock %}

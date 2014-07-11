@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jobs>
+	{% for item in jobs %}
+		<job>
+			<jobnumber>{{ item.jobnumber }}</jobnumber>
+			<id>{{ item.id }}</id>
+			<company>{{ item.companyname }}</company>
+			<title>{{ item.title }}</title>
+		</job>
+	{% endfor %}
+ </jobs>

@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="col-md-12">
+
+         <ol class="breadcrumb">
+          <li><a href="/jobs/list">Jobs</a></li>
+          <li><a href="/invoicing">Invoicing</a></li>
+          <li class="active">Report for {{ date }}</li>
+        </ol>
+        
+        <h1>Summary for {{ date }}
+        
+        {% if user.group b-and 8 %}
+             {% set full_date = '01/' ~ date %}
+            {% if full_date|date("d") < "now"|date("m")  %}
+            <div class="btn-group floatright">
+                {% if month_closed %}
+                <a class="pull-right btn btn-primary" href="#re-open_month" data-toggle="modal"><i class="glyphicon glyphicon-folder-open"></i> Re-open Month</a> 
+                {% else %}
+                <a class="pull-right btn btn-primary" href="#close_month" data-toggle="modal"><i class="glyphicon glyphicon-lock"></i> Close Month</a>
+                {% endif %}
+            </div>
+            {% endif %}
+        {% endif %}
+        
+        </h1>
+
+ 
+       
+         <table class="table table-bordered table-responsive">
+            <tr class="active">
+                <th width="25%">Account Manager</th>
+                <th width="25%">Invoices Amount</th>
+                <th width="25%">Purchases</th>
+                <th width="25%">Gross Margin</th>
+            </tr>
+            {% set total_value = 0 %}
+            {% set total_chargeout = 0 %}
+            {% set total_chargein = 0 %}
+            {% for manager in accountmanagers %}
+            	{% set total_value = total_value + manager.studiovalue %}
+            	{% set total_chargeout = total_chargeout + manager.chargeout %}
+            	{% set total_chargein = total_chargein + manager.chargein %}
+                <tr>
+                    <td>{{ manager.firstname }}</td>
+                    <td>£{{ (manager.studiovalue+manager.chargeout)|number_format }}</td>
+                    <td>£{{ (manager.chargein)|number_format }}</td>
+                    <td>£{{ ((manager.studiovalue+manager.chargeout) - manager.chargein)|number_format }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <th></th>
+                <th>£{{ (total_value+total_chargeout)|number_format }}</th>
+                <th>£{{ (total_chargein)|number_format }}</th>
+                <th>£{{ ((total_value+total_chargeout) - total_chargein)|number_format }}</th>
+            </tr>
+		</table>       
+        
+    
+            <ul class="nav nav-tabs">
+                {% for manager in accountmanagers %}
+                    <li><a href="#{{ manager.firstname }}" data-toggle="tab">{{ manager.firstname }} <span class="badge">{{ manager.count }}</span></a></li>
+                {% endfor %}
+            </ul>
+
+            <br />
+
+             <div class="tab-content">
+             
+             	{% for manager in accountmanagers %}
+                {% set total_value = 0 %}
+                {% set total_bought = 0 %}
+                <div class="tab-pane" id="{{ manager.firstname }}">
+                    <table class="table table-bordered table-responsive table-smallfont">
+                        <tr class="active">
+                            <th>Job Number</th>
+                            <th>Client</th>
+                            <th>Contact</th>
+                            <th>Job Name</th>
+                            <th>Value</th>
+                            <th>Charge In</th>
+                            <th>PO</th>
+                            <th>Status</th>
+                            <th>Invoice Date</th>
+                            <th>Invoice #</th>
+                            <th>Info</th>
+                        </tr>
+                        {% for job in invoicing %}
+                            {% if job.accountmanagerid == manager.accountmanagerid %}
+                                {% set total_value = total_value + job.studiovalue %}
+                                {% set total_chargeout = total_chargeout + job.chargeout %}
+                                {% set total_chargein = total_chargein + job.chargein %}
+                            	<tr class="invoicestatus-{{ job.statusid }}" id="jobrow-{{ job.lineid }}">
+                                	<td><a href="/jobs/view/{{ getJobIdByNumber(job.jobnumber) }}">{{ job.jobnumber }}</a></td>
+                                	<td><a href="/accounts/view/{{ job.organisationid }}">{{ getCompanyName(job.organisationid) }}</a></td>
+                                	<td><a href="/contacts/view/{{ job.contactid }}">{{ getContactName(job.contactid) }}</a></td>
+                                	<td><strong>{{ job.title }}</strong><br />{{ job.description }}</td>
+                                	<td>£{{ (job.studiovalue+job.chargeout)|number_format }}</td>
+                                	<td>£{{ job.chargein|number_format }}</td>
+                                	<td><a data-placement="left" href="#" id="po" class="po" data-type="text" data-pk="{{ job.id }}" data-url="/invoicing/update-job-po" data-title="Enter PO">{{ job.po }}</a></td>
+                                	<td>
+                                        <select class="form-control input-xs jobState" id="{{ job.lineid }}" name="jobState" final="{{ job.finalinvoice }}">
+                                            {% for item in global_invoicestates %}
+                                            	{% if item.id > 1 %}
+                                                <option value="{{ item.id }}" {% if job.statusid == item.id %}selected="selected"{% endif %}>{{ item.name }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                	<td><a data-placement="left" href="#" id="date" class="date" data-defaultValue="null" data-viewformat="dd/mm/yyyy" data-type="date" data-pk="{{ job.lineid }}" data-url="/invoicing/update-invoice-date" data-title="Enter Date">{% if job.invoicedate %}{{ job.invoicedate|date("d/m/Y") }}{% endif %}</a></td>
+                                	<td><a data-placement="left" href="#" id="number" class="number" data-defaultValue="null" data-type="text" data-pk="{{ job.lineid }}" data-url="/invoicing/update-invoice-number" data-title="Enter number">{{ job.invoicenumber }}</a></td>
+                                    <td nowrap="nowrap">
+                                    	<a class="btn btn-primary tr_minus btn-xs close_line floatleft"><i class="glyphicon glyphicon-inbox"></i> {% if job.finalinvoice == 1 %}Final{% else %}Part{% endif %}</a>
+                                    	{% if job.note %}
+                                            &nbsp;<button title="" data-placement="left" data-toggle="popover" class="btn btn-xs btn-primary popovers" type="button" data-content="{{ job.note }}"><i class="glyphicon glyphicon-comment"></i></button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}                    
+                        {% endfor %}
+                        <!--<tr class="active">
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>£{{ total_value|number_format }}</th>
+                            <th>£{{ total_bought|number_format }}</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>-->
+                    </table>
+                </div>
+                {% endfor %}
+                
+            </div>
+
+</div>
+
+
+    <div class="modal fade" id="close_month">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form role="form" name="closeJob" method="post" action="/invoicing/report/close">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Close Month</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to close this month so that no further invoices can be added?</p>
+                    
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" class="form-control" name="invoicingMonth" id="invoicingMonth" value="{{ date }}">
+
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Close Month</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="re-open_month">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form role="form" name="closeJob" method="post" action="/invoicing/report/open">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Re-Open Month</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to re-open this month?</p>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" class="form-control" name="invoicingMonth" id="invoicingMonth" value="{{ date }}">
+
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Re-Open Month</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+
+		$('.popovers').popover({trigger:'hover'});
+
+		$('.descriptions').popover({trigger:'click'});
+		
+		$('.jobState').change(function(){
+
+			var jobid = $(this).attr("id");
+			var statusid = $(this).val();
+			var finalinvoice= $(this).attr("final");
+
+			$.ajax({
+				type: "GET",
+				url: "/ajax/update-invoice-status/" + jobid + "/" + statusid + "/" + finalinvoice,
+				success: function() {
+					$("#jobrow-" + jobid).removeClass();
+					$("#jobrow-" + jobid).addClass("invoicestatus-" + statusid);
+				}
+			});
+			
+		});
+
+		$('.po, .date, .number').editable();
+
+	});
+</script>
+
+{% endblock %}

@@ -1,0 +1,346 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<div class="col-md-4">
+
+
+    
+
+        
+        {% if user.group b-and 16 %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">New Jobs</h3>
+                    <a href="/jobs/list#_add_job" class="btn btn-primary btn-xs pull-right"><i class="glyphicon glyphicon-plus"></i> Add</a>
+                </div>
+                <div class="list-group">
+                    {% for item in last5Jobs %}
+                        <a href="/jobs/view/{{ item.id }}" class="list-group-item popovers" data-toggle="popover" data-placement="bottom" title="{{ getCompanyName(item.organisationid) }}" data-content="<strong>Account Mgr:</strong> {{ getAccMgrFirstName(item.accountmanagerid) }}<br /><strong>Value:</strong> £{{ item.value }}">{% if item.title|length > 40 %}{{ item.title[:40] ~ '...' }}{% else %}{{ item.title }}{% endif %} <span class="lighttext" >({{ item.date|date('dS M') }})</span> <span class="floatright lighttext" >{{ item.jobnumber }}</span></a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+
+
+        {% if user.group b-and 1 %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">New Clients</h3>
+                    <a href="/accounts/list#_add_client" class="btn btn-primary btn-xs pull-right"><i class="glyphicon glyphicon-plus"></i> Add</a>
+                </div>
+                <div class="list-group">
+                    {% for item in last5Clients %}
+                        <a href="/accounts/view/{{ item.organisationid}}" class="list-group-item">{{ item.name }} <span class="lighttext" >({{ item.firstcontact|date('dS M') }})</span><span class="floatright lighttext">{{ getAccMgrFirstName(item.accountmanagerid) }}</span></a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if user.group b-and 512 %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Latest Prospects</h3>
+                    <a href="/accounts/list#_add_client" class="btn btn-primary btn-xs pull-right"><i class="glyphicon glyphicon-plus"></i> Add</a>
+                </div>
+                <div class="list-group">
+                    {% for item in last5Prospects %}
+                        <a href="/accounts/view/{{ item.organisationid}}" class="list-group-item popovers" data-placement="top" title="Prospect Status" data-content="{{ item.note }}">{{ item.name }} <span class="lighttext" >({{ item.firstcontact|date('dS M') }})</span><span class="floatright lighttext">{{ getAccMgrFirstName(item.accountmanagerid) }}</span></a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if user.group b-and 16 %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Value of jobs this month to date</h3>
+                </div>
+                <div class="panel-body">
+                	<h1 style="text-align:center; margin:0;">£{{ currentjobsvalue|number_format }}</h1>
+                </div>
+                <div class="panel-heading">
+                    <h3 class="panel-title">Value of jobs for last quarter</h3>
+                </div>
+                <div class="panel-body">
+                	<div id="jobvalue-chart" style="height:150px;"></div>
+                </div>
+            </div>
+        {% endif %}
+
+</div>
+
+<div class="col-md-4">
+
+            {% if user.group b-and 8 %}
+            <div class="panel panel-default ">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Studio Utilisation for previous day</h3>
+                </div>
+           <!-- <div class="list-group">
+                	{% set _totalhours = 0 %}
+                    {% for item in employeeHoursLastDay %}
+                    	{% set _totalhours = _totalhours + item.hours %}
+                        <a href="/timesheets/view/{{ item.timesheetid }}" class="list-group-item">{{ item.firstname }} - {{ item.hours }} hrs  <span class="badge">{{ ((item.hours / 7.5) * 100)|number_format }}%</span></a>
+                    {% endfor %}
+                </div> -->
+                 <div class="panel-body popovers" style="text-align:center;" data-placement="bottom" title="Staff Hours" data-content="<table class='table table-bordered'>{% for item in employeeHoursLastDay %}<tr><td><strong>{{ item.firstname }}</strong></td><td>{{ item.hours }}</td><td>{{ ((item.hours / 7.5) * 100)|number_format }}%</td><tr>{% endfor %}</table>">
+                 	<!--<p>Overall Studio Utilisation</p>-->
+                 
+                   <input class="knob" data-readOnly=true data-displayInput=true data-bgColor="#FFF" data-fgColor="#555" value="{{ ((_totalhours / (7.5 * employeeHoursLastDay|length)) * 100)|number_format }}"  data-width="150" data-height="150">
+
+                </div>
+           </div>
+        {% endif %}
+           
+    	{% if user.group b-and 1024 and outstandinghosting %}
+            <div class="panel panel-danger ">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Oustanding Hosting</h3>
+                    <span class="badge pull-right">{{ outstandinghosting|length }}</span>
+                </div>
+                <div class="list-group" style="max-height:192px; overflow-y:auto;">
+                    {% for item in outstandinghosting %}
+                        <a href="/hosting/view/{{ item.id}}" class="list-group-item">{% if item.typeid == 1 %}<i class="glyphicon glyphicon-globe"></i>{% elseif item.typeid == 2 %}<i class="glyphicon glyphicon-hdd"></i>{% else %}<i class="glyphicon glyphicon-envelope"></i>{% endif %}  {{ item.description }} | {{ item.expirydate|date('d/m/Y') }}<span class="floatright lighttext">{{ item.name }}</span></a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+    	{% if jobswithoutestimate %}
+            <div class="panel panel-danger ">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Your Jobs Needing Estimates</h3>
+                    <span class="badge pull-right">{{ alljobswithoutestimate|length }}</span>
+                </div>
+                <div class="list-group" style="height:192px; overflow-y:auto;">
+                    {% for item in jobswithoutestimate %}
+                        <a href="/jobs/view/{{ item.id}}" class="list-group-item">{% if item.title|length > 30 %}{{ item.title[:30] ~ '...' }}{% else %}{{ item.title }}{% endif %}<span class="floatright lighttext">{% if getCompanyName(item.organisationid)|length > 15 %}{{ getCompanyName(item.organisationid)[:15] ~ '...' }}{% else %}{{ getCompanyName(item.organisationid) }}{% endif %}</span></a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if user.group b-and 8 and alljobswithoutestimate%}
+            <div class="panel panel-danger ">
+                <div class="panel-heading">
+                    <h3 class="panel-title">All Jobs Needing Estimates </h3>
+                    <span class="badge pull-right">{{ alljobswithoutestimate|length }}</span>
+                </div>
+                <div class="list-group" style="height:192px; overflow-y:auto;">
+                    {% for item in alljobswithoutestimate %}
+                        <a href="/jobs/view/{{ item.id}}" class="list-group-item">{% if item.title|length > 30 %}{{ item.title[:30] ~ '...' }}{% else %}{{ item.title }}{% endif %}<span class="floatright lighttext">{% if getCompanyName(item.organisationid)|length > 15 %}{{ getCompanyName(item.organisationid)[:15] ~ '...' }}{% else %}{{ getCompanyName(item.organisationid) }}{% endif %}</span></a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+            <div class="panel panel-warning ">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Active Live Jobs Approaching Budget (80%+)</h3>
+                </div>
+                <div class="list-group" style="height:192px; overflow-y:auto;">
+                    {% for item in wipjobsnearlyoverbudget if item.diff > 0 and item.lastworkdate and ((item.acthours / item.esthours) * 100) > 80 %}
+                        <a href="/jobs/view/{{ item.id }}" class="list-group-item popovers" data-toggle="popover" data-placement="bottom" title="{{ getCompanyName(item.organisationid) }}" data-content="<strong>Budget:</strong> £{{ item.estvalue }}<br /><strong>Cost:</strong> £{{ item.actvalue }}<br /><strong>Budget Remaining:</strong> £{{ item.diffvalue }}<br /><strong>Budget Used:</strong> {{ ((item.acthours / item.esthours) * 100)|number_format }}%">{% if item.title|length > 45 %}{{ item.title[:45] ~ '...' }}{% else %}{{ item.title }}{% endif %}<span class="floatright lighttext">{{ getAccMgrFirstName(item.accountmanagerid) }}</span><!--<br /><span class="lighttext">{{ item.esthours }} - {{ item.acthours }} - {{ item.diff }} - {{ item.lastworkdate }}</span>
+                        {{ ((item.acthours / item.esthours) * 100) }}-->
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="panel panel-danger ">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Jobs Over Budget</h3>
+                </div>
+
+                {% if user.group b-and 8 %}
+				<ul class="nav nav-pills nav-justified">
+                    <li class="active"><a href="#job_over_live" data-toggle="pill">Live</a></li>
+                    <li><a href="#job_over_closed" data-toggle="pill">Closed</a></li>
+                </ul>
+                {% endif %}
+
+                <div class="tab-content">
+                    <div id="job_over_live" class="tab-pane active">
+                        <div class="list-group" style="height:192px; overflow-y:auto;">
+                            {% for item in livejobsoverbudget if item.diffvalue < 0 %}
+                                <a href="/jobs/view/{{ item.id }}" class="list-group-item popovers" data-toggle="popover" data-placement="bottom" title="{{ getCompanyName(item.organisationid) }}" data-content="<strong>Budget:</strong> £{{ item.estvalue }}<br /><strong>Cost:</strong> £{{ item.actvalue }}<br /><strong>Over Budget By:</strong> £{{ item.diffvalue }}">{% if item.title|length > 45 %}{{ item.title[:45] ~ '...' }}{% else %}{{ item.title }}{% endif %}<span class="floatright lighttext">{{ getAccMgrFirstName(item.accountmanagerid) }}</span><br /><span class="lighttext"></span></a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                     <div id="job_over_closed" class="tab-pane">
+                       <div class="list-group" style="height:192px; overflow-y:auto;">
+                            {% for item in oldjobsoverbudget if item.diffvalue < 0 %}
+                                <a href="/jobs/view/{{ item.id }}" class="list-group-item popovers" data-toggle="popover" data-placement="top" title="{{ getCompanyName(item.organisationid) }}" data-content="<strong>Budget:</strong> £{{ item.estvalue }}<br /><strong>Cost:</strong> £{{ item.actvalue }}<br /><strong>Difference:</strong> £{{ item.diffvalue }}">{% if item.title|length > 45 %}{{ item.title[:45] ~ '...' }}{% else %}{{ item.title }}{% endif %}<span class="floatright lighttext">{{ getAccMgrFirstName(item.accountmanagerid) }}</span><br /><span class="lighttext"></span></a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+
+            
+
+            <div class="panel panel-danger ">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Jobs Over Budget By Work Type</h3>
+                </div>
+                
+                {% if user.group b-and 8 %}
+				<ul class="nav nav-pills nav-justified">
+                    <li class="active"><a href="#wt_over_live" data-toggle="pill">Live</a></li>
+                    <li><a href="#wt_over_closed" data-toggle="pill">Closed</a></li>
+                </ul>
+                {% endif %}
+                
+                <div class="tab-content">
+                    <div id="wt_over_live" class="tab-pane active">
+                        <div class="list-group" style="height:192px; overflow-y:auto;">
+                            {% for item in jobsoverbyworktype if item.diffHours < 0 %}
+                                <a href="/jobs/view/{{ item.id }}" class="list-group-item popovers" data-toggle="popover" data-placement="top" title="{{ getCompanyName(item.organisationid) }}" data-content="<strong>Work Type:</strong> {{ getWorkTypeName(item.worktypeid) }}<br /><strong>Estimated:</strong> {{ item.estHours }} hrs<br /><strong>Actual:</strong> {{ item.actHours }} hrs<br /><strong>Over By:</strong> {{ item.diffHours }} hrs">{% if item.title|length > 45 %}{{ item.title[:45] ~ '...' }}{% else %}{{ item.title }}{% endif %}<span class="floatright lighttext">{{ getAccMgrFirstName(item.accountmanagerid) }}</span><br /><span class="lighttext"></span>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                 
+                    <div id="wt_over_closed" class="tab-pane">
+                        <div class="list-group" style="height:192px; overflow-y:auto;">
+                            {% for item in oldjobsoverbyworktype if item.diffHours < 0 %}
+                                <a href="/jobs/view/{{ item.id }}" class="list-group-item popovers" data-toggle="popover" data-placement="top" title="{{ getCompanyName(item.organisationid) }}" data-content="<strong>Work Type:</strong> {{ getWorkTypeName(item.worktypeid) }}<br /><strong>Estimated:</strong> {{ item.estHours }} hrs<br /><strong>Actual:</strong> {{ item.actHours }} hrs<br /><strong>Over By:</strong> {{ item.diffHours }} hrs">{% if item.title|length > 45 %}{{ item.title[:45] ~ '...' }}{% else %}{{ item.title }}{% endif %}<span class="floatright lighttext">{{ getAccMgrFirstName(item.accountmanagerid) }}</span><br /><span class="lighttext"></span>
+                                
+                                
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+
+</div>
+
+<div class="col-md-4">
+    
+            <div class="panel panel-default">
+                <div class="panel-heading birthdays">
+                    <h3 class="panel-title">&nbsp;</h3>
+                </div>
+                <div class="panel-body">
+                {% if birthdays %}
+                    {% for item in birthdays %}
+                        <p>{{ item.firstname }}'s on the {{ item.dob|date('dS M') }}</p>
+                    {% endfor %}
+                {% else %}
+                    <p>No birthdays coming up</p>
+                {% endif %}
+                </div>
+            </div>
+        
+            <div class="panel panel-default">
+                <div class="panel-heading holidays">
+                    <h3 class="panel-title">&nbsp;</h3>
+                </div>
+                <div class="panel-body">
+                {% if holidays %}
+                    {% for item in holidays %}
+                    	{% if item.startdate != item.enddate %}
+                            <p>{{ item.firstname }} from <strong>{{ item.startdate|date('D dS M') }}</strong> until <strong>{{ item.enddate|date('D dS M') }}</strong></p>
+                        {% else %}
+                            <p>{{ item.firstname }} on <strong>{{ item.startdate|date('D dS M') }}</strong></p>
+                        {% endif %}				
+                    {% endfor %}
+                {% else %}
+                    <p>No holidays coming up!</p>
+                {% endif %}
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading noticeboard">
+                    <h3 class="panel-title">&nbsp;</h3>
+                </div>
+                <ul class="list-group" style="height:350px; overflow-y:auto;">
+                    {% if noticeboard %}
+                        {% for item in noticeboard %}
+                            <li class="list-group-item">{% if user.id == item.employeeid %}<span class="floatright"><a href="/dashboard/delete-notice/{{ item.id }}" class="text-danger"><i class="glyphicon glyphicon-remove "></i></a></span>{% endif %}{% if item.notice|length > 1000 %}{{ item.notice|slice(0, 1000) }}...{% else %}{{ item.notice }}{% endif %} - <strong>{{ item.firstname }}, {{ item.date|date('D dS M') }}</strong></li>
+                        {% endfor %}
+                    {% else %}
+                    {% endif %}
+                </ul>
+                <div class="panel-footer">
+                    <form role="form" name="addNotice" method="post" id="addClient" action="/dashboard/add-notice">
+                        <div class="input-group input-group-sm">
+                            
+                          <input type="text" class="form-control" name="notice" id="notice">
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">Post!</button>
+                          </span>
+                        </div>
+                    </form>
+                </div>
+        </div>
+
+</div>
+{% if user.group b-and 8 %}
+<script type="text/javascript">
+
+	$(document).ready(function() {
+	
+		$('.knob').val(0).trigger('change');
+
+		$({value: 0}).delay(500).animate({value: {{ ((_totalhours / (7.5 * employeeHoursLastDay|length)) * 100)|number_format }} /* change this value to set percentage - 0 > 100 */ }, {
+			duration: 1000,
+			easing:'swing',
+			step: function() 
+			{
+				$('.knob').val(Math.ceil(this.value)).trigger('change');
+			}
+		});
+
+	});
+
+</script>
+
+{% endif %}
+
+<script type="text/javascript">
+
+	$(function($) {
+	
+		$(".knob").knob({ 'format' : function (value) {   return value + '%';   } });
+	
+	});
+
+	$(document).ready(function() {
+
+		$('.popovers').popover({trigger:'hover', html:true, viewport: 'body'});
+
+	});
+	
+	Morris.Line({
+	  element: 'jobvalue-chart',
+	  data: [
+		{ y: '{{ "now"|date_modify("-2 months")|date("Y-m") }}', a: '{{ jobsvalue.month1 }}' },
+		{ y: '{{ "now"|date_modify("-1 months")|date("Y-m") }}', a: '{{ jobsvalue.month2 }}' },
+		{ y: '{{ "now"|date("Y-m") }}', a: '{{ jobsvalue.month3 }}' },
+	  ],
+	  xLabels: "month",
+	  xLabelAngle: 1,
+	  xkey: ['y'],
+	  ykeys: ['a'],
+	  labels: ['Value'],
+	  lineColors: ['#333333'],
+	  resize: true
+	});
+
+
+	
+</script>
+
+
+{% endblock %}

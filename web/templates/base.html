@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="/templates/assets/img/logo.png">
+    <link rel="apple-touch-icon" href="/templates/assets/img/apple-icon.png"/>  
+
+    <title>VAULT</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/templates/dist/css/bootstrap.css" rel="stylesheet">
+    <!-- Bootstrap theme 
+    <link href="/templates/dist/css/bootstrap-theme.min.css" rel="stylesheet">-->
+
+    <!-- Custom styles for this template -->
+    <link href="/templates/assets/css/datepicker.css" rel="stylesheet">
+    <link href="/templates/assets/css/theme.css" rel="stylesheet">
+    <link href="/templates/assets/css/typeahead.js-bootstrap.css" rel="stylesheet">
+    <link href="/templates/assets/css/offcanvas.css" rel="stylesheet">
+    <link href="/templates/assets/css/morris.css" rel="stylesheet">
+    
+    <link href="/templates/assets/css/print.css" rel="stylesheet" media="print">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="/templates/assets/js/html5shiv.js"></script>
+      <script src="/templates/assets/js/respond.min.js"></script>
+    <![endif]-->
+    
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <script src="/templates/assets/js/jquery.js"></script>
+    <script src="/templates/dist/js/bootstrap.min.js"></script>
+    <script src="/templates/assets/js/holder.js"></script>
+    <script src="/templates/assets/js/twitter-bootstrap-hover-dropdown.min.js"></script>
+    <script src="/templates/assets/js/hogan-2.0.0.js"></script>
+    <script src="/templates/assets/js/typeahead.js"></script>
+    <script src="/templates/assets/js/jquery.equalheights.js"></script>
+    <script src="/templates/assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="/templates/assets/js/jquery.searchable-1.1.0.min.js"></script>
+    <script src="/templates/assets/js/jquery.knob.js"></script>
+    <script src="/templates/assets/js/jquery.dataTables.min.js"></script>
+    
+    
+    <script src="/templates/assets/js/raphael-min.js"></script>
+    <script src="/templates/assets/js/morris.min.js"></script>
+
+    <!--<script src="/templates/assets/js/bootstrap-datepicker.js"></script>-->
+   
+   <!-- <script src="/templates/assets/js/jquery-validate.js"></script>-->
+   
+    <script src="/templates/assets/js/jquery.form-validator.js"></script>
+   
+    <!-- X-Editable -->
+    <link href="/templates/dist/css/bootstrap-editable.css" rel="stylesheet">
+    <script src="/templates/dist/js/bootstrap-editable-bs3.js"></script>
+
+    
+    <script type="text/javascript">
+	
+	
+		//turn to inline mode
+		//$.fn.editable.defaults.mode = 'inline';
+		
+		$(document).ready(function() {
+
+			$('.addFileUpload').on("click",function(){
+				$('.noteAttachment:last').after('<input type="file" id="noteAttachment" name="noteAttachment[]" class="noteAttachment">');
+			});
+			
+			$('[data-toggle=offcanvas]').click(function() {
+				$('.row-offcanvas').toggleClass('active');
+			  });
+			
+			handleTabLinks();
+
+			$('.datepicker').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			})
+
+			$('.datepicker-timesheet').datepicker({
+				format: 'dd/mm/yyyy',
+				endDate: '+0d',
+				autoclose: true,
+				todayHighlight: true
+			})
+			
+			$('.monthpicker').datepicker({
+				format: "mm/yyyy",
+				minViewMode: 1,
+				autoclose: true,
+				todayHighlight: true
+			});
+
+			
+		});
+		
+		function handleTabLinks() {
+        if(window.location.hash == '') {
+            //window.location.hash = window.location.hash + '#_';
+        }else{
+			var hash = window.location.hash.split('#')[1];
+			var prefix = '_';
+			var hpieces = hash.split('/');
+			for (var i=0;i<hpieces.length;i++) {
+				var domelid = hpieces[i].replace(prefix,'');
+				var domitem = $('a[href=#' + domelid + '][data-toggle=tab]');
+				if (domitem.length > 0) {
+					domitem.tab('show');
+				}
+			}
+		}
+        $('a[data-toggle=tab]').on('shown', function (e) {
+            if ($(this).hasClass('nested')) {
+                var nested = window.location.hash.split('/');
+                window.location.hash = nested[0] + '/' + e.target.hash.split('#')[1];
+            } else {
+                window.location.hash = e.target.hash.replace('#', '#' + prefix);
+            }
+        });
+    }
+	
+	</script>
+
+
+  </head>
+
+  <body>
+
+  {% block navigation %}
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+         <a class="navbar-brand" href="/"><img src="/templates/assets/img/logo.png" height="49"  alt=""/></a>
+        </div>
+        <div class="navbar-collapse collapse">
+           <ul class="nav navbar-nav">
+                <li><a href="/"><i class="icon-dashboard"></i> Dashboard</a></li>
+
+                {% if user.group b-and 1 %}<li class="dropdown "><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-sitemap"></i> CRM <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/accounts/list"><i class="icon-home"></i> Accounts</a></li>
+                        <li><a href="/contacts/list"><i class="icon-user"></i> Contacts</a></li>
+                      <!--  {% if user.group b-and 512 %}<li><a href="/prospects"><i class="glyphicon glyphicon-fire"></i> Prospects</a></li>{% endif %} -->
+                    </ul>
+               </li>{% endif %}
+
+                {% if user.group b-and 16 or user.group b-and 64 %}<li class="dropdown "><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-book"></i> Jobs <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      {% if user.group b-and 16 %}<li><a href="/jobs/list"><i class="glyphicon glyphicon-book"></i> Jobs Book</a></li>{% endif %}
+                      {% if user.group b-and 256 %}<li><a href="/invoicing"><i class="icon-inbox"></i> Invoicing</a></li>{% endif %}
+                       {% if user.group b-and 64 %}<li><a href="/timesheets/list"><i class="icon-tasks"></i> Timesheets</a></li>{% endif %}
+                   </ul>
+               </li>{% endif %}
+
+
+                {% if user.group b-and 4 %}
+                <li class="dropdown "><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-question-sign"></i> Support <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/support/packages/list"><i class="glyphicon glyphicon-gift"></i> Packages</a></li>
+                        <li><a href="/tickets/list"><i class="glyphicon glyphicon-bookmark"></i> Tickets</a></li>
+                    </ul>
+               </li>
+               {% endif %}
+
+				{% if user.group b-and 1024 %}
+                <li class="dropdown "><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-globe"></i> Hosting <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/hosting#_web"><i class="glyphicon glyphicon-hdd"></i> <span>Web hosting</span></a></li>
+                        <li><a href="/hosting#_email"><i class="glyphicon glyphicon-envelope"></i> <span>Email hosting</span></a></li>
+                        <li><a href="/hosting#_domains"><i class="glyphicon glyphicon-globe"></i> <span>Domain names</span></a></li>
+                    </ul>
+               </li>
+               {% endif %}
+
+                {% if user.group b-and 4096 %}
+                <li class="dropdown "><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-stats"></i> Reports <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/reports/summary"><span>Summary Report</span></a></li>
+                        <li><a href="/reports/utilisation"><span>Utilisation Report</span></a></li>
+                        <li><a href="/reports/client-list"><span>Client List</span></a></li>
+                        <li><a href="/reports/jobs"><span>Jobs List</span></a></li>
+                        <li><a href="/reports/logs"><span>User Logs</span></a></li>
+                    </ul>
+               </li>
+               {% endif %}
+
+				{% if user.group b-and 2048 %}
+                <li class="dropdown "><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon icon-group"></i> Staff <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/staff/accounts/list"><span>User Accounts</span></a></li>
+                        <li><a href="/staff/holidays"><span>Holidays</span></a></li>
+                    </ul>
+               </li>
+               {% endif %}
+
+        <!--        <li class="dropdown "><a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/reports"><i class="glyphicon glyphicon-user"></i> <span>Users</span></a></li>
+                        <li><a href="/reports"><i class="glyphicon glyphicon-cog"></i> <span>Settings</span></a></li>
+                    </ul>
+               </li>-->
+
+
+          </ul>
+            <ul class="nav navbar-nav navbar-right hidden-sm">
+                <li class="dropdown "><a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ getAccMgrName(user.id) }} <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <!--<li><a href="/settings"><i class="glyphicon glyphicon-cog"></i> <span>Settings</span></a></li>
+                        <li><a href="/contacts/list"><i class="glyphicon glyphicon-list"></i> <span>Account Info</span></a></li>-->
+                        <li><a href="/logout"><i class="glyphicon glyphicon-eject"></i> <span>Logout</span></a></li>
+                    </ul>
+               </li>
+          </ul>
+          
+      <!--  <form class="navbar-form navbar-right" role="search">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search">
+          </div>
+          <button type="submit" class="btn btn-default">Search</button>
+         </form>
+         -->
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+      {% endblock %}
+
+    <div class="container theme-showcase">
+    
+      <div class="row row-offcanvas row-offcanvas-left">
+      {% block content %}
+
+            
+      {% endblock %}
+      </div>
+      
+      
+      
+
+    </div> <!-- /container -->
+
+  </body>
+</html>

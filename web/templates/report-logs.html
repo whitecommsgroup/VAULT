@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="col-md-12">
+
+        <ol class="breadcrumb">
+            <li class="active">Reports</li>
+          <li><a href="/reports/logs">Logs</a></li>
+            <li class="active">Report for {{ dateFrom }} to {{ dateTo }}</li>
+        </ol>
+        
+        <h4>Log Report for {{ dateFrom }} to {{ dateTo }}</h4>
+
+        <div class="tab-pane active" id="logs">
+             <table class="table table-bordered table-responsive table-condensed table-striped">
+                 <thead>
+                    <tr class="active">
+                        <th nowrap="nowrap">Table</th>
+                        <th nowrap="nowrap">Record</th>
+                        <th nowrap="nowrap">Action</th>
+                        <th nowrap="nowrap">Date</th>
+                        <th nowrap="nowrap">Name</th>
+                    </tr>
+                </thead>
+                 <tbody>
+                    {% for item in logs %}
+                    <tr>
+                        <td>{{ item.tablename }}</td>
+                        <td>{{ item.recordid }}</td>
+                        <td>{{ item.action }}</td>
+                        <td>{{ item.date }}</td>
+                        <td>{{ item.firstname }} {{ item.lastname }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>    
+
+</div>
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+		
+		var table = $('.table').DataTable( { "paging":   false } );
+		
+		$(".table thead th").each( function ( i ) {
+        var select = $('<select><option value=""></option></select>')
+            .appendTo( $(this).empty() )
+            .on( 'change', function () {
+                table.column( i )
+                    .search( '^'+$(this).val()+'$', true, false )
+                    .draw();
+            } );
+ 
+        table.column( i ).data().unique().sort().each( function ( d, j ) {
+            select.append( '<option value="'+d+'">'+d+'</option>' )
+        } );
+    } );
+
+	});
+</script>
+
+{% endblock %}

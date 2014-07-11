@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="col-md-12">
+
+	<ol class="breadcrumb">
+      <li class="active">Staff</li>
+      <li><a href="/staff/accounts/list">Accounts</a></li>
+      <li class="active">View</li>
+    </ol>
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ employee.firstname }} {{ employee.lastname }}</h3>
+                </div>
+            <div class="panel-body">
+                <form role="form" name="addContact" id="addContact" method="post" action="/staff/accounts/update/{{ employee.id }}">
+                    <div class="form-group">
+                        <label for="employeeFirstName">First Name</label>
+                        <input type="text" class="form-control" name="employeeFirstName" id="employeeFirstName" placeholder="Enter first name" data-validation="required" value="{{ employee.firstname }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="employeeLastName">Last Name</label>
+                        <input type="text" class="form-control" name="employeeLastName" id="employeeLastName" placeholder="Enter last name" data-validation="required" value="{{ employee.lastname }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="employeeDOB">DOB</label>
+                        <input type="text" class="form-control datepicker" name="employeeDOB" id="employeeDOB" placeholder="Enter DOB" data-validation="required" value="{{ employee.dob|date('d/m/Y') }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="employeeDepartment">Department</label>
+                        <select class="form-control" id="employeeDepartment" name="employeeDepartment" data-validation="required">
+                            <option value="">-- select --</option>
+                            {% for item in departments %}
+                                <option value="{{ item.id }}" {% if employee.departmentid == item.id %}selected="selected"{% endif %}>{{ item.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                
+                    <div class="form-group">
+                        <label for="">User groups</label><br />
+                        {% for group in usergroups %}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" id="employeeUserGroups{{ loop.index }}" value="{{ group.id }}" name="employeeUserGroups[]" {% if group.checked == 1 %}checked="checked"{% endif %}> {{ group.name }}
+                            </label><br />
+                        {% endfor %}
+                    </div>
+                    <div class="form-group">
+                        <label for="employeeEmail">Email address</label>
+                        <input type="email" class="form-control" name="employeeEmail" id="employeeEmail" placeholder="Enter email address" value="{{ employee.email }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="employeeUsername">Username</label>
+                        <input type="text" class="form-control" name="employeeUsername" id="employeeUsername" placeholder="Enter username" value="{{ employee.username }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="employeePassword">Password</label>
+                        <input type="text" class="form-control" name="employeePassword" id="employeePassword" placeholder="Enter password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+
+</div>
+{% raw %}
+	<script>
+        $.validate({  });
+    </script>
+
+    <script type="text/javascript">
+		
+		$(document).ready(function() {
+
+
+
+		});
+		
+	</script>
+
+ {% endraw %}
+       
+{% endblock %}

@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="col-md-12">
+
+	<ol class="breadcrumb">
+      <li><a href="#">CRM</a></li>
+      <li class="active">Contacts</li>
+    </ol>
+
+
+<div class="tabbable">
+
+     <ul class="nav nav-tabs">
+      <li class="active"><a href="#all" data-toggle="tab"><i class="glyphicon glyphicon-align-justify"></i> All</a></li>
+      <li><a href="#pinned" data-toggle="tab"><i class="glyphicon glyphicon-pushpin"></i> Pinned</a></li>
+      {% if user.group b-and 2 %}<li class="navbar-right"><a href="#add_contact" data-toggle="tab"><i class="glyphicon glyphicon-plus"></i> Add New</a></li>{% endif %}
+    </ul>
+
+</div>
+
+    <br />
+    
+     <div class="tab-content">
+     
+         <div class="tab-pane active" id="all">
+            <div class="nav nav-tabs nav-stacked">
+               <div class="btn-group" id="list-filter">
+                    <button type="button" class="btn btn-default btn-xs list-filter-all">all</button>
+                    <button type="button" class="btn btn-default btn-xs list-filter-number">#</button>
+                    {% for letter in 'a'..'z' %}
+                        <button type="button" class="btn btn-default btn-xs list-filter-letter" value="{{ letter }}">{{ letter }}</button>
+                    {% endfor %}
+                </div>
+                <br /><br />
+                {% for contact in content %}
+                    <a href="/contacts/view/{{ contact.id}}" class="list-group-item {{ contact.lastname|lower|slice(0, 1) }}">{{ contact.firstname}} {{ contact.lastname}} <span class="floatright lighttext">{{ contact.organisationname }}</span></a>
+                {% endfor %}
+            </div>
+        </div>
+        
+         <div class="tab-pane" id="pinned">
+         </div>
+
+        <div class="tab-pane" id="add_contact">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">New Contact Details</h3>
+                </div>
+            <div class="panel-body">
+                <form role="form" name="addContact" id="addContact" method="post" action="/contacts/add">
+                    <div class="form-group">
+                        <label for="contactCompany">Company</label>
+                        <select class="form-control" id="contactCompany" name="contactCompany" data-validation="required">
+                        <option value="">-- select --</option>
+                            {% for client in clients %}
+                        <option value="{{ client.organisationid}}">{{ client.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactName">First Name</label>
+                        <input type="text" class="form-control" name="contactFirstName" id="contactFirstName" placeholder="Enter first name" data-validation="required">
+                    </div>
+                    <div class="form-group">
+                        <label for="contactName">Last Name</label>
+                        <input type="text" class="form-control" name="contactLastName" id="contactLastName" placeholder="Enter last name" data-validation="required">
+                    </div>
+                    <div class="form-group">
+                        <label for="contactPosition">Position</label>
+                        <input type="text" class="form-control" name="contactPosition" id="contactPosition" placeholder="Enter position">
+                    </div>
+                    <div class="form-group">
+                        <label for="contactPhone">Phone number</label>
+                        <input type="text" class="form-control" name="contactPhone" id="contactPhone" placeholder="Enter phone number">
+                    </div>
+                    <div class="form-group">
+                        <label for="contactMobile">Mobile number</label>
+                        <input type="text" class="form-control" name="contactMobile" id="contactMobile" placeholder="Enter mobile number">
+                    </div>
+                    <div class="form-group">
+                        <label for="contactEmail">Email address</label>
+                        <input type="email" class="form-control" name="contactEmail" id="contactEmail" placeholder="Enter email address">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    
+</div>
+
+</div>
+{% raw %}
+	<script>
+        $.validate({  });
+    </script>
+
+    <script type="text/javascript">
+		
+		$(document).ready(function() {
+
+
+		$(".list-filter-all, .list-filter-number, .list-filter-letter").click(function(){
+			$(".list-filter-all, .list-filter-number, .list-filter-letter").removeClass("active");
+			$(this).addClass("active");
+		});
+
+		$(".list-filter-all").click(function(){
+			$(this).parent().parent().children(".tab-content .nav-stacked a").show();
+		});
+
+		$(".list-filter-number").click(function(){
+			$(this).parent().parent().children(".tab-content .nav-stacked a").hide();
+			$(this).parent().parent().children(".tab-content .nav-stacked a.0").show();
+			$(this).parent().parent().children(".tab-content .nav-stacked a.1").show();
+			$(this).parent().parent().children(".tab-content .nav-stacked a.2").show();
+			$(this).parent().parent().children(".tab-content .nav-stacked a.3").show();
+			$(this).parent().parent().children(".tab-content .nav-stacked a.4").show();
+			$(this).parent().parent().children(".tab-content .nav-stacked a.5").show();
+			$(this).parent().parent().children(".tab-content .nav-stacked a.6").show();
+			$(this).parent().parent().children(".tab-content .nav-stacked a.7").show();
+			$(this).parent().parent().children(".tab-content .nav-stacked a.8").show();
+			$(this).parent().parent().children(".tab-content .nav-stacked a.9").show();
+		});
+		
+		$(".list-filter-letter").click(function(){
+			val = $(this).val();
+			$(this).parent().parent().children(".tab-content .nav-stacked a").hide();
+			$(this).parent().parent().children(".tab-content .nav-stacked a." + val + "").show();
+		});
+
+		});
+		
+	</script>
+
+ {% endraw %}
+       
+{% endblock %}

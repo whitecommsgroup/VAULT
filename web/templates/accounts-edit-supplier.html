@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+<div class="col-md-12">
+
+	<ol class="breadcrumb">
+      <li><a href="#">CRM</a></li>
+      <li class="active"><a href="/accounts/list">Accounts</a></li>
+      <li class="active"><a href="/accounts/view/{{ clientDetails.organisationid }}">{{ clientDetails.name }}</a></li>
+      <li class="active">Edit</li>
+    </ol>
+
+                 	<div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Company Details</h3>
+                    </div>
+                    <div class="panel-body">
+                    <form role="form" name="addClient" method="post" id="addClient" action="/accounts/update-supplier/{{ clientDetails.organisationid }}">
+                      <div class="form-group">
+                        <label for="companyName">Company Name *</label>
+                        <input type="text" class="form-control" name="companyName" id="companyName" placeholder="Enter company name" value="{{ clientDetails.name }}" data-validation="required">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyPhone">Phone</label>
+                        <input type="text" class="form-control" name="companyPhone" id="companyPhone" placeholder="Enter phone number" value="{{ clientDetails.phone }}">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyEmail">Email</label>
+                        <input type="text" class="form-control" name="companyEmail" id="companyEmail" placeholder="Enter email address" value="{{ clientDetails.email }}">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyWebsite">Website</label>
+                        <input type="text" class="form-control" name="companyWebsite" id="companyWebsite" placeholder="Enter website URL" value="{{ clientDetails.website }}">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyAdd1">Address 1</label>
+                        <input type="text" class="form-control" name="companyAdd1" id="companyAdd1" placeholder="Enter address line 1" value="{{ clientDetails.address1 }}">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyAdd2">Address 2</label>
+                        <input type="text" class="form-control" name="companyAdd2" id="companyAdd2" placeholder="Enter address line 2" value="{{ clientDetails.address2 }}">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyAdd3">Address 3</label>
+                        <input type="text" class="form-control" name="companyAdd3" id="companyAdd3" placeholder="Enter address line 3" value="{{ clientDetails.address3 }}">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyTown">Town</label>
+                        <input type="text" class="form-control" name="companyTown" id="companyTown" placeholder="Enter town" value="{{ clientDetails.town }}">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyCounty">County</label>
+                        <input type="text" class="form-control" name="companyCounty" id="companyCounty" placeholder="Enter county" value="{{ clientDetails.county }}">
+                      </div>
+                      <div class="form-group">
+                        <label for="companyPostcode">Postcode</label>
+                        <input type="text" class="form-control" name="companyPostcode" id="companyPostcode" placeholder="Enter postcode" value="{{ clientDetails.postcode }}">
+                      </div>
+ 
+                     </div>
+                     
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Account Info</h3>
+                    </div>
+
+                    <div class="panel-body">
+                      
+                      <div class="form-group">
+                        <label for="companyAccountStatus">Supplier Type *</label>
+                        <select class="form-control" id="companyAccountStatus" name="companyAccountStatus" data-validation="required">
+                          <option value="">- select -</option>
+                            {% for state in global_states_suppliers %}
+                            	<option value="{{ state.id }}" {% if clientDetails.accountstatusid == state.id %}selected="selected"{% endif %}>{{ state.name }}</option>
+                            {% endfor %}
+                        </select>
+                      </div>
+
+                        <a class="btn btn-default previous" href="/accounts/view/{{ clientDetails.organisationid }}">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                        
+                    </form>
+                    </div>
+                </div>
+</div>
+
+
+<script>
+    $.validate({  });
+</script>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="col-md-12">
+
+         <ol class="breadcrumb">
+          <li><a href="/hosting">Hosting</a></li>
+          <li><a href="/hosting/view/{{ hosting.id }}">{{ hosting.description}}</a></li>
+          <li class="active">Edit</li>
+        </ol>
+    
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Edit Web Hosting Details</h3>
+            </div>
+        <div class="panel-body">
+            <form role="form" name="editHosting" id="editHosting" method="post" action="/hosting/update/{{ hosting.id }}">
+                <div><input type="hidden" name="hostingType" id="hostingType" value="{{ hosting.type }}" /></div>
+                <div class="form-group">
+                    <label for="hostingCompany">Company</label>
+                    <select class="form-control webCompany" id="hostingCompany" name="hostingCompany" data-validation="required">
+                    <option value="">-- select --</option>
+                        {% for item in global_clients %}
+                            <option value="{{ item.organisationid }}" {% if hosting.organisationid == item.organisationid %}selected="selected"{% endif %}>{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="hostingJob">Job</label>
+                    <select class="form-control webJob" id="hostingJob" name="hostingJob" >
+                        <option value="">-- select --</option>
+                         {% for item in getJobsByClient(hosting.organisationid) %}
+                            {% if item.statusid == 1 %}
+                                <option value="{{ item.id }}" {% if hosting.jobid == item.id %}selected="selected"{% endif %}>{{ item.jobnumber }} - {{ item.title }}</option>
+                            {% endif %}
+                        {% endfor %}
+                   </select>
+                </div>
+                <div class="form-group">
+                    <label for="hostingDescription">Description</label>
+                    <input type="text" class="form-control" name="hostingDescription" id="hostingDescription" placeholder="Enter description" data-validation="required" value="{{ hosting.description }}">
+                </div>
+                <div class="form-group form-inline">
+                    <label for="hostingValue">Value</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">£</span>
+                        <input type="text" class="form-control" name="hostingValue" id="hostingValue" placeholder="Enter value" data-validation="required" data-pattern="[0-9]+" value="{{ hosting.value }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="hostingExpiryDate">Expiry Date</label>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="icon-calendar"></i></span>
+                        <input type="text" class="form-control datepicker" name="hostingExpiryDate" id="hostingExpiryDate" placeholder="Select date" value="{{ hosting.expirydate|date("d/m/Y") }}" data-validation="required">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="hostingPeriod">Renewal Period</label>
+                    <input type="text" class="form-control" name="hostingPeriod" id="hostingPeriod" placeholder="Enter number of months" data-validation="required" data-pattern="[0-9]+" value="{{ hosting.period }}">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $.validate({  });
+</script>
+<script type="text/javascript">
+
+	$(document).ready(function() {
+
+		
+		$('.webCompany').change(function(){
+			var accountid = $(this).val();
+			$.ajax({
+					type: "GET",
+					url: "/xml/jobs/" + accountid,
+					dataType: "xml",
+					success: function(xml) {
+						var select = $('.webJob');
+						select.attr("disabled","disabled");
+						select.children().remove();
+						select.append("<option value=''>-- select --</option>");
+						$(xml).find('item').each(function(){
+							var title = $(this).find('title').text();
+							var id = $(this).find('id').text();
+							select.append("<option value="+id+">"+title+"</option>");
+						});
+						select.removeAttr("disabled");
+					}
+				});
+		});
+
+		$('.emailCompany').change(function(){
+			var accountid = $(this).val();
+			$.ajax({
+					type: "GET",
+					url: "/xml/jobs/" + accountid,
+					dataType: "xml",
+					success: function(xml) {
+						var select = $('.emailJob');
+						select.attr("disabled","disabled");
+						select.children().remove();
+						select.append("<option value=''>-- select --</option>");
+						$(xml).find('item').each(function(){
+							var title = $(this).find('title').text();
+							var id = $(this).find('id').text();
+							select.append("<option value="+id+">"+title+"</option>");
+						});
+						select.removeAttr("disabled");
+					}
+				});
+		});
+
+		$('.domainCompany').change(function(){
+			var accountid = $(this).val();
+			$.ajax({
+					type: "GET",
+					url: "/xml/jobs/" + accountid,
+					dataType: "xml",
+					success: function(xml) {
+						var select = $('.domainJob');
+						select.attr("disabled","disabled");
+						select.children().remove();
+						select.append("<option value=''>-- select --</option>");
+						$(xml).find('item').each(function(){
+							var title = $(this).find('title').text();
+							var id = $(this).find('id').text();
+							select.append("<option value="+id+">"+title+"</option>");
+						});
+						select.removeAttr("disabled");
+					}
+				});
+		});
+		
+
+	});
+</script>
+
+{% endblock %}
