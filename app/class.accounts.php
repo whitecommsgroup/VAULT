@@ -52,19 +52,22 @@ class Accounts
     {
 		$results = $this->app['db']->fetchAll('
            SELECT
-              distinct(organisation.id) as orgid, organisation_details.name As orgname, organisation_contactstates.name AS contactstatename, organisation.lastdate, organisation.nextdate, (SELECT organisation_notes.body FROM organisation_notes WHERE organisation_notes.organisationid = orgid ORDER BY date DESC LIMIT 1) As actionbody, (SELECT organisation_notes.date FROM organisation_notes WHERE organisation_notes.organisationid = orgid ORDER BY date DESC LIMIT 1) As actiondate, organisation_contacts.id As contactid, organisation_contacts.firstname As firstname, organisation_contacts.lastname As lastname, organisation_contacts.phone As phone, organisation_contacts.mobile As mobile, organisation_contacts.email As email
+              distinct(organisation.id) as orgid, organisation_details.name As orgname, organisation_contactstates.name AS contactstatename, organisation.lastdate, organisation.nextdate, (SELECT organisation_notes.body FROM organisation_notes WHERE organisation_notes.organisationid = orgid ORDER BY date DESC LIMIT 1) As actionbody, (SELECT organisation_notes.date FROM organisation_notes WHERE organisation_notes.organisationid = orgid ORDER BY date DESC LIMIT 1) As actiondate, organisation_contacts.id As contactid, organisation_contacts.firstname As firstname, organisation_contacts.lastname As lastname, organisation_contacts.phone As phone, organisation_contacts.mobile As mobile, organisation_contacts.email As email, organisation_substates.name As substatename, organisation.accountsubstatusid
            FROM
                organisation
 			LEFT JOIN
 				organisation_details ON organisation.id = organisation_details.organisationid
 			LEFT JOIN
 				organisation_contactstates ON organisation.contactstatusid = organisation_contactstates.id
+			LEFT JOIN
+				organisation_substates ON organisation.accountsubstatusid = organisation_substates.id
 			STRAIGHT_JOIN
 				organisation_contacts ON organisation.id = organisation_contacts.organisationid
            WHERE
                type = ? AND accountstatusid = ? AND organisation_details.name IS NOT NULL
 		   GROUP BY organisation.id
 		   ORDER BY nextdate DESC
+		   LIMIT 100
 		   ', array(1,2));
 		
 		return $results;
@@ -271,20 +274,47 @@ class Accounts
 
 	}
 	
-		function updateClientLapsed($accountid){
+	function updateClientLapsed($accountid){
 
-			$return = $this->app['db']->update(
-				'organisation',
-				array(
-					'accountstatusid' => 4
-				),
-				array(
-					'id' => $accountid
-				)
-			);
-			
-		}
+		$return = $this->app['db']->update(
+			'organisation',
+			array(
+				'accountstatusid' => 4
+			),
+			array(
+				'id' => $accountid
+			)
+		);
+		
+	}
 
+	function updateClientStatus($accountid, $statusid){
+
+		$return = $this->app['db']->update(
+			'organisation',
+			array(
+				'accountstatusid' => $statusid
+			),
+			array(
+				'id' => $accountid
+			)
+		);
+		
+	}
+
+	function updateClientSubStatus($accountid, $substatusid){
+
+		$return = $this->app['db']->update(
+			'organisation',
+			array(
+				'accountsubstatusid' => $substatusid
+			),
+			array(
+				'id' => $accountid
+			)
+		);
+		
+	}
 
 	function updateClient($accountid, $companyName, $companyPhone, $companyEmail, $companyWebsite, $companyAdd1, $companyAdd2, $companyAdd3, $companyTown, $companyCounty, $companyPostcode, $companyAccountStatus, $companyFirstcontact, $companyAccManager, $companyNextDate, $companySource, $compactSector, $companyServices){
 		   
@@ -455,6 +485,12 @@ class Accounts
 	function getListOfContactStates()
 	{
 		$results = $this->app['db']->fetchAll('SELECT * FROM organisation_contactstates');
+		return $results;
+	}
+
+	function getListOfSubStates($stateid)
+	{
+		$results = $this->app['db']->fetchAll('SELECT * FROM organisation_substates WHERE parentid = ?', array($stateid));
 		return $results;
 	}
 

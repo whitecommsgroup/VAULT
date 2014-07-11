@@ -67,6 +67,7 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) use ($vaul
 		$twig->addGlobal('global_states_clients', $vault->accounts->getListOfStatesByType(1));
 		$twig->addGlobal('global_states_suppliers', $vault->accounts->getListOfStatesByType(2));
 		$twig->addGlobal('global_contactstates', $vault->accounts->getListOfContactStates());
+		$twig->addGlobal('global_substates', $vault->accounts->getListOfSubStates(2));
 		
 
 		//tickets
@@ -651,6 +652,23 @@ $app->get('/accounts/make-lapsed/{id}', function ($id) use ($app, $vault) {
 
 });
 
+// *** UPDATE ACCOUNT - STATUS ***/
+$app->get('/accounts/update-status/{id}/{statusid}', function ($id, $statusid) use ($app, $vault) {
+
+		$result = $vault->accounts->updateClientStatus($id, $statusid);
+		return $result;
+
+});
+
+
+// *** UPDATE ACCOUNT - SUB STATUS ***/
+$app->get('/accounts/update-substatus/{id}/{substatusid}', function ($id, $substatusid) use ($app, $vault) {
+
+		$result = $vault->accounts->updateClientSubStatus($id, $substatusid);
+		return $result;
+
+});
+
 // *** UPDATE ACCOUNT - CLIENT ***/
 $app->post('/accounts/update-client/{id}', function ($id) use ($app, $vault) {
 
@@ -743,6 +761,30 @@ $app->get('/prospects', function () use ($app, $vault){
 	));
 	
 });
+
+// *** PROSPECTS PAGE ***/
+$app->post('/prospects/add', function () use ($app, $vault){
+
+	// get form values
+	$values = $app['request']->request->all();
+
+	// get user details
+	$user = $app['session']->get('user');
+
+	// run account insert 
+	$accountid = $vault->accounts->addAccount(1, $values['prospectCompanyName'], $values['prospectNumber'], $values['prospectEmail'], '', '', '', '', '', '', '', 2, $values['prospectFirstcontact'], $user['id'], NULL, '', '', '');
+
+	// run contact insert
+	$contactid = $vault->contacts->addContact($accountid, $values['prospectFirstName'], $values['prospectLastName'], '', $values['prospectNumber'], $values['prospectEmail'], $values['contactEmail']);
+	
+	// run insert
+	$noteid = $vault->notes->addNote($accountid, $values['prospectNote'], 0, 0, $user['id']);
+
+	return $app->redirect('/prospects');
+
+	
+});
+
 
 // *** PROSPECTS - UPDATE ACCOUNT VALUE ***/
 $app->post('/prospects/update-account', function () use ($app, $vault) {

@@ -13,12 +13,12 @@
                     <table class="table table-bordered table-responsive" style="font-size:0.8em;">
                         <tr>
                             <th>Prospect Info</strong></th>
-                            <th>Note</th>
-                            <th style="white-space:nowrap;">Next action date</th>
+                            <th width="50%">Note</th>
+                            <th style="white-space:nowrap;" >Next action date</th>
                             <th>Status</th>
                             <td></td>
                         </tr>
-                    	<form>
+                        <form role="form" name="addProspect" method="post" id="addProspect" action="/prospects/add">
                         <tr>
                             <td>
                                 <input type="text" class="form-control input-sm" name="prospectCompanyName" id="prospectCompanyName" placeholder="Company name" required>
@@ -27,16 +27,18 @@
                                 <input type="text" class="form-control input-sm" name="prospectNumber" id="prospectNumber" placeholder="Contact number" required>
                                 <input type="text" class="form-control input-sm" name="prospectEmail" id="prospectEmail" placeholder="Contact email" required>
                             </td>
-                            <td><textarea class="form-control input-sm" name="companyFirstcontact" id="companyFirstcontact" rows="6"></textarea></td>
-                            <td style="white-space:nowrap;"><input type="text" class="form-control datepicker input-sm" name="companyFirstcontact" id="companyFirstcontact" placeholder="Select date"></td>
+                            <td><textarea class="form-control input-xs" name="prospectNote" id="prospectNote" rows="6"></textarea></td>
+                            <td style="white-space:nowrap;"><input type="text" class="form-control datepicker input-sm" name="prospectFirstcontact" id="prospectFirstcontact" placeholder="Select date"></td>
                             <td style="white-space:nowrap;">
-                                <select class="form-control input-sm">
-                                	{% for item in global_contactstates %}
+                                <select class="form-control input-xs">
+                                	{% for item in global_substates %}
                                       <option value="{{ item.id }}">{{ item.name }}</option>
                                 	{% endfor %}
                                 </select>
                             </td>
-                            <td style="white-space:nowrap;"><a href="#add_person"class="btn btn-primary btn-xs" data-toggle="modal">Add <i class="glyphicon glyphicon-plus"></i></a></td>
+                            <td style="white-space:nowrap;">
+                                <button type="submit" class="btn btn-primary btn-xs">Add <i class="glyphicon glyphicon-plus"></i></button>
+                            </td>
                         </tr>
                         </form>
                         {% for client in content %}
@@ -58,16 +60,30 @@
                                 <td style="white-space:nowrap;">
                                 <a data-placement="left" data-pk="{{ client.orgid }}" data-url="/prospects/update-account" data-viewformat="dd/mm/yyyy" data-type="date" id="nextdate" href="#" class="nextdate" style="">{% if client.nextdate|length > 0 %}{{ client.nextdate|date("d/m/Y") }}{% else %}{% endif %}</a>
                                 </td>
-                                <td style="white-space:nowrap;">{{ client.contactstatename }}</td>
+                                <td style="white-space:nowrap;">
+                                <a data-placement="left" data-pk="{{ client.orgid }}" data-url="/prospects/update-account" data-type="select" id="accountsubstatusid" href="#" class="accountsubstatusid_{{ client.orgid }}" style="">{{ client.substatename }}</a>
+                                <script>
+								$(function(){
+									$('.accountsubstatusid_{{ client.orgid }}').editable({
+										value: {{ client.accountsubstatusid }},  
+										source: [
+												{% for item in global_substates %}
+											 	 {value: {{ item.id }}, text: '{{ item.name }}'},
+												{% endfor %}
+										   ]
+									});
+								});
+								</script>
+</td>
                                 <td>
                                     <div class="btn-group floatright">
                                       <button type="button" class="btn btn-primary dropdown-toggle btn-xs" data-toggle="dropdown">
                                         Action <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu pull-right" role="menu">
-                                        <li><a href="#edit_prospect" data-toggle="modal"><i class="glyphicon glyphicon-pencil"></i> Edit</a></li>
-                                        <li><a href="#convert_prospect" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i> Convert to client</a></li>
-                                        <li><a href="#delete_prospect" data-toggle="modal"><i class="glyphicon glyphicon-trash"></i> Delete</a></li>
+                                        <li><a href="/accounts/view/{{ client.orgid }}" data-toggle="modal"><i class="glyphicon glyphicon-zoom-in"></i> View</a></li>
+                                        <li><a href="/accounts/update-status/{{ client.orgid }}/1" data-toggle="modal"><i class="glyphicon glyphicon-plus"></i> Change to Client</a></li>
+                                        <li><a href="/accounts/update-status/{{ client.orgid }}/8" data-toggle="modal"><i class="glyphicon glyphicon-trash"></i> Change to Lapsed</a></li>
                                       </ul>
                                     </div>
                                 </td>
@@ -81,7 +97,8 @@
 
     $(document).ready(function() {
 		
-		$('.name, .firstname, .lastname, .phone, .email, .actionbody, .nextdate').editable();
+		$('.name, .firstname, .lastname, .phone, .email, .actionbody, .nextdate, .accountsubstatusid').editable();
+		
 		
     });
  
