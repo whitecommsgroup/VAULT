@@ -230,7 +230,7 @@ class Accounts
 		return $return;
 	}
 
-	function addAccount($type, $companyName, $companyPhone, $companyEmail, $companyWebsite, $companyAdd1, $companyAdd2, $companyAdd3, $companyTown, $companyCounty, $companyPostcode, $companyAccountStatus, $companyFirstcontact, $companyAccManager, $companyNextDate, $companySource, $compactSector, $companyServices){
+	function addAccount($type, $companyName, $companyPhone, $companyEmail, $companyWebsite, $companyAdd1, $companyAdd2, $companyAdd3, $companyTown, $companyCounty, $companyPostcode, $companyAccountStatus, $companyFirstcontact, $companyAccManager, $companyNextDate, $companySource, $compactSector, $companyServices, $companyAccountSubStatus){
 		   
 		$this->app['db']->insert(
 			'organisation',
@@ -242,7 +242,8 @@ class Accounts
 				'services' => $companyServices,
 				'sectorid' => $compactSector,
 				'accountstatusid' => $companyAccountStatus,
-				'nextdate' => uk_date_to_mysql_date($companyNextDate)
+				'nextdate' => uk_date_to_mysql_date($companyNextDate),
+				'accountsubstatusid' => $companyAccountSubStatus,
 			)
 		);
 

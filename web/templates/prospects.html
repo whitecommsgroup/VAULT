@@ -30,7 +30,7 @@
                             <td><textarea class="form-control input-xs" name="prospectNote" id="prospectNote" rows="6"></textarea></td>
                             <td style="white-space:nowrap;"><input type="text" class="form-control datepicker input-sm" name="prospectFirstcontact" id="prospectFirstcontact" placeholder="Select date"></td>
                             <td style="white-space:nowrap;">
-                                <select class="form-control input-xs">
+                                <select class="form-control input-xs" name="prospectStatus" >
                                 	{% for item in global_substates %}
                                       <option value="{{ item.id }}">{{ item.name }}</option>
                                 	{% endfor %}

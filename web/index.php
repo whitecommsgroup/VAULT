@@ -772,7 +772,7 @@ $app->post('/prospects/add', function () use ($app, $vault){
 	$user = $app['session']->get('user');
 
 	// run account insert 
-	$accountid = $vault->accounts->addAccount(1, $values['prospectCompanyName'], $values['prospectNumber'], $values['prospectEmail'], '', '', '', '', '', '', '', 2, $values['prospectFirstcontact'], $user['id'], NULL, '', '', '');
+	$accountid = $vault->accounts->addAccount(1, $values['prospectCompanyName'], $values['prospectNumber'], $values['prospectEmail'], '', '', '', '', '', '', '', 2, $values['prospectFirstcontact'], $user['id'], NULL, '', '', '', $values['prospectStatus']);
 
 	// run contact insert
 	$contactid = $vault->contacts->addContact($accountid, $values['prospectFirstName'], $values['prospectLastName'], '', $values['prospectNumber'], $values['prospectEmail'], $values['contactEmail']);
