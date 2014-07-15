@@ -24,6 +24,8 @@
     
     <link href="/templates/assets/css/print.css" rel="stylesheet" media="print">
 
+    <link href="/templates/assets/css/bootstrap-select.css" rel="stylesheet" media="print">
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="/templates/assets/js/html5shiv.js"></script>
@@ -45,6 +47,9 @@
     <script src="/templates/assets/js/jquery.searchable-1.1.0.min.js"></script>
     <script src="/templates/assets/js/jquery.knob.js"></script>
     <script src="/templates/assets/js/jquery.dataTables.min.js"></script>
+    
+    <script src="/templates/assets/js/bootstrap-select.min.js"></script>
+   
     
     
     <script src="/templates/assets/js/raphael-min.js"></script>
@@ -68,6 +73,8 @@
 		//$.fn.editable.defaults.mode = 'inline';
 		
 		$(document).ready(function() {
+			
+			$('.selectpicker').selectpicker();
 
 			$('.addFileUpload').on("click",function(){
 				$('.noteAttachment:last').after('<input type="file" id="noteAttachment" name="noteAttachment[]" class="noteAttachment">');

@@ -41,8 +41,31 @@
                                 <button type="submit" class="btn btn-primary btn-xs">Add <i class="glyphicon glyphicon-plus"></i></button>
                             </td>
                         </tr>
+                    </table>
                         </form>
-                        {% for client in content %}
+                        
+                        
+                    <ul class="nav nav-tabs">
+                    {% for item in global_substates %}
+                        <li {% if loop.index == 1 %}class="active"{% endif %}><a href="#{{ item.name }}" data-toggle="tab">{{ item.name }}</a></li>
+                    {% endfor %}
+                      </li>
+                    </ul>
+
+                 <div class="tab-content">
+
+                {% for states in global_substates %}
+                 <div class="tab-pane {% if loop.index == 1 %}active{% endif %}" id="{{ states.name }}">
+                        
+                    <table class="table table-bordered table-responsive" style="font-size:0.8em;">
+                        <tr>
+                            <th>Prospect Info</strong></th>
+                            <th width="50%">Note</th>
+                            <th style="white-space:nowrap;" >Next action date</th>
+                            <th>Status</th>
+                            <td></td>
+                        </tr>
+                        {% for client in content if client.accountsubstatusid == states.id %}
                             <tr class="status-{{ client.contactstatename }}">
                             	<td>
                                 <a data-placement="right" href="#" id="name" class="name" data-type="text" data-pk="{{ client.orgid }}" data-url="/prospects/update-account-details" data-title="Enter name" data-value="{{ client.orgname }}">{{ client.orgname|length > 25 ? client.orgname|slice(0, 25) ~ '...' : client.orgname  }}</a>
@@ -91,6 +114,10 @@
                             </tr>
                         {% endfor %}
                     </table>
+
+                </div>
+            {% endfor %}
+			
             
 </div>
 
@@ -98,8 +125,19 @@
 
     $(document).ready(function() {
 		
-		$('.name, .firstname, .lastname, .phone, .email, .actionbody, .nextdate, .accountsubstatusid').editable();
-		
+		$('.name, .firstname, .lastname, .phone, .email, .actionbody, .nextdate').editable();
+
+		$('.accountsubstatusid').editable({
+			ajaxOptions: { dataType: 'html' },
+			success: function(response, newValue) {
+				alert('e');
+				if(response.status == '0'){
+					return response.msg;
+				}else{
+					alert('ok');
+				}
+			}
+		});		
 		
     });
  

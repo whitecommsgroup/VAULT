@@ -5,6 +5,7 @@ body {
 }
 
 
+
 .theme-dropdown .dropdown-menu {
   display: block;
   position: static;
@@ -307,4 +308,12 @@ textarea.input-xs {
 
 table tr td {
     vertical-align: middle!important;
+}
+
+/* timesheet table */
+
+.table-timesheet td {
+	display: block!important;
+	width: 100%!important;
+	min-width:100%!important;
 }

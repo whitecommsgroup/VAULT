@@ -22,7 +22,7 @@
                                 <input type="text" class="form-control datepicker" name="timesheetDate" id="timesheetDate" placeholder="Enter date or leave blank for today" value="{{ timesheet.date|date('d/m/Y') }}" readonly>
                             </div>
                         </div>
-                        <table id="tbl">
+                        <table id="tbl" class="table-timesheet">
                            <tr>
                            		<th class="col-md-1">ID</th>
                            		<th class="col-md-5">Job</th>
@@ -39,7 +39,7 @@
                            		<td class="col-md-1" class="tr_id"><input class="form-control" name="timeSheetLineId[]" id="timeSheetLineId" type="hidden" value="{{ line.id }}" ><input id="timeSheetLineIdReadOnly" class="form-control" style="font-size:0.8em;" type="text" value="{{ line.id }}" readonly><input  style="display:none;" type="text" class="form-control timesheetApproved" name="timesheetApproved[]" id="timesheetApproved" placeholder="Hours" value="{{ line.approved }}" {% if line.approved == 1 %}readonly{% endif %}></td>
                                 <td class="col-md-5">
                                 	<div class="form-group">
-                                		<input style="float:left; width:25%; margin-right:10px;" type="text" class="form-control typeah" name="timeSheetJobNumber[]" id="timeSheetJobNumber" placeholder="Job number" value="{{ line.jobid }}" {% if line.approved == 1 %}readonly{% endif %} autocomplete="off" data-validation="required">
+                                		<input style="float:left; width:20%; margin-right:10px;" type="text" class="form-control typeah" name="timeSheetJobNumber[]" id="timeSheetJobNumber" placeholder="Job number" value="{{ line.jobid }}" {% if line.approved == 1 %}readonly{% endif %} autocomplete="off" data-validation="required">
                                 	    <input style="float:left; width:35%; margin-right:10px; font-size:0.8em;" type="text" class="form-control" name="timeSheetClient[]" id="timeSheetClient" placeholder="Client"  autocomplete="off" readonly data-validation="required" value="{{ getCompanyName(line.organisationid) }}">
                                 	    <input style="width:35%; font-size:0.8em;" type="text" class="form-control" name="timeSheetTitle[]" id="timeSheetTitle" placeholder="Title"  autocomplete="off" readonly data-validation="required" value="{{ getJobTitle(line.jobidentity) }}">
                                 	</div>

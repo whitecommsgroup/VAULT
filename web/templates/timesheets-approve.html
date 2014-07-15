@@ -36,7 +36,7 @@
                            		<td class="col-md-1" class="tr_id"><input class="form-control" name="timeSheetLineId[]" id="timeSheetLineId" type="hidden" value="{{ line.id }}" ><input class="form-control" type="text" value="{{ line.id }}" readonly><input type="hidden" class="form-control" name="timeSheetDescription[]" id="timeSheetDescription" value="{{ line.description }}"></td>
                                 <td class="col-md-5">
                                 	<div class="form-group">
-                                		<input style="float:left; width:25%; margin-right:10px;" type="text" class="form-control typeah" name="timeSheetJobNumber[]" id="timeSheetJobNumber" placeholder="Job number" value="{{ line.jobid }}" {% if line.approved == 1 %}readonly{% endif %} autocomplete="off">
+                                		<input style="float:left; width:20%; margin-right:10px;" type="text" class="form-control typeah" name="timeSheetJobNumber[]" id="timeSheetJobNumber" placeholder="Job number" value="{{ line.jobid }}" {% if line.approved == 1 %}readonly{% endif %} autocomplete="off">
                                 	    <input style="float:left; width:35%; margin-right:10px; font-size:0.8em;" type="text" class="form-control" name="timeSheetClient[]" id="timeSheetClient" placeholder="Client"  autocomplete="off" readonly data-validation="required" value="{{ getCompanyName(line.organisationid) }}">
                                 	    <input style="width:35%; font-size:0.8em;" type="text" class="form-control" name="timeSheetTitle[]" id="timeSheetTitle" placeholder="Title"  autocomplete="off" readonly data-validation="required" value="{{ getJobTitle(line.jobidentity) }}">
                                 	</div>
